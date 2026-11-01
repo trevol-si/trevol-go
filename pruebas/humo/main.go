@@ -2,8 +2,9 @@
 //
 //	TREVOL_API_KEY=tvl_test_… go run ./pruebas/humo
 //
-// Solo lecturas y un preview (el SDK de Go NO emite). Se NIEGA a correr si la llave no es tvl_test_. TREVOL_BASE_URL (opcional) apunta a
-// otro servidor, p. ej. un Prism local.
+// Lecturas, un preview y un error tipado (validation_error); con TREVOL_HUMO_EMITIR=1 además EMITE una factura en habilitación, espera a que
+// quede final y descarga el PDF. Se NIEGA a correr si la llave no es tvl_test_. TREVOL_BASE_URL (opcional) apunta a otro servidor, p. ej. un
+// Prism local.
 package main
 
 import (
@@ -14,6 +15,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"io"
 	"net/http"
 	"os"
 	"regexp"
@@ -69,12 +71,20 @@ func main() {
 		}
 		return fmt.Sprintf("%s (%s)", co.GetName(), co.GetNit()), nil
 	})
-	paso("PreviewInvoice", func() (string, error) {
+	factura := func(externo string, conLineas bool) (generado.InvoiceInput, error) {
 		var entrada generado.InvoiceInput
-		cuerpo := `{"external_id":"HUMO-PREVIEW","customer":{"final_consumer":true},
-			"items":[{"description":"Prueba de humo del SDK de Trevol","quantity":"1","unit_price":"1000","taxes":[{"code":"01","rate":"19"}]}],
-			"payment":{"form":"cash","methods":[{"code":"10"}]}}`
-		if err := json.Unmarshal([]byte(cuerpo), &entrada); err != nil {
+		lineas := `[]`
+		if conLineas {
+			lineas = `[{"description":"Prueba de humo del SDK de Trevol","quantity":"1","unit_price":"1000","taxes":[{"code":"01","rate":"19"}]}]`
+		}
+		cuerpo := `{"external_id":"` + externo + `","customer":{"final_consumer":true},"items":` + lineas +
+			`,"payment":{"form":"cash","methods":[{"code":"10"}]}}`
+		err := json.Unmarshal([]byte(cuerpo), &entrada)
+		return entrada, err
+	}
+	paso("PreviewInvoice", func() (string, error) {
+		entrada, err := factura("HUMO-PREVIEW", true)
+		if err != nil {
 			return "", err
 		}
 		p, _, err := c.InvoicesAPI.PreviewInvoice(ctx).InvoiceInput(entrada).Execute()
@@ -82,6 +92,22 @@ func main() {
 			return "", err
 		}
 		return fmt.Sprintf("total %v", p.Totals["total"]), nil
+	})
+	paso("PreviewInvoice sin líneas → KindValidation (code validation_error)", func() (string, error) {
+		entrada, err := factura("HUMO-INVALIDA", false)
+		if err != nil {
+			return "", err
+		}
+		_, _, err = c.InvoicesAPI.PreviewInvoice(ctx).InvoiceInput(entrada).Execute()
+		var te *trevol.Error
+		if !errors.As(err, &te) || te.Kind != trevol.KindValidation || te.Code != "validation_error" {
+			return "", fmt.Errorf("no lanzó KindValidation con validation_error: %v", err)
+		}
+		puntero := ""
+		if len(te.Errors) > 0 {
+			puntero = te.Errors[0].Pointer
+		}
+		return fmt.Sprintf("%d %s %s", te.Status, te.Code, puntero), nil
 	})
 	paso("ListInvoices + Paginate (3)", func() (string, error) {
 		if _, _, err := c.InvoicesAPI.ListInvoices(ctx).Limit(3).Execute(); err != nil {
@@ -135,6 +161,64 @@ func main() {
 		}
 		return e.GetType(), nil
 	})
+
+	if os.Getenv("TREVOL_HUMO_EMITIR") == "1" {
+		id := ""
+		paso("CreateInvoice (EMITE en habilitación)", func() (string, error) {
+			entrada, err := factura(fmt.Sprintf("HUMO-GO-%d", time.Now().Unix()), true)
+			if err != nil {
+				return "", err
+			}
+			d, _, err := c.InvoicesAPI.CreateInvoice(ctx).InvoiceInput(entrada).Execute()
+			if err != nil {
+				return "", err
+			}
+			id = d.GetId()
+			return id + " " + d.GetStatus(), nil
+		})
+		if id != "" {
+			paso("espera un estado final (hasta 90 s)", func() (string, error) {
+				limite := time.Now().Add(90 * time.Second)
+				for {
+					d, _, err := c.InvoicesAPI.RetrieveInvoice(ctx, id).Execute()
+					if err != nil {
+						return "", err
+					}
+					switch estado := d.GetStatus(); estado {
+					case "pending", "sending", "processing":
+						if time.Now().After(limite) {
+							return "", fmt.Errorf("status = %s", estado)
+						}
+						time.Sleep(3 * time.Second)
+					case "accepted":
+						return estado, nil
+					default:
+						return "", fmt.Errorf("status = %s", estado)
+					}
+				}
+			})
+			paso("DownloadInvoicePdf", func() (string, error) {
+				archivo, _, err := c.InvoicesAPI.DownloadInvoicePdf(ctx, id).Execute()
+				if err != nil {
+					return "", err
+				}
+				defer archivo.Close()
+				if _, err := archivo.Seek(0, io.SeekStart); err != nil {
+					return "", err
+				}
+				bytes, err := io.ReadAll(archivo)
+				if err != nil {
+					return "", err
+				}
+				if !strings.HasPrefix(string(bytes), "%PDF") {
+					return "", fmt.Errorf("no es un PDF")
+				}
+				return fmt.Sprintf("PDF %d bytes", len(bytes)), nil
+			})
+		}
+	} else {
+		fmt.Println("(no se emite nada: define TREVOL_HUMO_EMITIR=1 para emitir una factura en habilitación)")
+	}
 
 	fmt.Printf("\n%d/%d pasos bien\n", total-fallas, total)
 	if fallas > 0 {
