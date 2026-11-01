@@ -3,7 +3,7 @@
  "info": {
   "title": "API de Trevol",
   "version": "2026-10-22",
-  "description": "Facturación electrónica de Colombia (DIAN). Con una llave se emiten las facturas de venta (incluida la exportación, la moneda extranjera, el AIU, los mandatos, el transporte, los notarios, las divisas y el sector salud) y sus notas crédito y débito; el documento soporte y su nota de ajuste; el documento equivalente electrónico (tiquete POS y los otros nueve tipos) y su nota de ajuste; la nómina electrónica (102) y su nota de ajuste (103); y los eventos RADIAN 030 a 034. Cada llave es de una empresa y un ambiente: tvl_test_ (habilitación real de la DIAN) o tvl_live_ (producción). Mensajes en español, campos en inglés. Versiones: la `2026-10-22` (la de las llaves nuevas) responde 202 `processing` cuando la DIAN no contesta y Trevol termina el documento (no crees otro para la misma operación); la `2026-10-21` (las llaves anteriores) responde 503 `dian_unavailable`. El encabezado `Trevol-Version` manda sobre la versión de la llave. La fase 3 es aditiva: no hay versión nueva. En habilitación, el set de pruebas de la nómina, del documento equivalente y de los eventos responde 202 `validating` en las dos versiones. El PDF, el ZIP y el correo se hacen después del 201 en los documentos que los llevan: espera el evento `….delivered` o consulta `delivery.status`. Avisos firmados con Standard Webhooks (sección `webhooks`; el catálogo tiene 49 tipos y un endpoint creado antes de la fase 3 con `*` sigue recibiendo solo los 22 de antes hasta que se guarde de nuevo su lista de eventos). El saldo prepago de la cuenta (lo comparten sus empresas) se consulta en `/v1/balance` y se recarga con Wompi (`POST /v1/balance/top_ups`). Documentación: https://trevol.si/desarrolladores"
+  "description": "Facturación electrónica de Colombia (DIAN). Con una llave se emiten las facturas de venta (incluida la exportación, la moneda extranjera, el AIU, los mandatos, el transporte, los notarios, las divisas y el sector salud) y sus notas crédito y débito; el documento soporte y su nota de ajuste; el documento equivalente electrónico (tiquete POS y los otros nueve tipos) y su nota de ajuste; la nómina electrónica (102) y su nota de ajuste (103); y los eventos RADIAN 030 a 034. Cada llave es de una empresa y un ambiente: tvl_test_ (habilitación real de la DIAN) o tvl_live_ (producción). Mensajes en español, campos en inglés. Versiones: la `2026-10-22` (la de las llaves nuevas) responde 202 `processing` cuando la DIAN no contesta y Trevol termina el documento (no crees otro para la misma operación); la `2026-10-21` (las llaves anteriores) responde 503 `dian_unavailable`. El encabezado `Trevol-Version` manda sobre la versión de la llave. La fase 3 es aditiva: no hay versión nueva. En habilitación, el set de pruebas de la nómina, del documento equivalente y de los eventos responde 202 `validating` en las dos versiones. El PDF, el ZIP y el correo se hacen después del 201 en los documentos que los llevan: espera el evento `….delivered` o consulta `delivery.status`. Avisos firmados con Standard Webhooks (sección `webhooks`; el catálogo tiene 49 tipos y un endpoint creado antes de la fase 3 con `*` sigue recibiendo solo los 22 de antes hasta que se guarde de nuevo su lista de eventos). El saldo prepago de la cuenta (lo comparten sus empresas) se consulta en `/v1/balance` y se recarga con Wompi (`POST /v1/balance/top_ups`). Documentación: https://platform.trevol.si/docs"
  },
  "servers": [
   {
@@ -1669,7 +1669,7 @@
          "minima": {
           "summary": "Menos que la recarga mínima",
           "value": {
-           "type": "https://trevol.si/api/errores#top_up_below_minimum",
+           "type": "https://platform.trevol.si/docs/errores#top_up_below_minimum",
            "title": "La recarga es menor que la mínima",
            "status": 422,
            "code": "top_up_below_minimum",
@@ -1682,7 +1682,7 @@
          "comprador": {
           "summary": "Los datos de la empresa no alcanzan para la factura",
           "value": {
-           "type": "https://trevol.si/api/errores#validation_error",
+           "type": "https://platform.trevol.si/docs/errores#validation_error",
            "title": "Los datos no son válidos",
            "status": 422,
            "code": "validation_error",
@@ -1745,7 +1745,7 @@
          "no_disponible": {
           "summary": "Las recargas no están disponibles",
           "value": {
-           "type": "https://trevol.si/api/errores#top_ups_unavailable",
+           "type": "https://platform.trevol.si/docs/errores#top_ups_unavailable",
            "title": "Las recargas no están disponibles",
            "status": 503,
            "code": "top_ups_unavailable",
@@ -5182,7 +5182,7 @@
          "sin_numeracion": {
           "summary": "No hay un rango de documento soporte vigente",
           "value": {
-           "type": "https://trevol.si/api/errores#numbering_unavailable",
+           "type": "https://platform.trevol.si/docs/errores#numbering_unavailable",
            "title": "La numeración no está disponible",
            "status": 422,
            "code": "numbering_unavailable",
@@ -7412,7 +7412,7 @@
          "sin_numeracion": {
           "summary": "No hay una resolución POS vigente",
           "value": {
-           "type": "https://trevol.si/api/errores#numbering_unavailable",
+           "type": "https://platform.trevol.si/docs/errores#numbering_unavailable",
            "title": "La numeración no está disponible",
            "status": 422,
            "code": "numbering_unavailable",
@@ -10005,7 +10005,7 @@
          "duplicado": {
           "summary": "Ya hay un 102 de ese trabajador y mes (producción, o habilitación con el set aceptado)",
           "value": {
-           "type": "https://trevol.si/api/errores#duplicate_document",
+           "type": "https://platform.trevol.si/docs/errores#duplicate_document",
            "title": "Ya existe un documento igual",
            "status": 409,
            "code": "duplicate_document",
@@ -10041,7 +10041,7 @@
          "no_habilitada": {
           "summary": "La nómina de la empresa no está habilitada",
           "value": {
-           "type": "https://trevol.si/api/errores#company_not_enabled",
+           "type": "https://platform.trevol.si/docs/errores#company_not_enabled",
            "title": "La empresa no está habilitada para facturar",
            "status": 422,
            "code": "company_not_enabled",
@@ -12648,7 +12648,7 @@
          "duplicado": {
           "summary": "Ya hay un evento vivo de ese código sobre la factura",
           "value": {
-           "type": "https://trevol.si/api/errores#duplicate_document",
+           "type": "https://platform.trevol.si/docs/errores#duplicate_document",
            "title": "Ya existe un documento igual",
            "status": 409,
            "code": "duplicate_document",
@@ -12661,7 +12661,7 @@
          "previo": {
           "summary": "Solo en la 2026-10-21: la DIAN todavía no muestra el evento anterior",
           "value": {
-           "type": "https://trevol.si/api/errores#previous_event_pending",
+           "type": "https://platform.trevol.si/docs/errores#previous_event_pending",
            "title": "Falta el evento anterior en la DIAN",
            "status": 409,
            "code": "previous_event_pending",
@@ -12698,7 +12698,7 @@
          "tacita": {
           "summary": "El 034 todavía no procede",
           "value": {
-           "type": "https://trevol.si/api/errores#tacit_acceptance_not_due",
+           "type": "https://platform.trevol.si/docs/errores#tacit_acceptance_not_due",
            "title": "La aceptación tácita todavía no procede",
            "status": 422,
            "code": "tacit_acceptance_not_due",
@@ -13446,7 +13446,7 @@
       "schema": {
        "type": "string"
       },
-      "description": "Trevol-Webhooks/1.0 (+https://trevol.si/desarrolladores)"
+      "description": "Trevol-Webhooks/1.0 (+https://platform.trevol.si/docs/webhooks)"
      }
     ],
     "requestBody": {
@@ -13527,7 +13527,7 @@
       "schema": {
        "type": "string"
       },
-      "description": "Trevol-Webhooks/1.0 (+https://trevol.si/desarrolladores)"
+      "description": "Trevol-Webhooks/1.0 (+https://platform.trevol.si/docs/webhooks)"
      }
     ],
     "requestBody": {
@@ -13608,7 +13608,7 @@
       "schema": {
        "type": "string"
       },
-      "description": "Trevol-Webhooks/1.0 (+https://trevol.si/desarrolladores)"
+      "description": "Trevol-Webhooks/1.0 (+https://platform.trevol.si/docs/webhooks)"
      }
     ],
     "requestBody": {
@@ -13689,7 +13689,7 @@
       "schema": {
        "type": "string"
       },
-      "description": "Trevol-Webhooks/1.0 (+https://trevol.si/desarrolladores)"
+      "description": "Trevol-Webhooks/1.0 (+https://platform.trevol.si/docs/webhooks)"
      }
     ],
     "requestBody": {
@@ -13770,7 +13770,7 @@
       "schema": {
        "type": "string"
       },
-      "description": "Trevol-Webhooks/1.0 (+https://trevol.si/desarrolladores)"
+      "description": "Trevol-Webhooks/1.0 (+https://platform.trevol.si/docs/webhooks)"
      }
     ],
     "requestBody": {
@@ -13851,7 +13851,7 @@
       "schema": {
        "type": "string"
       },
-      "description": "Trevol-Webhooks/1.0 (+https://trevol.si/desarrolladores)"
+      "description": "Trevol-Webhooks/1.0 (+https://platform.trevol.si/docs/webhooks)"
      }
     ],
     "requestBody": {
@@ -13932,7 +13932,7 @@
       "schema": {
        "type": "string"
       },
-      "description": "Trevol-Webhooks/1.0 (+https://trevol.si/desarrolladores)"
+      "description": "Trevol-Webhooks/1.0 (+https://platform.trevol.si/docs/webhooks)"
      }
     ],
     "requestBody": {
@@ -14013,7 +14013,7 @@
       "schema": {
        "type": "string"
       },
-      "description": "Trevol-Webhooks/1.0 (+https://trevol.si/desarrolladores)"
+      "description": "Trevol-Webhooks/1.0 (+https://platform.trevol.si/docs/webhooks)"
      }
     ],
     "requestBody": {
@@ -14094,7 +14094,7 @@
       "schema": {
        "type": "string"
       },
-      "description": "Trevol-Webhooks/1.0 (+https://trevol.si/desarrolladores)"
+      "description": "Trevol-Webhooks/1.0 (+https://platform.trevol.si/docs/webhooks)"
      }
     ],
     "requestBody": {
@@ -14175,7 +14175,7 @@
       "schema": {
        "type": "string"
       },
-      "description": "Trevol-Webhooks/1.0 (+https://trevol.si/desarrolladores)"
+      "description": "Trevol-Webhooks/1.0 (+https://platform.trevol.si/docs/webhooks)"
      }
     ],
     "requestBody": {
@@ -14256,7 +14256,7 @@
       "schema": {
        "type": "string"
       },
-      "description": "Trevol-Webhooks/1.0 (+https://trevol.si/desarrolladores)"
+      "description": "Trevol-Webhooks/1.0 (+https://platform.trevol.si/docs/webhooks)"
      }
     ],
     "requestBody": {
@@ -14337,7 +14337,7 @@
       "schema": {
        "type": "string"
       },
-      "description": "Trevol-Webhooks/1.0 (+https://trevol.si/desarrolladores)"
+      "description": "Trevol-Webhooks/1.0 (+https://platform.trevol.si/docs/webhooks)"
      }
     ],
     "requestBody": {
@@ -14418,7 +14418,7 @@
       "schema": {
        "type": "string"
       },
-      "description": "Trevol-Webhooks/1.0 (+https://trevol.si/desarrolladores)"
+      "description": "Trevol-Webhooks/1.0 (+https://platform.trevol.si/docs/webhooks)"
      }
     ],
     "requestBody": {
@@ -14499,7 +14499,7 @@
       "schema": {
        "type": "string"
       },
-      "description": "Trevol-Webhooks/1.0 (+https://trevol.si/desarrolladores)"
+      "description": "Trevol-Webhooks/1.0 (+https://platform.trevol.si/docs/webhooks)"
      }
     ],
     "requestBody": {
@@ -14580,7 +14580,7 @@
       "schema": {
        "type": "string"
       },
-      "description": "Trevol-Webhooks/1.0 (+https://trevol.si/desarrolladores)"
+      "description": "Trevol-Webhooks/1.0 (+https://platform.trevol.si/docs/webhooks)"
      }
     ],
     "requestBody": {
@@ -14661,7 +14661,7 @@
       "schema": {
        "type": "string"
       },
-      "description": "Trevol-Webhooks/1.0 (+https://trevol.si/desarrolladores)"
+      "description": "Trevol-Webhooks/1.0 (+https://platform.trevol.si/docs/webhooks)"
      }
     ],
     "requestBody": {
@@ -14742,7 +14742,7 @@
       "schema": {
        "type": "string"
       },
-      "description": "Trevol-Webhooks/1.0 (+https://trevol.si/desarrolladores)"
+      "description": "Trevol-Webhooks/1.0 (+https://platform.trevol.si/docs/webhooks)"
      }
     ],
     "requestBody": {
@@ -14823,7 +14823,7 @@
       "schema": {
        "type": "string"
       },
-      "description": "Trevol-Webhooks/1.0 (+https://trevol.si/desarrolladores)"
+      "description": "Trevol-Webhooks/1.0 (+https://platform.trevol.si/docs/webhooks)"
      }
     ],
     "requestBody": {
@@ -14904,7 +14904,7 @@
       "schema": {
        "type": "string"
       },
-      "description": "Trevol-Webhooks/1.0 (+https://trevol.si/desarrolladores)"
+      "description": "Trevol-Webhooks/1.0 (+https://platform.trevol.si/docs/webhooks)"
      }
     ],
     "requestBody": {
@@ -14985,7 +14985,7 @@
       "schema": {
        "type": "string"
       },
-      "description": "Trevol-Webhooks/1.0 (+https://trevol.si/desarrolladores)"
+      "description": "Trevol-Webhooks/1.0 (+https://platform.trevol.si/docs/webhooks)"
      }
     ],
     "requestBody": {
@@ -15066,7 +15066,7 @@
       "schema": {
        "type": "string"
       },
-      "description": "Trevol-Webhooks/1.0 (+https://trevol.si/desarrolladores)"
+      "description": "Trevol-Webhooks/1.0 (+https://platform.trevol.si/docs/webhooks)"
      }
     ],
     "requestBody": {
@@ -15147,7 +15147,7 @@
       "schema": {
        "type": "string"
       },
-      "description": "Trevol-Webhooks/1.0 (+https://trevol.si/desarrolladores)"
+      "description": "Trevol-Webhooks/1.0 (+https://platform.trevol.si/docs/webhooks)"
      }
     ],
     "requestBody": {
@@ -15228,7 +15228,7 @@
       "schema": {
        "type": "string"
       },
-      "description": "Trevol-Webhooks/1.0 (+https://trevol.si/desarrolladores)"
+      "description": "Trevol-Webhooks/1.0 (+https://platform.trevol.si/docs/webhooks)"
      }
     ],
     "requestBody": {
@@ -15335,7 +15335,7 @@
       "schema": {
        "type": "string"
       },
-      "description": "Trevol-Webhooks/1.0 (+https://trevol.si/desarrolladores)"
+      "description": "Trevol-Webhooks/1.0 (+https://platform.trevol.si/docs/webhooks)"
      }
     ],
     "requestBody": {
@@ -15416,7 +15416,7 @@
       "schema": {
        "type": "string"
       },
-      "description": "Trevol-Webhooks/1.0 (+https://trevol.si/desarrolladores)"
+      "description": "Trevol-Webhooks/1.0 (+https://platform.trevol.si/docs/webhooks)"
      }
     ],
     "requestBody": {
@@ -15497,7 +15497,7 @@
       "schema": {
        "type": "string"
       },
-      "description": "Trevol-Webhooks/1.0 (+https://trevol.si/desarrolladores)"
+      "description": "Trevol-Webhooks/1.0 (+https://platform.trevol.si/docs/webhooks)"
      }
     ],
     "requestBody": {
@@ -15578,7 +15578,7 @@
       "schema": {
        "type": "string"
       },
-      "description": "Trevol-Webhooks/1.0 (+https://trevol.si/desarrolladores)"
+      "description": "Trevol-Webhooks/1.0 (+https://platform.trevol.si/docs/webhooks)"
      }
     ],
     "requestBody": {
@@ -15659,7 +15659,7 @@
       "schema": {
        "type": "string"
       },
-      "description": "Trevol-Webhooks/1.0 (+https://trevol.si/desarrolladores)"
+      "description": "Trevol-Webhooks/1.0 (+https://platform.trevol.si/docs/webhooks)"
      }
     ],
     "requestBody": {
@@ -15740,7 +15740,7 @@
       "schema": {
        "type": "string"
       },
-      "description": "Trevol-Webhooks/1.0 (+https://trevol.si/desarrolladores)"
+      "description": "Trevol-Webhooks/1.0 (+https://platform.trevol.si/docs/webhooks)"
      }
     ],
     "requestBody": {
@@ -15821,7 +15821,7 @@
       "schema": {
        "type": "string"
       },
-      "description": "Trevol-Webhooks/1.0 (+https://trevol.si/desarrolladores)"
+      "description": "Trevol-Webhooks/1.0 (+https://platform.trevol.si/docs/webhooks)"
      }
     ],
     "requestBody": {
@@ -15902,7 +15902,7 @@
       "schema": {
        "type": "string"
       },
-      "description": "Trevol-Webhooks/1.0 (+https://trevol.si/desarrolladores)"
+      "description": "Trevol-Webhooks/1.0 (+https://platform.trevol.si/docs/webhooks)"
      }
     ],
     "requestBody": {
@@ -15983,7 +15983,7 @@
       "schema": {
        "type": "string"
       },
-      "description": "Trevol-Webhooks/1.0 (+https://trevol.si/desarrolladores)"
+      "description": "Trevol-Webhooks/1.0 (+https://platform.trevol.si/docs/webhooks)"
      }
     ],
     "requestBody": {
@@ -16097,7 +16097,7 @@
       "schema": {
        "type": "string"
       },
-      "description": "Trevol-Webhooks/1.0 (+https://trevol.si/desarrolladores)"
+      "description": "Trevol-Webhooks/1.0 (+https://platform.trevol.si/docs/webhooks)"
      }
     ],
     "requestBody": {
@@ -16178,7 +16178,7 @@
       "schema": {
        "type": "string"
       },
-      "description": "Trevol-Webhooks/1.0 (+https://trevol.si/desarrolladores)"
+      "description": "Trevol-Webhooks/1.0 (+https://platform.trevol.si/docs/webhooks)"
      }
     ],
     "requestBody": {
@@ -16259,7 +16259,7 @@
       "schema": {
        "type": "string"
       },
-      "description": "Trevol-Webhooks/1.0 (+https://trevol.si/desarrolladores)"
+      "description": "Trevol-Webhooks/1.0 (+https://platform.trevol.si/docs/webhooks)"
      }
     ],
     "requestBody": {
@@ -16340,7 +16340,7 @@
       "schema": {
        "type": "string"
       },
-      "description": "Trevol-Webhooks/1.0 (+https://trevol.si/desarrolladores)"
+      "description": "Trevol-Webhooks/1.0 (+https://platform.trevol.si/docs/webhooks)"
      }
     ],
     "requestBody": {
@@ -16421,7 +16421,7 @@
       "schema": {
        "type": "string"
       },
-      "description": "Trevol-Webhooks/1.0 (+https://trevol.si/desarrolladores)"
+      "description": "Trevol-Webhooks/1.0 (+https://platform.trevol.si/docs/webhooks)"
      }
     ],
     "requestBody": {
@@ -16502,7 +16502,7 @@
       "schema": {
        "type": "string"
       },
-      "description": "Trevol-Webhooks/1.0 (+https://trevol.si/desarrolladores)"
+      "description": "Trevol-Webhooks/1.0 (+https://platform.trevol.si/docs/webhooks)"
      }
     ],
     "requestBody": {
@@ -16583,7 +16583,7 @@
       "schema": {
        "type": "string"
       },
-      "description": "Trevol-Webhooks/1.0 (+https://trevol.si/desarrolladores)"
+      "description": "Trevol-Webhooks/1.0 (+https://platform.trevol.si/docs/webhooks)"
      }
     ],
     "requestBody": {
@@ -16664,7 +16664,7 @@
       "schema": {
        "type": "string"
       },
-      "description": "Trevol-Webhooks/1.0 (+https://trevol.si/desarrolladores)"
+      "description": "Trevol-Webhooks/1.0 (+https://platform.trevol.si/docs/webhooks)"
      }
     ],
     "requestBody": {
@@ -16745,7 +16745,7 @@
       "schema": {
        "type": "string"
       },
-      "description": "Trevol-Webhooks/1.0 (+https://trevol.si/desarrolladores)"
+      "description": "Trevol-Webhooks/1.0 (+https://platform.trevol.si/docs/webhooks)"
      }
     ],
     "requestBody": {
@@ -16858,7 +16858,7 @@
       "schema": {
        "type": "string"
       },
-      "description": "Trevol-Webhooks/1.0 (+https://trevol.si/desarrolladores)"
+      "description": "Trevol-Webhooks/1.0 (+https://platform.trevol.si/docs/webhooks)"
      }
     ],
     "requestBody": {
@@ -16939,7 +16939,7 @@
       "schema": {
        "type": "string"
       },
-      "description": "Trevol-Webhooks/1.0 (+https://trevol.si/desarrolladores)"
+      "description": "Trevol-Webhooks/1.0 (+https://platform.trevol.si/docs/webhooks)"
      }
     ],
     "requestBody": {
@@ -17051,7 +17051,7 @@
       "schema": {
        "type": "string"
       },
-      "description": "Trevol-Webhooks/1.0 (+https://trevol.si/desarrolladores)"
+      "description": "Trevol-Webhooks/1.0 (+https://platform.trevol.si/docs/webhooks)"
      }
     ],
     "requestBody": {
@@ -17132,7 +17132,7 @@
       "schema": {
        "type": "string"
       },
-      "description": "Trevol-Webhooks/1.0 (+https://trevol.si/desarrolladores)"
+      "description": "Trevol-Webhooks/1.0 (+https://platform.trevol.si/docs/webhooks)"
      }
     ],
     "requestBody": {
@@ -17213,7 +17213,7 @@
       "schema": {
        "type": "string"
       },
-      "description": "Trevol-Webhooks/1.0 (+https://trevol.si/desarrolladores)"
+      "description": "Trevol-Webhooks/1.0 (+https://platform.trevol.si/docs/webhooks)"
      }
     ],
     "requestBody": {
@@ -17294,7 +17294,7 @@
       "schema": {
        "type": "string"
       },
-      "description": "Trevol-Webhooks/1.0 (+https://trevol.si/desarrolladores)"
+      "description": "Trevol-Webhooks/1.0 (+https://platform.trevol.si/docs/webhooks)"
      }
     ],
     "requestBody": {
@@ -17375,7 +17375,7 @@
       "schema": {
        "type": "string"
       },
-      "description": "Trevol-Webhooks/1.0 (+https://trevol.si/desarrolladores)"
+      "description": "Trevol-Webhooks/1.0 (+https://platform.trevol.si/docs/webhooks)"
      }
     ],
     "requestBody": {
@@ -17491,7 +17491,7 @@
       "schema": {
        "type": "string"
       },
-      "description": "Trevol-Webhooks/1.0 (+https://trevol.si/desarrolladores)"
+      "description": "Trevol-Webhooks/1.0 (+https://platform.trevol.si/docs/webhooks)"
      }
     ],
     "requestBody": {
@@ -17572,7 +17572,7 @@
       "schema": {
        "type": "string"
       },
-      "description": "Trevol-Webhooks/1.0 (+https://trevol.si/desarrolladores)"
+      "description": "Trevol-Webhooks/1.0 (+https://platform.trevol.si/docs/webhooks)"
      }
     ],
     "requestBody": {
