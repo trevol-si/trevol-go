@@ -267,7 +267,7 @@
   "ejemplos": [
    {
     "nombre": "exportacion",
-    "resumen": "Exportación en dólares (Fase 1B)",
+    "resumen": "Exportación en dólares",
     "valor": {
      "external_id": "EXP-77",
      "document_type": "02",
@@ -924,7 +924,7 @@
   "ejemplos": [
    {
     "nombre": "exportacion",
-    "resumen": "Exportación en dólares (Fase 1B)",
+    "resumen": "Exportación en dólares",
     "valor": {
      "external_id": "EXP-77",
      "document_type": "02",
@@ -3069,7 +3069,7 @@
   "ejemplos": [
    {
     "nombre": "exportacion",
-    "resumen": "Exportación en dólares (Fase 1B)",
+    "resumen": "Exportación en dólares",
     "valor": {
      "external_id": "EXP-77",
      "document_type": "02",

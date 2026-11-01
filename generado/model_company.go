@@ -22,7 +22,7 @@ type Company struct {
 	Object *string `json:"object,omitempty"`
 	Id *string `json:"id,omitempty"`
 	Nit NullableString `json:"nit,omitempty"`
-	CheckDigit NullableString `json:"check_digit,omitempty"`
+	CheckDigit NullableInt32 `json:"check_digit,omitempty"`
 	// La razón social.
 	Name NullableString `json:"name,omitempty"`
 	TradeName NullableString `json:"trade_name,omitempty"`
@@ -163,9 +163,9 @@ func (o *Company) UnsetNit() {
 }
 
 // GetCheckDigit returns the CheckDigit field value if set, zero value otherwise (both if not set or set to explicit null).
-func (o *Company) GetCheckDigit() string {
+func (o *Company) GetCheckDigit() int32 {
 	if o == nil || IsNil(o.CheckDigit.Get()) {
-		var ret string
+		var ret int32
 		return ret
 	}
 	return *o.CheckDigit.Get()
@@ -174,7 +174,7 @@ func (o *Company) GetCheckDigit() string {
 // GetCheckDigitOk returns a tuple with the CheckDigit field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 // NOTE: If the value is an explicit nil, `nil, true` will be returned
-func (o *Company) GetCheckDigitOk() (*string, bool) {
+func (o *Company) GetCheckDigitOk() (*int32, bool) {
 	if o == nil {
 		return nil, false
 	}
@@ -190,8 +190,8 @@ func (o *Company) HasCheckDigit() bool {
 	return false
 }
 
-// SetCheckDigit gets a reference to the given NullableString and assigns it to the CheckDigit field.
-func (o *Company) SetCheckDigit(v string) {
+// SetCheckDigit gets a reference to the given NullableInt32 and assigns it to the CheckDigit field.
+func (o *Company) SetCheckDigit(v int32) {
 	o.CheckDigit.Set(&v)
 }
 // SetCheckDigitNil sets the value for CheckDigit to be an explicit nil

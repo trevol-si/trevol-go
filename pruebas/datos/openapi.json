@@ -26,7 +26,7 @@
   },
   {
    "name": "Facturas",
-   "description": "Emitir, consultar, corregir y reenviar facturas electrónicas, incluidas la exportación, la moneda extranjera, el AIU, los mandatos, el transporte, los notarios, las divisas y el sector salud (Fase 1B)."
+   "description": "Emitir, consultar, corregir y reenviar facturas electrónicas, incluidas la exportación, la moneda extranjera, el AIU, los mandatos, el transporte, los notarios, las divisas y el sector salud."
   },
   {
    "name": "Notas crédito",
@@ -1835,7 +1835,7 @@
        },
        "examples": {
         "exportacion": {
-         "summary": "Exportación en dólares (Fase 1B)",
+         "summary": "Exportación en dólares",
          "value": {
           "external_id": "EXP-77",
           "document_type": "02",
@@ -2200,7 +2200,7 @@
        },
        "examples": {
         "exportacion": {
-         "summary": "Exportación en dólares (Fase 1B)",
+         "summary": "Exportación en dólares",
          "value": {
           "external_id": "EXP-77",
           "document_type": "02",
@@ -2382,7 +2382,7 @@
        },
        "examples": {
         "exportacion": {
-         "summary": "Exportación en dólares (Fase 1B)",
+         "summary": "Exportación en dólares",
          "value": {
           "external_id": "EXP-77",
           "document_type": "02",
@@ -25579,7 +25579,7 @@
      },
      "check_digit": {
       "type": [
-       "string",
+       "integer",
        "null"
       ]
      },
