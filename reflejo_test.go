@@ -5,7 +5,7 @@ import (
 	"reflect"
 	"strings"
 
-	"github.com/trevol/trevol-go/generado"
+	"github.com/trevol-si/trevol-go/generado"
 )
 
 func jsonDe(texto string, destino any) error {

@@ -20,8 +20,8 @@ import (
 	"strings"
 	"time"
 
-	trevol "github.com/trevol/trevol-go"
-	"github.com/trevol/trevol-go/generado"
+	trevol "github.com/trevol-si/trevol-go"
+	"github.com/trevol-si/trevol-go/generado"
 )
 
 func main() {

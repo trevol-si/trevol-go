@@ -14,7 +14,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/trevol/trevol-go/generado"
+	"github.com/trevol-si/trevol-go/generado"
 )
 
 // Version es la versión de este SDK; APIVersion la versión de la API con que se generó (el valor de Trevol-Version por defecto).

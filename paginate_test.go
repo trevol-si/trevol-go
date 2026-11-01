@@ -5,7 +5,7 @@ import (
 	"errors"
 	"testing"
 
-	"github.com/trevol/trevol-go/generado"
+	"github.com/trevol-si/trevol-go/generado"
 )
 
 func doc(n string) generado.Document {

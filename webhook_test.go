@@ -12,7 +12,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/trevol/trevol-go/generado"
+	"github.com/trevol-si/trevol-go/generado"
 )
 
 type casoWebhook struct {

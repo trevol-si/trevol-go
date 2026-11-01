@@ -9,7 +9,7 @@ import (
 	"unicode/utf8"
 
 	standardwebhooks "github.com/standard-webhooks/standard-webhooks/libraries/go"
-	"github.com/trevol/trevol-go/generado"
+	"github.com/trevol-si/trevol-go/generado"
 )
 
 // Tolerance es cuánto se tolera la diferencia entre webhook-timestamp y el reloj: 5 minutos hacia atrás y hacia adelante.

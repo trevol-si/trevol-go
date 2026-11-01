@@ -7,7 +7,7 @@ import (
 	"log"
 	"os"
 
-	trevol "github.com/trevol/trevol-go"
+	trevol "github.com/trevol-si/trevol-go"
 )
 
 func main() {

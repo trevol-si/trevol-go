@@ -7,7 +7,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/trevol/trevol-go/generado"
+	"github.com/trevol-si/trevol-go/generado"
 )
 
 var estadoPorClase = map[string]int{"AuthenticationError": 401, "PermissionDeniedError": 403, "NotFoundError": 404, "InvalidRequestError": 400,

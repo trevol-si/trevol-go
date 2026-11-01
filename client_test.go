@@ -7,7 +7,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/trevol/trevol-go/generado"
+	"github.com/trevol-si/trevol-go/generado"
 )
 
 var entradaFactura = generado.InvoiceInput{}

@@ -15,7 +15,7 @@ RADIAN ante la DIAN (Colombia). Documentación: <https://platform.trevol.si/docs
 ## Instalación
 
 ```sh
-go get github.com/trevol/trevol-go
+go get github.com/trevol-si/trevol-go
 ```
 
 Necesita Go 1.23 o más nuevo (usa `iter.Seq2`). La única dependencia es la biblioteca abierta de
@@ -38,8 +38,8 @@ import (
 	"log"
 	"os"
 
-	trevol "github.com/trevol/trevol-go"
-	"github.com/trevol/trevol-go/generado"
+	trevol "github.com/trevol-si/trevol-go"
+	"github.com/trevol-si/trevol-go/generado"
 )
 
 func main() {
@@ -147,6 +147,9 @@ generado es `nil`: las cabeceras de la respuesta están en `te.Header`.
 
 ```go
 w, err := trevol.NewWebhook(os.Getenv("TREVOL_WEBHOOK_SECRET")) // whsec_…
+if err != nil {
+	log.Fatal(err)
+}
 http.HandleFunc("/webhooks/trevol", func(rw http.ResponseWriter, r *http.Request) {
 	cuerpo, _ := io.ReadAll(r.Body) // el cuerpo CRUDO
 	evento, err := w.Verify(cuerpo, r.Header)
@@ -155,7 +158,10 @@ http.HandleFunc("/webhooks/trevol", func(rw http.ResponseWriter, r *http.Request
 		return
 	}
 	// Deduplica por evento.GetId() (también llega en la cabecera webhook-id): la verificación no evita repeticiones.
-	datos, ok, _ := trevol.EventData(evento) // el modelo según el type (p. ej. *generado.DocumentEventData)
+	datos, ok, err := trevol.EventData(evento) // el modelo según el type (p. ej. *generado.DocumentEventData)
+	if err == nil && ok {
+		log.Printf("evento %s: %T", evento.GetId(), datos) // tu lógica
+	}
 	rw.WriteHeader(http.StatusOK)
 })
 ```

@@ -12,7 +12,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/trevol/trevol-go/generado"
+	"github.com/trevol-si/trevol-go/generado"
 )
 
 // Outcome es lo que pasó en un intento: una respuesta (con Status) o un fallo de red (Network, sin respuesta).

@@ -1,4 +1,4 @@
-module github.com/trevol/trevol-go
+module github.com/trevol-si/trevol-go
 
 go 1.23
 
