@@ -21,36 +21,38 @@ func main() {
 
 	var entrada generado.InvoiceInput
 	cuerpo := `{
-  "external_id": "EXP-77",
-  "document_type": "02",
-  "currency": {
-    "code": "USD",
-    "exchange_rate": "3950.12",
-    "rate_date": "2026-10-21"
-  },
-  "delivery_terms": {
-    "incoterm": "FOB",
-    "conditions": "Puerto de Cartagena"
-  },
+  "external_id": "VENTA-2026-000123",
   "customer": {
-    "document_type": "50",
-    "document_number": "US123456789",
-    "name": "ACME INC",
-    "country": "US",
-    "city": "Miami",
-    "region": "Florida",
-    "postal_code": "33131",
-    "address": "200 S Biscayne Blvd"
+    "document_type": "31",
+    "document_number": "900123456",
+    "name": "COMERCIALIZADORA ANDINA SAS",
+    "person_type": "legal",
+    "email": "facturacion@comercializadoraandina.example",
+    "address": "Calle 72 # 10-34, Oficina 501",
+    "municipality_code": "11001"
   },
   "items": [
     {
-      "description": "Consultoría",
-      "quantity": "1",
-      "unit_price": "1000",
+      "code": "LIC-ANUAL",
+      "description": "Licencia anual de software",
+      "quantity": "2",
+      "unit_price": "150000",
       "taxes": [
         {
           "code": "01",
-          "excluded": true
+          "rate": "19"
+        }
+      ]
+    },
+    {
+      "code": "SOP-MES",
+      "description": "Soporte técnico mensual",
+      "quantity": "1",
+      "unit_price": "80000",
+      "taxes": [
+        {
+          "code": "01",
+          "rate": "19"
         }
       ]
     }
@@ -58,7 +60,10 @@ func main() {
   "payment": {
     "form": "credit",
     "term_days": 30
-  }
+  },
+  "notes": [
+    "Gracias por su compra"
+  ]
 }`
 	if err := json.Unmarshal([]byte(cuerpo), &entrada); err != nil {
 		log.Fatal(err)
