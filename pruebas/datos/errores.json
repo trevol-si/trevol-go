@@ -1,0 +1,33 @@
+{
+ "descripcion": "A mano (docs/api/43-sdks-y-documentacion.md §2.6.5). Cada code de Problem pertenece a una clase de error de los SDK; preparar.py falla si el enum de Problem tiene un code que no está aquí. Un code que el SDK no conoce (la API sumó uno) da la clase base, nunca rompe.",
+ "base": "TrevolError",
+ "clases": {
+  "AuthenticationError": ["authentication_required", "invalid_api_key"],
+  "PermissionDeniedError": ["permission_denied"],
+  "NotFoundError": ["not_found"],
+  "InvalidRequestError": ["method_not_allowed", "unsupported_version", "invalid_json", "invalid_request", "idempotency_key_required"],
+  "IdempotencyError": ["idempotency_key_reused"],
+  "ValidationError": ["validation_error"],
+  "ConflictError": ["external_id_in_use", "invalid_state", "duplicate_document", "request_in_progress", "previous_event_pending", "file_unavailable", "webhook_limit_reached"],
+  "PreconditionError": ["company_not_enabled", "numbering_unavailable", "certificate_problem", "tacit_acceptance_not_due"],
+  "DianRejectedError": ["dian_rejected"],
+  "BalanceError": ["insufficient_balance", "top_up_below_minimum", "top_up_above_maximum", "top_ups_unavailable"],
+  "RateLimitError": ["rate_limited"],
+  "DianUnavailableError": ["dian_unavailable"],
+  "InternalServerError": ["internal_error"]
+ },
+ "estados": {
+  "400": "InvalidRequestError",
+  "401": "AuthenticationError",
+  "402": "BalanceError",
+  "403": "PermissionDeniedError",
+  "404": "NotFoundError",
+  "409": "ConflictError",
+  "422": "ValidationError",
+  "429": "RateLimitError",
+  "5xx": "InternalServerError"
+ },
+ "sinRespuesta": "APIConnectionError",
+ "configuracion": "ConfigurationError",
+ "webhook": "WebhookVerificationError"
+}

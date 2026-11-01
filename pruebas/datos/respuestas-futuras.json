@@ -1,0 +1,287 @@
+{
+ "descripcion": "Respuestas «del futuro» (docs/api/43 §2.10.1 punto 8 y C3): lo que la API puede mandar mañana (un valor nuevo de un enum, una propiedad o un code nuevos, un campo que falta, un evento de un type nuevo) NO debe romper a quien ya integró. Cada SDK las decodifica a través de su método generado (`operacion`) y comprueba `esperado`. Los eventos pasan por Webhook.eventData.",
+ "casos": [
+  {
+   "nombre": "un documento con un status que no existe todavía",
+   "operacion": "retrieveInvoice",
+   "estado": 200,
+   "cuerpo": {
+    "id": "inv_3f0c1a2b3f0c1a2b3f0c1a2b3f0c1a2b",
+    "object": "invoice",
+    "environment": "test",
+    "status": "quarantined",
+    "number": "SETP990012345",
+    "prefix": "SETP",
+    "external_id": "VENTA-2026-000123",
+    "origin": "api",
+    "cufe": "abababababababababababababababababababababababababababababababababababababababababababababababab",
+    "issued_at": "2026-10-31T09:15:02-05:00",
+    "document_type": "01",
+    "totals": {
+     "subtotal": "100000.00",
+     "total": "119000.00",
+     "currency": null
+    },
+    "dian": {
+     "status_code": "00",
+     "message": "Procesado Correctamente.",
+     "rules": []
+    },
+    "delivery": {
+     "status": "pending"
+    },
+    "created_at": "2026-10-31T09:15:02-05:00",
+    "updated_at": "2026-10-31T09:15:03-05:00"
+   },
+   "esperado": {
+    "id": "inv_3f0c1a2b3f0c1a2b3f0c1a2b3f0c1a2b",
+    "status": "quarantined"
+   }
+  },
+  {
+   "nombre": "un documento con una propiedad nueva",
+   "operacion": "retrieveInvoice",
+   "estado": 200,
+   "cuerpo": {
+    "id": "inv_3f0c1a2b3f0c1a2b3f0c1a2b3f0c1a2b",
+    "object": "invoice",
+    "environment": "test",
+    "status": "accepted",
+    "number": "SETP990012345",
+    "prefix": "SETP",
+    "external_id": "VENTA-2026-000123",
+    "origin": "api",
+    "cufe": "abababababababababababababababababababababababababababababababababababababababababababababababab",
+    "issued_at": "2026-10-31T09:15:02-05:00",
+    "document_type": "01",
+    "totals": {
+     "subtotal": "100000.00",
+     "total": "119000.00",
+     "currency": null
+    },
+    "dian": {
+     "status_code": "00",
+     "message": "Procesado Correctamente.",
+     "rules": []
+    },
+    "delivery": {
+     "status": "pending"
+    },
+    "created_at": "2026-10-31T09:15:02-05:00",
+    "updated_at": "2026-10-31T09:15:03-05:00",
+    "carbon_footprint": {
+     "grams": 12
+    }
+   },
+   "esperado": {
+    "id": "inv_3f0c1a2b3f0c1a2b3f0c1a2b3f0c1a2b",
+    "status": "accepted"
+   }
+  },
+  {
+   "nombre": "un documento al que le faltan propiedades que hoy se declaran obligatorias",
+   "operacion": "retrieveInvoice",
+   "estado": 200,
+   "cuerpo": {
+    "id": "inv_3f0c1a2b3f0c1a2b3f0c1a2b3f0c1a2b",
+    "object": "invoice",
+    "status": "accepted"
+   },
+   "esperado": {
+    "id": "inv_3f0c1a2b3f0c1a2b3f0c1a2b3f0c1a2b",
+    "status": "accepted"
+   }
+  },
+  {
+   "nombre": "un documento con un object y un environment nuevos",
+   "operacion": "retrieveInvoice",
+   "estado": 200,
+   "cuerpo": {
+    "id": "inv_3f0c1a2b3f0c1a2b3f0c1a2b3f0c1a2b",
+    "object": "invoice_v2",
+    "environment": "sandbox",
+    "status": "accepted",
+    "number": "SETP990012345",
+    "prefix": "SETP",
+    "external_id": "VENTA-2026-000123",
+    "origin": "api",
+    "cufe": "abababababababababababababababababababababababababababababababababababababababababababababababab",
+    "issued_at": "2026-10-31T09:15:02-05:00",
+    "document_type": "01",
+    "totals": {
+     "subtotal": "100000.00",
+     "total": "119000.00",
+     "currency": null
+    },
+    "dian": {
+     "status_code": "00",
+     "message": "Procesado Correctamente.",
+     "rules": []
+    },
+    "delivery": {
+     "status": "pending"
+    },
+    "created_at": "2026-10-31T09:15:02-05:00",
+    "updated_at": "2026-10-31T09:15:03-05:00"
+   },
+   "esperado": {
+    "id": "inv_3f0c1a2b3f0c1a2b3f0c1a2b3f0c1a2b",
+    "status": "accepted"
+   }
+  },
+  {
+   "nombre": "un listado con un campo nuevo y un documento de status nuevo",
+   "operacion": "listInvoices",
+   "estado": 200,
+   "cuerpo": {
+    "object": "list",
+    "data": [
+     {
+      "id": "inv_3f0c1a2b3f0c1a2b3f0c1a2b3f0c1a2b",
+      "object": "invoice",
+      "environment": "test",
+      "status": "quarantined",
+      "number": "SETP990012345",
+      "prefix": "SETP",
+      "external_id": "VENTA-2026-000123",
+      "origin": "api",
+      "cufe": "abababababababababababababababababababababababababababababababababababababababababababababababab",
+      "issued_at": "2026-10-31T09:15:02-05:00",
+      "document_type": "01",
+      "totals": {
+       "subtotal": "100000.00",
+       "total": "119000.00",
+       "currency": null
+      },
+      "dian": {
+       "status_code": "00",
+       "message": "Procesado Correctamente.",
+       "rules": []
+      },
+      "delivery": {
+       "status": "pending"
+      },
+      "created_at": "2026-10-31T09:15:02-05:00",
+      "updated_at": "2026-10-31T09:15:03-05:00"
+     }
+    ],
+    "has_more": false,
+    "next_cursor": null,
+    "total_estimate": 1
+   },
+   "esperado": {
+    "cantidad": 1,
+    "has_more": false
+   }
+  },
+  {
+   "nombre": "un problem con un code nuevo (llega como TrevolError con ese code)",
+   "operacion": "retrieveInvoice",
+   "estado": 422,
+   "cuerpo": {
+    "type": "https://platform.trevol.si/docs/errores#validation_error",
+    "title": "La solicitud no es válida",
+    "status": 422,
+    "code": "code_del_futuro",
+    "retryable": false,
+    "detail": "Revisa los campos.",
+    "request_id": "req_a1a1a1a1a1a1a1a1a1a1a1a1"
+   },
+   "esperado": {
+    "clase": "TrevolError",
+    "code": "code_del_futuro",
+    "status": 422
+   }
+  },
+  {
+   "nombre": "un problem sin request_id (el Worker no siempre lo manda): toma el de la cabecera",
+   "operacion": "retrieveInvoice",
+   "estado": 404,
+   "cabeceras": {
+    "request-id": "req_b2b2b2b2b2b2b2b2b2b2b2b2"
+   },
+   "cuerpo": {
+    "type": "https://platform.trevol.si/docs/errores#validation_error",
+    "title": "La solicitud no es válida",
+    "status": 404,
+    "code": "not_found",
+    "retryable": false,
+    "detail": "Revisa los campos."
+   },
+   "esperado": {
+    "clase": "NotFoundError",
+    "code": "not_found",
+    "status": 404,
+    "requestId": "req_b2b2b2b2b2b2b2b2b2b2b2b2"
+   }
+  },
+  {
+   "nombre": "un problem con campos extra desconocidos",
+   "operacion": "retrieveInvoice",
+   "estado": 422,
+   "cuerpo": {
+    "type": "https://platform.trevol.si/docs/errores#validation_error",
+    "title": "La solicitud no es válida",
+    "status": 422,
+    "code": "validation_error",
+    "retryable": false,
+    "detail": "Revisa los campos.",
+    "request_id": "req_a1a1a1a1a1a1a1a1a1a1a1a1",
+    "hint": "nuevo",
+    "errors": [
+     {
+      "field": "items",
+      "pointer": "/items",
+      "message": "Falta",
+      "severity": "fatal"
+     }
+    ]
+   },
+   "esperado": {
+    "clase": "ValidationError",
+    "code": "validation_error",
+    "status": 422
+   }
+  },
+  {
+   "nombre": "un evento de un type nuevo",
+   "evento": {
+    "id": "evt_1f1f1f1f1f1f1f1f1f1f1f1f1f1f1f1f",
+    "object": "event",
+    "type": "invoice.archived",
+    "timestamp": "2026-10-31T14:20:05Z",
+    "environment": "test",
+    "api_version": "2026-10-22",
+    "data": {
+     "id": "inv_3f0c1a2b3f0c1a2b3f0c1a2b3f0c1a2b",
+     "nuevo": true
+    }
+   },
+   "esperado": {
+    "type": "invoice.archived",
+    "tieneModelo": false
+   }
+  },
+  {
+   "nombre": "un evento conocido con datos nuevos",
+   "evento": {
+    "id": "evt_2f2f2f2f2f2f2f2f2f2f2f2f2f2f2f2f",
+    "object": "event",
+    "type": "invoice.accepted",
+    "timestamp": "2026-10-31T14:20:05Z",
+    "environment": "test",
+    "api_version": "2026-10-22",
+    "data": {
+     "object": "invoice",
+     "id": "inv_3f0c1a2b3f0c1a2b3f0c1a2b3f0c1a2b",
+     "status": "quarantined",
+     "campo_nuevo": 1
+    }
+   },
+   "esperado": {
+    "type": "invoice.accepted",
+    "tieneModelo": true
+   }
+  }
+ ]
+}

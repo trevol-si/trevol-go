@@ -1,0 +1,4090 @@
+[
+ {
+  "operationId": "correctCreditNote",
+  "metodo": "PUT",
+  "ruta": "/credit_notes/{id}",
+  "recurso": "CreditNotes",
+  "idempotente": true,
+  "reintento": "seguro",
+  "binario": null,
+  "lista": null,
+  "respuesta": "Document",
+  "cuerpo": "NoteInput",
+  "cuerpoRequerido": true,
+  "parametros": [
+   {
+    "nombre": "id",
+    "en": "path",
+    "requerido": true,
+    "tipo": "string"
+   },
+   {
+    "nombre": "Idempotency-Key",
+    "en": "header",
+    "requerido": false,
+    "tipo": "string"
+   }
+  ],
+  "ejemplos": [
+   {
+    "nombre": "devolucion",
+    "resumen": "Devolución parcial de una factura de Trevol",
+    "valor": {
+     "external_id": "DEV-2026-000045",
+     "concept": "1",
+     "description": "Devolución de una unidad por empaque dañado",
+     "invoice": {
+      "id": "inv_3f0c1a2b3f0c1a2b3f0c1a2b3f0c1a2b"
+     },
+     "items": [
+      {
+       "description": "Café especial 500 g",
+       "code": "CAF-500",
+       "unit": "94",
+       "quantity": "1",
+       "unit_price": "32000",
+       "taxes": [
+        {
+         "code": "01",
+         "rate": "19"
+        }
+       ]
+      }
+     ]
+    }
+   }
+  ]
+ },
+ {
+  "operationId": "correctDebitNote",
+  "metodo": "PUT",
+  "ruta": "/debit_notes/{id}",
+  "recurso": "DebitNotes",
+  "idempotente": true,
+  "reintento": "seguro",
+  "binario": null,
+  "lista": null,
+  "respuesta": "Document",
+  "cuerpo": "NoteInput",
+  "cuerpoRequerido": true,
+  "parametros": [
+   {
+    "nombre": "id",
+    "en": "path",
+    "requerido": true,
+    "tipo": "string"
+   },
+   {
+    "nombre": "Idempotency-Key",
+    "en": "header",
+    "requerido": false,
+    "tipo": "string"
+   }
+  ],
+  "ejemplos": [
+   {
+    "nombre": "intereses",
+    "resumen": "Intereses de mora de una factura de Trevol",
+    "valor": {
+     "external_id": "INT-2026-000012",
+     "concept": "1",
+     "description": "Intereses de mora de la factura de septiembre",
+     "invoice": {
+      "id": "inv_3f0c1a2b3f0c1a2b3f0c1a2b3f0c1a2b"
+     },
+     "items": [
+      {
+       "description": "Intereses de mora",
+       "unit": "94",
+       "quantity": "1",
+       "unit_price": "45000"
+      }
+     ]
+    }
+   }
+  ]
+ },
+ {
+  "operationId": "correctEquivalentDocument",
+  "metodo": "PUT",
+  "ruta": "/equivalent_documents/{id}",
+  "recurso": "EquivalentDocuments",
+  "idempotente": true,
+  "reintento": "seguro",
+  "binario": null,
+  "lista": null,
+  "respuesta": "EquivalentDocument",
+  "cuerpo": "EquivalentDocumentInput",
+  "cuerpoRequerido": true,
+  "parametros": [
+   {
+    "nombre": "id",
+    "en": "path",
+    "requerido": true,
+    "tipo": "string"
+   },
+   {
+    "nombre": "Idempotency-Key",
+    "en": "header",
+    "requerido": false,
+    "tipo": "string"
+   }
+  ],
+  "ejemplos": [
+   {
+    "nombre": "pos",
+    "resumen": "Tiquete POS de consumidor final, en la caja de un prefijo",
+    "valor": {
+     "external_id": "TIQ-1",
+     "customer": {
+      "final_consumer": true
+     },
+     "pos": {
+      "register": {
+       "plate": "CJ-01",
+       "location": "Local 1, Jamundí",
+       "cashier": "PEREZ ANA",
+       "type": "Caja principal"
+      }
+     },
+     "numbering": {
+      "prefix": "POS2"
+     },
+     "payment": {
+      "form": "cash",
+      "methods": [
+       {
+        "code": "10"
+       }
+      ]
+     },
+     "items": [
+      {
+       "description": "Gaseosa 400 ml",
+       "code": "GAS-1",
+       "unit": "94",
+       "quantity": "2",
+       "unit_price": "3000",
+       "taxes": [
+        {
+         "code": "01",
+         "rate": "19"
+        }
+       ]
+      },
+      {
+       "description": "Almuerzo",
+       "unit": "94",
+       "quantity": "1",
+       "unit_price": "18000"
+      }
+     ]
+    }
+   }
+  ]
+ },
+ {
+  "operationId": "correctEquivalentDocumentAdjustment",
+  "metodo": "PUT",
+  "ruta": "/equivalent_document_adjustments/{id}",
+  "recurso": "EquivalentDocumentAdjustments",
+  "idempotente": true,
+  "reintento": "seguro",
+  "binario": null,
+  "lista": null,
+  "respuesta": "EquivalentDocumentAdjustment",
+  "cuerpo": "EquivalentDocumentAdjustmentInput",
+  "cuerpoRequerido": true,
+  "parametros": [
+   {
+    "nombre": "id",
+    "en": "path",
+    "requerido": true,
+    "tipo": "string"
+   },
+   {
+    "nombre": "Idempotency-Key",
+    "en": "header",
+    "requerido": false,
+    "tipo": "string"
+   }
+  ],
+  "ejemplos": [
+   {
+    "nombre": "devolucion",
+    "resumen": "Nota crédito: una devolución",
+    "valor": {
+     "external_id": "TIQ-1-DEV",
+     "note_type": "credit",
+     "concept": "1",
+     "equivalent_document": {
+      "id": "pos_3f0c1a2b3f0c1a2b3f0c1a2b3f0c1a2b"
+     },
+     "items": [
+      {
+       "description": "Devolución gaseosa",
+       "unit": "94",
+       "quantity": "1",
+       "unit_price": "3000",
+       "taxes": [
+        {
+         "code": "01",
+         "rate": "19"
+        }
+       ]
+      }
+     ]
+    }
+   }
+  ]
+ },
+ {
+  "operationId": "correctInvoice",
+  "metodo": "PUT",
+  "ruta": "/invoices/{id}",
+  "recurso": "Invoices",
+  "idempotente": true,
+  "reintento": "seguro",
+  "binario": null,
+  "lista": null,
+  "respuesta": "Document",
+  "cuerpo": "InvoiceInput",
+  "cuerpoRequerido": true,
+  "parametros": [
+   {
+    "nombre": "id",
+    "en": "path",
+    "requerido": true,
+    "tipo": "string"
+   },
+   {
+    "nombre": "Idempotency-Key",
+    "en": "header",
+    "requerido": false,
+    "tipo": "string"
+   }
+  ],
+  "ejemplos": [
+   {
+    "nombre": "exportacion",
+    "resumen": "Exportación en dólares (Fase 1B)",
+    "valor": {
+     "external_id": "EXP-77",
+     "document_type": "02",
+     "currency": {
+      "code": "USD",
+      "exchange_rate": "3950.12",
+      "rate_date": "2026-10-21"
+     },
+     "delivery_terms": {
+      "incoterm": "FOB",
+      "conditions": "Puerto de Cartagena"
+     },
+     "customer": {
+      "document_type": "50",
+      "document_number": "US123456789",
+      "name": "ACME INC",
+      "country": "US",
+      "city": "Miami",
+      "region": "Florida",
+      "postal_code": "33131",
+      "address": "200 S Biscayne Blvd"
+     },
+     "items": [
+      {
+       "description": "Consultoría",
+       "quantity": "1",
+       "unit_price": "1000",
+       "taxes": [
+        {
+         "code": "01",
+         "excluded": true
+        }
+       ]
+      }
+     ],
+     "payment": {
+      "form": "credit",
+      "term_days": 30
+     }
+    }
+   }
+  ]
+ },
+ {
+  "operationId": "correctPayroll",
+  "metodo": "PUT",
+  "ruta": "/payrolls/{id}",
+  "recurso": "Payrolls",
+  "idempotente": true,
+  "reintento": "seguro",
+  "binario": null,
+  "lista": null,
+  "respuesta": "Payroll",
+  "cuerpo": "PayrollInput",
+  "cuerpoRequerido": true,
+  "parametros": [
+   {
+    "nombre": "id",
+    "en": "path",
+    "requerido": true,
+    "tipo": "string"
+   },
+   {
+    "nombre": "Idempotency-Key",
+    "en": "header",
+    "requerido": false,
+    "tipo": "string"
+   }
+  ],
+  "ejemplos": [
+   {
+    "nombre": "mensual",
+    "resumen": "Nómina de un mes completo",
+    "valor": {
+     "external_id": "NOM-2026-09-001",
+     "period": {
+      "hire_date": "2024-03-01",
+      "start": "2026-09-01",
+      "end": "2026-09-30"
+     },
+     "pay_period": "5",
+     "notes": [
+      "Nómina de septiembre de 2026"
+     ],
+     "employee": {
+      "type": "01",
+      "subtype": "00",
+      "high_risk_pension": false,
+      "document_type": "13",
+      "document_number": "1000000101",
+      "first_surname": "PRUEBA",
+      "second_surname": "NOMINA01",
+      "first_name": "TRABAJADOR",
+      "other_names": "DE PRUEBA",
+      "workplace": {
+       "country": "CO",
+       "municipality_code": "76001",
+       "address": "Calle 1 # 1-1"
+      },
+      "integral_salary": false,
+      "contract_type": "2",
+      "salary": "1423500",
+      "code": "TRAB-01"
+     },
+     "payment": {
+      "form": "1",
+      "method": "42",
+      "bank": "Banco de Pruebas",
+      "account_type": "Ahorros",
+      "account_number": "0001234501"
+     },
+     "payment_dates": [
+      "2026-09-30"
+     ],
+     "earnings": {
+      "basic": {
+       "days": 30,
+       "amount": "1423500"
+      },
+      "transport": [
+       {
+        "allowance": "200000"
+       }
+      ]
+     },
+     "deductions": {
+      "health": {
+       "percent": "4",
+       "amount": "56940"
+      },
+      "pension": {
+       "percent": "4",
+       "amount": "56940"
+      }
+     }
+    }
+   }
+  ]
+ },
+ {
+  "operationId": "correctPayrollAdjustment",
+  "metodo": "PUT",
+  "ruta": "/payroll_adjustments/{id}",
+  "recurso": "PayrollAdjustments",
+  "idempotente": true,
+  "reintento": "seguro",
+  "binario": null,
+  "lista": null,
+  "respuesta": "PayrollAdjustment",
+  "cuerpo": "PayrollAdjustmentInput",
+  "cuerpoRequerido": true,
+  "parametros": [
+   {
+    "nombre": "id",
+    "en": "path",
+    "requerido": true,
+    "tipo": "string"
+   },
+   {
+    "nombre": "Idempotency-Key",
+    "en": "header",
+    "requerido": false,
+    "tipo": "string"
+   }
+  ],
+  "ejemplos": [
+   {
+    "nombre": "reemplazar",
+    "resumen": "Reemplazar: la nómina corregida",
+    "valor": {
+     "external_id": "NOM-2026-09-001-R",
+     "period": {
+      "hire_date": "2024-03-01",
+      "start": "2026-09-01",
+      "end": "2026-09-30"
+     },
+     "pay_period": "5",
+     "notes": [
+      "Nómina de septiembre de 2026"
+     ],
+     "employee": {
+      "type": "01",
+      "subtype": "00",
+      "high_risk_pension": false,
+      "document_type": "13",
+      "document_number": "1000000101",
+      "first_surname": "PRUEBA",
+      "second_surname": "NOMINA01",
+      "first_name": "TRABAJADOR",
+      "other_names": "DE PRUEBA",
+      "workplace": {
+       "country": "CO",
+       "municipality_code": "76001",
+       "address": "Calle 1 # 1-1"
+      },
+      "integral_salary": false,
+      "contract_type": "2",
+      "salary": "1423500",
+      "code": "TRAB-01"
+     },
+     "payment": {
+      "form": "1",
+      "method": "42",
+      "bank": "Banco de Pruebas",
+      "account_type": "Ahorros",
+      "account_number": "0001234501"
+     },
+     "payment_dates": [
+      "2026-09-30"
+     ],
+     "earnings": {
+      "basic": {
+       "days": 30,
+       "amount": "1423500"
+      },
+      "transport": [
+       {
+        "allowance": "210000"
+       }
+      ]
+     },
+     "deductions": {
+      "health": {
+       "percent": "4",
+       "amount": "56940"
+      },
+      "pension": {
+       "percent": "4",
+       "amount": "56940"
+      }
+     },
+     "type": "replace",
+     "predecessor": {
+      "id": "pr_3f0c1a2b3f0c1a2b3f0c1a2b3f0c1a2b"
+     }
+    }
+   },
+   {
+    "nombre": "eliminar",
+    "resumen": "Eliminar: la nómina no debió enviarse",
+    "valor": {
+     "external_id": "NOM-2026-09-001-E",
+     "type": "delete",
+     "predecessor": {
+      "id": "pr_3f0c1a2b3f0c1a2b3f0c1a2b3f0c1a2b"
+     },
+     "notes": [
+      "Enviada por error"
+     ]
+    }
+   }
+  ]
+ },
+ {
+  "operationId": "correctSupportDocument",
+  "metodo": "PUT",
+  "ruta": "/support_documents/{id}",
+  "recurso": "SupportDocuments",
+  "idempotente": true,
+  "reintento": "seguro",
+  "binario": null,
+  "lista": null,
+  "respuesta": "SupportDocument",
+  "cuerpo": "SupportDocumentInput",
+  "cuerpoRequerido": true,
+  "parametros": [
+   {
+    "nombre": "id",
+    "en": "path",
+    "requerido": true,
+    "tipo": "string"
+   },
+   {
+    "nombre": "Idempotency-Key",
+    "en": "header",
+    "requerido": false,
+    "tipo": "string"
+   }
+  ],
+  "ejemplos": [
+   {
+    "nombre": "compra",
+    "resumen": "Compra de leche a un campesino",
+    "valor": {
+     "external_id": "OC-991",
+     "seller": {
+      "resident": true,
+      "person_type": "natural",
+      "document_type": "31",
+      "document_number": "1020304050",
+      "name": "PEREZ GOMEZ ANA MARIA",
+      "address": "Vereda El Silencio, finca La Esperanza",
+      "municipality_code": "25053",
+      "postal_code": "252007",
+      "tax_responsibilities": [
+       "R-99-PN"
+      ]
+     },
+     "items": [
+      {
+       "description": "Leche cruda",
+       "unit": "LTR",
+       "quantity": "120",
+       "unit_price": "1800"
+      }
+     ],
+     "payment": {
+      "form": "cash",
+      "methods": [
+       {
+        "code": "10"
+       }
+      ]
+     },
+     "notes": [
+      "Compra de la semana 42 de octubre"
+     ]
+    }
+   }
+  ]
+ },
+ {
+  "operationId": "correctSupportDocumentAdjustment",
+  "metodo": "PUT",
+  "ruta": "/support_document_adjustments/{id}",
+  "recurso": "SupportDocumentAdjustments",
+  "idempotente": true,
+  "reintento": "seguro",
+  "binario": null,
+  "lista": null,
+  "respuesta": "SupportDocumentAdjustment",
+  "cuerpo": "SupportDocumentAdjustmentInput",
+  "cuerpoRequerido": true,
+  "parametros": [
+   {
+    "nombre": "id",
+    "en": "path",
+    "requerido": true,
+    "tipo": "string"
+   },
+   {
+    "nombre": "Idempotency-Key",
+    "en": "header",
+    "requerido": false,
+    "tipo": "string"
+   }
+  ],
+  "ejemplos": [
+   {
+    "nombre": "anulacion",
+    "resumen": "Anulación de un documento soporte de Trevol",
+    "valor": {
+     "external_id": "OC-991-ANULA",
+     "concept": "2",
+     "description": "Anulación: la compra de leche se registró dos veces en el ERP",
+     "support_document": {
+      "id": "sd_3f0c1a2b3f0c1a2b3f0c1a2b3f0c1a2b"
+     },
+     "items": [
+      {
+       "description": "Leche cruda",
+       "unit": "LTR",
+       "quantity": "120",
+       "unit_price": "1800"
+      }
+     ]
+    }
+   }
+  ]
+ },
+ {
+  "operationId": "createBalanceTopUp",
+  "metodo": "POST",
+  "ruta": "/balance/top_ups",
+  "recurso": "Balance",
+  "idempotente": true,
+  "reintento": "seguro",
+  "binario": null,
+  "lista": null,
+  "respuesta": "TopUp",
+  "cuerpo": "TopUpInput",
+  "cuerpoRequerido": true,
+  "parametros": [
+   {
+    "nombre": "Idempotency-Key",
+    "en": "header",
+    "requerido": false,
+    "tipo": "string"
+   }
+  ],
+  "ejemplos": [
+   {
+    "nombre": "empresa",
+    "resumen": "A nombre de la empresa de la llave",
+    "valor": {
+     "amount_cop": 50000
+    }
+   },
+   {
+    "nombre": "comprador",
+    "resumen": "Con otro comprador para la factura",
+    "valor": {
+     "amount_cop": 50000,
+     "buyer": {
+      "document_type": "31",
+      "document_number": "900373115",
+      "check_digit": "3",
+      "person_type": "legal",
+      "name": "TOSTADORA MONTEVERDE SAS",
+      "email": "contabilidad@monteverde.example",
+      "phone": "3001234567",
+      "address": "Cra 5 # 10-20",
+      "municipality_code": "76001"
+     }
+    }
+   }
+  ]
+ },
+ {
+  "operationId": "createCreditNote",
+  "metodo": "POST",
+  "ruta": "/credit_notes",
+  "recurso": "CreditNotes",
+  "idempotente": true,
+  "reintento": "seguro",
+  "binario": null,
+  "lista": null,
+  "respuesta": "Document",
+  "cuerpo": "NoteInput",
+  "cuerpoRequerido": true,
+  "parametros": [
+   {
+    "nombre": "Idempotency-Key",
+    "en": "header",
+    "requerido": false,
+    "tipo": "string"
+   }
+  ],
+  "ejemplos": [
+   {
+    "nombre": "devolucion",
+    "resumen": "Devolución parcial de una factura de Trevol",
+    "valor": {
+     "external_id": "DEV-2026-000045",
+     "concept": "1",
+     "description": "Devolución de una unidad por empaque dañado",
+     "invoice": {
+      "id": "inv_3f0c1a2b3f0c1a2b3f0c1a2b3f0c1a2b"
+     },
+     "items": [
+      {
+       "description": "Café especial 500 g",
+       "code": "CAF-500",
+       "unit": "94",
+       "quantity": "1",
+       "unit_price": "32000",
+       "taxes": [
+        {
+         "code": "01",
+         "rate": "19"
+        }
+       ]
+      }
+     ]
+    }
+   }
+  ]
+ },
+ {
+  "operationId": "createDebitNote",
+  "metodo": "POST",
+  "ruta": "/debit_notes",
+  "recurso": "DebitNotes",
+  "idempotente": true,
+  "reintento": "seguro",
+  "binario": null,
+  "lista": null,
+  "respuesta": "Document",
+  "cuerpo": "NoteInput",
+  "cuerpoRequerido": true,
+  "parametros": [
+   {
+    "nombre": "Idempotency-Key",
+    "en": "header",
+    "requerido": false,
+    "tipo": "string"
+   }
+  ],
+  "ejemplos": [
+   {
+    "nombre": "intereses",
+    "resumen": "Intereses de mora de una factura de Trevol",
+    "valor": {
+     "external_id": "INT-2026-000012",
+     "concept": "1",
+     "description": "Intereses de mora de la factura de septiembre",
+     "invoice": {
+      "id": "inv_3f0c1a2b3f0c1a2b3f0c1a2b3f0c1a2b"
+     },
+     "items": [
+      {
+       "description": "Intereses de mora",
+       "unit": "94",
+       "quantity": "1",
+       "unit_price": "45000"
+      }
+     ]
+    }
+   }
+  ]
+ },
+ {
+  "operationId": "createEquivalentDocument",
+  "metodo": "POST",
+  "ruta": "/equivalent_documents",
+  "recurso": "EquivalentDocuments",
+  "idempotente": true,
+  "reintento": "seguro",
+  "binario": null,
+  "lista": null,
+  "respuesta": "EquivalentDocument",
+  "cuerpo": "EquivalentDocumentInput",
+  "cuerpoRequerido": true,
+  "parametros": [
+   {
+    "nombre": "Idempotency-Key",
+    "en": "header",
+    "requerido": false,
+    "tipo": "string"
+   }
+  ],
+  "ejemplos": [
+   {
+    "nombre": "pos",
+    "resumen": "Tiquete POS de consumidor final, en la caja de un prefijo",
+    "valor": {
+     "external_id": "TIQ-1",
+     "customer": {
+      "final_consumer": true
+     },
+     "pos": {
+      "register": {
+       "plate": "CJ-01",
+       "location": "Local 1, Jamundí",
+       "cashier": "PEREZ ANA",
+       "type": "Caja principal"
+      }
+     },
+     "numbering": {
+      "prefix": "POS2"
+     },
+     "payment": {
+      "form": "cash",
+      "methods": [
+       {
+        "code": "10"
+       }
+      ]
+     },
+     "items": [
+      {
+       "description": "Gaseosa 400 ml",
+       "code": "GAS-1",
+       "unit": "94",
+       "quantity": "2",
+       "unit_price": "3000",
+       "taxes": [
+        {
+         "code": "01",
+         "rate": "19"
+        }
+       ]
+      },
+      {
+       "description": "Almuerzo",
+       "unit": "94",
+       "quantity": "1",
+       "unit_price": "18000"
+      }
+     ]
+    }
+   }
+  ]
+ },
+ {
+  "operationId": "createEquivalentDocumentAdjustment",
+  "metodo": "POST",
+  "ruta": "/equivalent_document_adjustments",
+  "recurso": "EquivalentDocumentAdjustments",
+  "idempotente": true,
+  "reintento": "seguro",
+  "binario": null,
+  "lista": null,
+  "respuesta": "EquivalentDocumentAdjustment",
+  "cuerpo": "EquivalentDocumentAdjustmentInput",
+  "cuerpoRequerido": true,
+  "parametros": [
+   {
+    "nombre": "Idempotency-Key",
+    "en": "header",
+    "requerido": false,
+    "tipo": "string"
+   }
+  ],
+  "ejemplos": [
+   {
+    "nombre": "devolucion",
+    "resumen": "Nota crédito: una devolución",
+    "valor": {
+     "external_id": "TIQ-1-DEV",
+     "note_type": "credit",
+     "concept": "1",
+     "equivalent_document": {
+      "id": "pos_3f0c1a2b3f0c1a2b3f0c1a2b3f0c1a2b"
+     },
+     "items": [
+      {
+       "description": "Devolución gaseosa",
+       "unit": "94",
+       "quantity": "1",
+       "unit_price": "3000",
+       "taxes": [
+        {
+         "code": "01",
+         "rate": "19"
+        }
+       ]
+      }
+     ]
+    }
+   }
+  ]
+ },
+ {
+  "operationId": "createInvoice",
+  "metodo": "POST",
+  "ruta": "/invoices",
+  "recurso": "Invoices",
+  "idempotente": true,
+  "reintento": "seguro",
+  "binario": null,
+  "lista": null,
+  "respuesta": "Document",
+  "cuerpo": "InvoiceInput",
+  "cuerpoRequerido": true,
+  "parametros": [
+   {
+    "nombre": "Idempotency-Key",
+    "en": "header",
+    "requerido": false,
+    "tipo": "string"
+   }
+  ],
+  "ejemplos": [
+   {
+    "nombre": "exportacion",
+    "resumen": "Exportación en dólares (Fase 1B)",
+    "valor": {
+     "external_id": "EXP-77",
+     "document_type": "02",
+     "currency": {
+      "code": "USD",
+      "exchange_rate": "3950.12",
+      "rate_date": "2026-10-21"
+     },
+     "delivery_terms": {
+      "incoterm": "FOB",
+      "conditions": "Puerto de Cartagena"
+     },
+     "customer": {
+      "document_type": "50",
+      "document_number": "US123456789",
+      "name": "ACME INC",
+      "country": "US",
+      "city": "Miami",
+      "region": "Florida",
+      "postal_code": "33131",
+      "address": "200 S Biscayne Blvd"
+     },
+     "items": [
+      {
+       "description": "Consultoría",
+       "quantity": "1",
+       "unit_price": "1000",
+       "taxes": [
+        {
+         "code": "01",
+         "excluded": true
+        }
+       ]
+      }
+     ],
+     "payment": {
+      "form": "credit",
+      "term_days": 30
+     }
+    }
+   }
+  ]
+ },
+ {
+  "operationId": "createPayroll",
+  "metodo": "POST",
+  "ruta": "/payrolls",
+  "recurso": "Payrolls",
+  "idempotente": true,
+  "reintento": "seguro",
+  "binario": null,
+  "lista": null,
+  "respuesta": "Payroll",
+  "cuerpo": "PayrollInput",
+  "cuerpoRequerido": true,
+  "parametros": [
+   {
+    "nombre": "Idempotency-Key",
+    "en": "header",
+    "requerido": false,
+    "tipo": "string"
+   }
+  ],
+  "ejemplos": [
+   {
+    "nombre": "mensual",
+    "resumen": "Nómina de un mes completo",
+    "valor": {
+     "external_id": "NOM-2026-09-001",
+     "period": {
+      "hire_date": "2024-03-01",
+      "start": "2026-09-01",
+      "end": "2026-09-30"
+     },
+     "pay_period": "5",
+     "notes": [
+      "Nómina de septiembre de 2026"
+     ],
+     "employee": {
+      "type": "01",
+      "subtype": "00",
+      "high_risk_pension": false,
+      "document_type": "13",
+      "document_number": "1000000101",
+      "first_surname": "PRUEBA",
+      "second_surname": "NOMINA01",
+      "first_name": "TRABAJADOR",
+      "other_names": "DE PRUEBA",
+      "workplace": {
+       "country": "CO",
+       "municipality_code": "76001",
+       "address": "Calle 1 # 1-1"
+      },
+      "integral_salary": false,
+      "contract_type": "2",
+      "salary": "1423500",
+      "code": "TRAB-01"
+     },
+     "payment": {
+      "form": "1",
+      "method": "42",
+      "bank": "Banco de Pruebas",
+      "account_type": "Ahorros",
+      "account_number": "0001234501"
+     },
+     "payment_dates": [
+      "2026-09-30"
+     ],
+     "earnings": {
+      "basic": {
+       "days": 30,
+       "amount": "1423500"
+      },
+      "transport": [
+       {
+        "allowance": "200000"
+       }
+      ]
+     },
+     "deductions": {
+      "health": {
+       "percent": "4",
+       "amount": "56940"
+      },
+      "pension": {
+       "percent": "4",
+       "amount": "56940"
+      }
+     }
+    }
+   }
+  ]
+ },
+ {
+  "operationId": "createPayrollAdjustment",
+  "metodo": "POST",
+  "ruta": "/payroll_adjustments",
+  "recurso": "PayrollAdjustments",
+  "idempotente": true,
+  "reintento": "seguro",
+  "binario": null,
+  "lista": null,
+  "respuesta": "PayrollAdjustment",
+  "cuerpo": "PayrollAdjustmentInput",
+  "cuerpoRequerido": true,
+  "parametros": [
+   {
+    "nombre": "Idempotency-Key",
+    "en": "header",
+    "requerido": false,
+    "tipo": "string"
+   }
+  ],
+  "ejemplos": [
+   {
+    "nombre": "reemplazar",
+    "resumen": "Reemplazar: la nómina corregida",
+    "valor": {
+     "external_id": "NOM-2026-09-001-R",
+     "period": {
+      "hire_date": "2024-03-01",
+      "start": "2026-09-01",
+      "end": "2026-09-30"
+     },
+     "pay_period": "5",
+     "notes": [
+      "Nómina de septiembre de 2026"
+     ],
+     "employee": {
+      "type": "01",
+      "subtype": "00",
+      "high_risk_pension": false,
+      "document_type": "13",
+      "document_number": "1000000101",
+      "first_surname": "PRUEBA",
+      "second_surname": "NOMINA01",
+      "first_name": "TRABAJADOR",
+      "other_names": "DE PRUEBA",
+      "workplace": {
+       "country": "CO",
+       "municipality_code": "76001",
+       "address": "Calle 1 # 1-1"
+      },
+      "integral_salary": false,
+      "contract_type": "2",
+      "salary": "1423500",
+      "code": "TRAB-01"
+     },
+     "payment": {
+      "form": "1",
+      "method": "42",
+      "bank": "Banco de Pruebas",
+      "account_type": "Ahorros",
+      "account_number": "0001234501"
+     },
+     "payment_dates": [
+      "2026-09-30"
+     ],
+     "earnings": {
+      "basic": {
+       "days": 30,
+       "amount": "1423500"
+      },
+      "transport": [
+       {
+        "allowance": "210000"
+       }
+      ]
+     },
+     "deductions": {
+      "health": {
+       "percent": "4",
+       "amount": "56940"
+      },
+      "pension": {
+       "percent": "4",
+       "amount": "56940"
+      }
+     },
+     "type": "replace",
+     "predecessor": {
+      "id": "pr_3f0c1a2b3f0c1a2b3f0c1a2b3f0c1a2b"
+     }
+    }
+   },
+   {
+    "nombre": "eliminar",
+    "resumen": "Eliminar: la nómina no debió enviarse",
+    "valor": {
+     "external_id": "NOM-2026-09-001-E",
+     "type": "delete",
+     "predecessor": {
+      "id": "pr_3f0c1a2b3f0c1a2b3f0c1a2b3f0c1a2b"
+     },
+     "notes": [
+      "Enviada por error"
+     ]
+    }
+   }
+  ]
+ },
+ {
+  "operationId": "createRadianEvent",
+  "metodo": "POST",
+  "ruta": "/radian_events",
+  "recurso": "RadianEvents",
+  "idempotente": true,
+  "reintento": "seguro",
+  "binario": null,
+  "lista": null,
+  "respuesta": "RadianEvent",
+  "cuerpo": "RadianEventInput",
+  "cuerpoRequerido": true,
+  "parametros": [
+   {
+    "nombre": "Idempotency-Key",
+    "en": "header",
+    "requerido": false,
+    "tipo": "string"
+   }
+  ],
+  "ejemplos": [
+   {
+    "nombre": "acuse",
+    "resumen": "Acuse de recibo (030) de una factura recibida",
+    "valor": {
+     "external_id": "ERP-ACUSE-DA1234",
+     "event_code": "030",
+     "invoice": {
+      "cufe": "cdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcd",
+      "number": "DA1234",
+      "type": "01",
+      "issuer": {
+       "nit": "900373427",
+       "check_digit": 3,
+       "document_type": "31",
+       "name": "DISTRIBUIDORA LOS ANDES SAS"
+      }
+     }
+    }
+   },
+   {
+    "nombre": "reclamo",
+    "resumen": "Reclamo (031) con su concepto",
+    "valor": {
+     "external_id": "ERP-RECLAMO-DA1234",
+     "event_code": "031",
+     "invoice": {
+      "cufe": "cdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcd",
+      "number": "DA1234",
+      "type": "01",
+      "issuer": {
+       "nit": "900373427",
+       "check_digit": 3,
+       "document_type": "31",
+       "name": "DISTRIBUIDORA LOS ANDES SAS"
+      }
+     },
+     "claim": {
+      "code": "02",
+      "note": "Faltaron dos cajas"
+     }
+    }
+   },
+   {
+    "nombre": "tacita",
+    "resumen": "Aceptación tácita (034) de una factura propia a crédito",
+    "valor": {
+     "external_id": "ERP-TACITA-FE1234",
+     "event_code": "034",
+     "invoice_id": "inv_3f0c1a2b3f0c1a2b3f0c1a2b3f0c1a2b"
+    }
+   },
+   {
+    "nombre": "tacita_cufe",
+    "resumen": "Aceptación tácita (034) de una factura propia emitida con otro software, por su CUFE",
+    "valor": {
+     "external_id": "ERP-TACITA-FE4722",
+     "event_code": "034",
+     "invoice": {
+      "cufe": "abababababababababababababababababababababababababababababababababababababababababababababababab",
+      "number": "FE4722"
+     }
+    }
+   }
+  ]
+ },
+ {
+  "operationId": "createSupportDocument",
+  "metodo": "POST",
+  "ruta": "/support_documents",
+  "recurso": "SupportDocuments",
+  "idempotente": true,
+  "reintento": "seguro",
+  "binario": null,
+  "lista": null,
+  "respuesta": "SupportDocument",
+  "cuerpo": "SupportDocumentInput",
+  "cuerpoRequerido": true,
+  "parametros": [
+   {
+    "nombre": "Idempotency-Key",
+    "en": "header",
+    "requerido": false,
+    "tipo": "string"
+   }
+  ],
+  "ejemplos": [
+   {
+    "nombre": "compra",
+    "resumen": "Compra de leche a un campesino",
+    "valor": {
+     "external_id": "OC-991",
+     "seller": {
+      "resident": true,
+      "person_type": "natural",
+      "document_type": "31",
+      "document_number": "1020304050",
+      "name": "PEREZ GOMEZ ANA MARIA",
+      "address": "Vereda El Silencio, finca La Esperanza",
+      "municipality_code": "25053",
+      "postal_code": "252007",
+      "tax_responsibilities": [
+       "R-99-PN"
+      ]
+     },
+     "items": [
+      {
+       "description": "Leche cruda",
+       "unit": "LTR",
+       "quantity": "120",
+       "unit_price": "1800"
+      }
+     ],
+     "payment": {
+      "form": "cash",
+      "methods": [
+       {
+        "code": "10"
+       }
+      ]
+     },
+     "notes": [
+      "Compra de la semana 42 de octubre"
+     ]
+    }
+   }
+  ]
+ },
+ {
+  "operationId": "createSupportDocumentAdjustment",
+  "metodo": "POST",
+  "ruta": "/support_document_adjustments",
+  "recurso": "SupportDocumentAdjustments",
+  "idempotente": true,
+  "reintento": "seguro",
+  "binario": null,
+  "lista": null,
+  "respuesta": "SupportDocumentAdjustment",
+  "cuerpo": "SupportDocumentAdjustmentInput",
+  "cuerpoRequerido": true,
+  "parametros": [
+   {
+    "nombre": "Idempotency-Key",
+    "en": "header",
+    "requerido": false,
+    "tipo": "string"
+   }
+  ],
+  "ejemplos": [
+   {
+    "nombre": "anulacion",
+    "resumen": "Anulación de un documento soporte de Trevol",
+    "valor": {
+     "external_id": "OC-991-ANULA",
+     "concept": "2",
+     "description": "Anulación: la compra de leche se registró dos veces en el ERP",
+     "support_document": {
+      "id": "sd_3f0c1a2b3f0c1a2b3f0c1a2b3f0c1a2b"
+     },
+     "items": [
+      {
+       "description": "Leche cruda",
+       "unit": "LTR",
+       "quantity": "120",
+       "unit_price": "1800"
+      }
+     ]
+    }
+   }
+  ]
+ },
+ {
+  "operationId": "createWebhookEndpoint",
+  "metodo": "POST",
+  "ruta": "/webhook_endpoints",
+  "recurso": "WebhookEndpoints",
+  "idempotente": false,
+  "reintento": "solo_429",
+  "binario": null,
+  "lista": null,
+  "respuesta": "WebhookEndpoint",
+  "cuerpo": "WebhookEndpointInput",
+  "cuerpoRequerido": true,
+  "parametros": [],
+  "ejemplos": [
+   {
+    "nombre": "ejemplo",
+    "resumen": "Tres eventos de facturación",
+    "valor": {
+     "url": "https://tu-servidor.co/webhooks/trevol",
+     "description": "Producción: facturación",
+     "events": [
+      "invoice.accepted",
+      "invoice.rejected",
+      "credit_note.accepted"
+     ]
+    }
+   }
+  ]
+ },
+ {
+  "operationId": "deleteWebhookEndpoint",
+  "metodo": "DELETE",
+  "ruta": "/webhook_endpoints/{id}",
+  "recurso": "WebhookEndpoints",
+  "idempotente": false,
+  "reintento": "solo_429",
+  "binario": null,
+  "lista": null,
+  "respuesta": "DeletedObject",
+  "cuerpo": null,
+  "cuerpoRequerido": false,
+  "parametros": [
+   {
+    "nombre": "id",
+    "en": "path",
+    "requerido": true,
+    "tipo": "string"
+   }
+  ],
+  "ejemplos": []
+ },
+ {
+  "operationId": "downloadCreditNoteDianResponse",
+  "metodo": "GET",
+  "ruta": "/credit_notes/{id}/dian_response",
+  "recurso": "CreditNotes",
+  "idempotente": false,
+  "reintento": "seguro",
+  "binario": "xml",
+  "lista": null,
+  "respuesta": null,
+  "cuerpo": null,
+  "cuerpoRequerido": false,
+  "parametros": [
+   {
+    "nombre": "id",
+    "en": "path",
+    "requerido": true,
+    "tipo": "string"
+   }
+  ],
+  "ejemplos": []
+ },
+ {
+  "operationId": "downloadCreditNotePdf",
+  "metodo": "GET",
+  "ruta": "/credit_notes/{id}/pdf",
+  "recurso": "CreditNotes",
+  "idempotente": false,
+  "reintento": "seguro",
+  "binario": "pdf",
+  "lista": null,
+  "respuesta": null,
+  "cuerpo": null,
+  "cuerpoRequerido": false,
+  "parametros": [
+   {
+    "nombre": "id",
+    "en": "path",
+    "requerido": true,
+    "tipo": "string"
+   }
+  ],
+  "ejemplos": []
+ },
+ {
+  "operationId": "downloadCreditNoteXml",
+  "metodo": "GET",
+  "ruta": "/credit_notes/{id}/xml",
+  "recurso": "CreditNotes",
+  "idempotente": false,
+  "reintento": "seguro",
+  "binario": "xml",
+  "lista": null,
+  "respuesta": null,
+  "cuerpo": null,
+  "cuerpoRequerido": false,
+  "parametros": [
+   {
+    "nombre": "id",
+    "en": "path",
+    "requerido": true,
+    "tipo": "string"
+   }
+  ],
+  "ejemplos": []
+ },
+ {
+  "operationId": "downloadCreditNoteZip",
+  "metodo": "GET",
+  "ruta": "/credit_notes/{id}/zip",
+  "recurso": "CreditNotes",
+  "idempotente": false,
+  "reintento": "seguro",
+  "binario": "zip",
+  "lista": null,
+  "respuesta": null,
+  "cuerpo": null,
+  "cuerpoRequerido": false,
+  "parametros": [
+   {
+    "nombre": "id",
+    "en": "path",
+    "requerido": true,
+    "tipo": "string"
+   }
+  ],
+  "ejemplos": []
+ },
+ {
+  "operationId": "downloadDebitNoteDianResponse",
+  "metodo": "GET",
+  "ruta": "/debit_notes/{id}/dian_response",
+  "recurso": "DebitNotes",
+  "idempotente": false,
+  "reintento": "seguro",
+  "binario": "xml",
+  "lista": null,
+  "respuesta": null,
+  "cuerpo": null,
+  "cuerpoRequerido": false,
+  "parametros": [
+   {
+    "nombre": "id",
+    "en": "path",
+    "requerido": true,
+    "tipo": "string"
+   }
+  ],
+  "ejemplos": []
+ },
+ {
+  "operationId": "downloadDebitNotePdf",
+  "metodo": "GET",
+  "ruta": "/debit_notes/{id}/pdf",
+  "recurso": "DebitNotes",
+  "idempotente": false,
+  "reintento": "seguro",
+  "binario": "pdf",
+  "lista": null,
+  "respuesta": null,
+  "cuerpo": null,
+  "cuerpoRequerido": false,
+  "parametros": [
+   {
+    "nombre": "id",
+    "en": "path",
+    "requerido": true,
+    "tipo": "string"
+   }
+  ],
+  "ejemplos": []
+ },
+ {
+  "operationId": "downloadDebitNoteXml",
+  "metodo": "GET",
+  "ruta": "/debit_notes/{id}/xml",
+  "recurso": "DebitNotes",
+  "idempotente": false,
+  "reintento": "seguro",
+  "binario": "xml",
+  "lista": null,
+  "respuesta": null,
+  "cuerpo": null,
+  "cuerpoRequerido": false,
+  "parametros": [
+   {
+    "nombre": "id",
+    "en": "path",
+    "requerido": true,
+    "tipo": "string"
+   }
+  ],
+  "ejemplos": []
+ },
+ {
+  "operationId": "downloadDebitNoteZip",
+  "metodo": "GET",
+  "ruta": "/debit_notes/{id}/zip",
+  "recurso": "DebitNotes",
+  "idempotente": false,
+  "reintento": "seguro",
+  "binario": "zip",
+  "lista": null,
+  "respuesta": null,
+  "cuerpo": null,
+  "cuerpoRequerido": false,
+  "parametros": [
+   {
+    "nombre": "id",
+    "en": "path",
+    "requerido": true,
+    "tipo": "string"
+   }
+  ],
+  "ejemplos": []
+ },
+ {
+  "operationId": "downloadEquivalentDocumentAdjustmentDianResponse",
+  "metodo": "GET",
+  "ruta": "/equivalent_document_adjustments/{id}/dian_response",
+  "recurso": "EquivalentDocumentAdjustments",
+  "idempotente": false,
+  "reintento": "seguro",
+  "binario": "xml",
+  "lista": null,
+  "respuesta": null,
+  "cuerpo": null,
+  "cuerpoRequerido": false,
+  "parametros": [
+   {
+    "nombre": "id",
+    "en": "path",
+    "requerido": true,
+    "tipo": "string"
+   }
+  ],
+  "ejemplos": []
+ },
+ {
+  "operationId": "downloadEquivalentDocumentAdjustmentPdf",
+  "metodo": "GET",
+  "ruta": "/equivalent_document_adjustments/{id}/pdf",
+  "recurso": "EquivalentDocumentAdjustments",
+  "idempotente": false,
+  "reintento": "seguro",
+  "binario": "pdf",
+  "lista": null,
+  "respuesta": null,
+  "cuerpo": null,
+  "cuerpoRequerido": false,
+  "parametros": [
+   {
+    "nombre": "id",
+    "en": "path",
+    "requerido": true,
+    "tipo": "string"
+   }
+  ],
+  "ejemplos": []
+ },
+ {
+  "operationId": "downloadEquivalentDocumentAdjustmentXml",
+  "metodo": "GET",
+  "ruta": "/equivalent_document_adjustments/{id}/xml",
+  "recurso": "EquivalentDocumentAdjustments",
+  "idempotente": false,
+  "reintento": "seguro",
+  "binario": "xml",
+  "lista": null,
+  "respuesta": null,
+  "cuerpo": null,
+  "cuerpoRequerido": false,
+  "parametros": [
+   {
+    "nombre": "id",
+    "en": "path",
+    "requerido": true,
+    "tipo": "string"
+   }
+  ],
+  "ejemplos": []
+ },
+ {
+  "operationId": "downloadEquivalentDocumentAdjustmentZip",
+  "metodo": "GET",
+  "ruta": "/equivalent_document_adjustments/{id}/zip",
+  "recurso": "EquivalentDocumentAdjustments",
+  "idempotente": false,
+  "reintento": "seguro",
+  "binario": "zip",
+  "lista": null,
+  "respuesta": null,
+  "cuerpo": null,
+  "cuerpoRequerido": false,
+  "parametros": [
+   {
+    "nombre": "id",
+    "en": "path",
+    "requerido": true,
+    "tipo": "string"
+   }
+  ],
+  "ejemplos": []
+ },
+ {
+  "operationId": "downloadEquivalentDocumentDianResponse",
+  "metodo": "GET",
+  "ruta": "/equivalent_documents/{id}/dian_response",
+  "recurso": "EquivalentDocuments",
+  "idempotente": false,
+  "reintento": "seguro",
+  "binario": "xml",
+  "lista": null,
+  "respuesta": null,
+  "cuerpo": null,
+  "cuerpoRequerido": false,
+  "parametros": [
+   {
+    "nombre": "id",
+    "en": "path",
+    "requerido": true,
+    "tipo": "string"
+   }
+  ],
+  "ejemplos": []
+ },
+ {
+  "operationId": "downloadEquivalentDocumentPdf",
+  "metodo": "GET",
+  "ruta": "/equivalent_documents/{id}/pdf",
+  "recurso": "EquivalentDocuments",
+  "idempotente": false,
+  "reintento": "seguro",
+  "binario": "pdf",
+  "lista": null,
+  "respuesta": null,
+  "cuerpo": null,
+  "cuerpoRequerido": false,
+  "parametros": [
+   {
+    "nombre": "id",
+    "en": "path",
+    "requerido": true,
+    "tipo": "string"
+   }
+  ],
+  "ejemplos": []
+ },
+ {
+  "operationId": "downloadEquivalentDocumentXml",
+  "metodo": "GET",
+  "ruta": "/equivalent_documents/{id}/xml",
+  "recurso": "EquivalentDocuments",
+  "idempotente": false,
+  "reintento": "seguro",
+  "binario": "xml",
+  "lista": null,
+  "respuesta": null,
+  "cuerpo": null,
+  "cuerpoRequerido": false,
+  "parametros": [
+   {
+    "nombre": "id",
+    "en": "path",
+    "requerido": true,
+    "tipo": "string"
+   }
+  ],
+  "ejemplos": []
+ },
+ {
+  "operationId": "downloadEquivalentDocumentZip",
+  "metodo": "GET",
+  "ruta": "/equivalent_documents/{id}/zip",
+  "recurso": "EquivalentDocuments",
+  "idempotente": false,
+  "reintento": "seguro",
+  "binario": "zip",
+  "lista": null,
+  "respuesta": null,
+  "cuerpo": null,
+  "cuerpoRequerido": false,
+  "parametros": [
+   {
+    "nombre": "id",
+    "en": "path",
+    "requerido": true,
+    "tipo": "string"
+   }
+  ],
+  "ejemplos": []
+ },
+ {
+  "operationId": "downloadInvoiceDianResponse",
+  "metodo": "GET",
+  "ruta": "/invoices/{id}/dian_response",
+  "recurso": "Invoices",
+  "idempotente": false,
+  "reintento": "seguro",
+  "binario": "xml",
+  "lista": null,
+  "respuesta": null,
+  "cuerpo": null,
+  "cuerpoRequerido": false,
+  "parametros": [
+   {
+    "nombre": "id",
+    "en": "path",
+    "requerido": true,
+    "tipo": "string"
+   }
+  ],
+  "ejemplos": []
+ },
+ {
+  "operationId": "downloadInvoicePdf",
+  "metodo": "GET",
+  "ruta": "/invoices/{id}/pdf",
+  "recurso": "Invoices",
+  "idempotente": false,
+  "reintento": "seguro",
+  "binario": "pdf",
+  "lista": null,
+  "respuesta": null,
+  "cuerpo": null,
+  "cuerpoRequerido": false,
+  "parametros": [
+   {
+    "nombre": "id",
+    "en": "path",
+    "requerido": true,
+    "tipo": "string"
+   }
+  ],
+  "ejemplos": []
+ },
+ {
+  "operationId": "downloadInvoiceXml",
+  "metodo": "GET",
+  "ruta": "/invoices/{id}/xml",
+  "recurso": "Invoices",
+  "idempotente": false,
+  "reintento": "seguro",
+  "binario": "xml",
+  "lista": null,
+  "respuesta": null,
+  "cuerpo": null,
+  "cuerpoRequerido": false,
+  "parametros": [
+   {
+    "nombre": "id",
+    "en": "path",
+    "requerido": true,
+    "tipo": "string"
+   }
+  ],
+  "ejemplos": []
+ },
+ {
+  "operationId": "downloadInvoiceZip",
+  "metodo": "GET",
+  "ruta": "/invoices/{id}/zip",
+  "recurso": "Invoices",
+  "idempotente": false,
+  "reintento": "seguro",
+  "binario": "zip",
+  "lista": null,
+  "respuesta": null,
+  "cuerpo": null,
+  "cuerpoRequerido": false,
+  "parametros": [
+   {
+    "nombre": "id",
+    "en": "path",
+    "requerido": true,
+    "tipo": "string"
+   }
+  ],
+  "ejemplos": []
+ },
+ {
+  "operationId": "downloadPayrollAdjustmentDianResponse",
+  "metodo": "GET",
+  "ruta": "/payroll_adjustments/{id}/dian_response",
+  "recurso": "PayrollAdjustments",
+  "idempotente": false,
+  "reintento": "seguro",
+  "binario": "xml",
+  "lista": null,
+  "respuesta": null,
+  "cuerpo": null,
+  "cuerpoRequerido": false,
+  "parametros": [
+   {
+    "nombre": "id",
+    "en": "path",
+    "requerido": true,
+    "tipo": "string"
+   }
+  ],
+  "ejemplos": []
+ },
+ {
+  "operationId": "downloadPayrollAdjustmentXml",
+  "metodo": "GET",
+  "ruta": "/payroll_adjustments/{id}/xml",
+  "recurso": "PayrollAdjustments",
+  "idempotente": false,
+  "reintento": "seguro",
+  "binario": "xml",
+  "lista": null,
+  "respuesta": null,
+  "cuerpo": null,
+  "cuerpoRequerido": false,
+  "parametros": [
+   {
+    "nombre": "id",
+    "en": "path",
+    "requerido": true,
+    "tipo": "string"
+   }
+  ],
+  "ejemplos": []
+ },
+ {
+  "operationId": "downloadPayrollAdjustmentZip",
+  "metodo": "GET",
+  "ruta": "/payroll_adjustments/{id}/zip",
+  "recurso": "PayrollAdjustments",
+  "idempotente": false,
+  "reintento": "seguro",
+  "binario": "zip",
+  "lista": null,
+  "respuesta": null,
+  "cuerpo": null,
+  "cuerpoRequerido": false,
+  "parametros": [
+   {
+    "nombre": "id",
+    "en": "path",
+    "requerido": true,
+    "tipo": "string"
+   }
+  ],
+  "ejemplos": []
+ },
+ {
+  "operationId": "downloadPayrollDianResponse",
+  "metodo": "GET",
+  "ruta": "/payrolls/{id}/dian_response",
+  "recurso": "Payrolls",
+  "idempotente": false,
+  "reintento": "seguro",
+  "binario": "xml",
+  "lista": null,
+  "respuesta": null,
+  "cuerpo": null,
+  "cuerpoRequerido": false,
+  "parametros": [
+   {
+    "nombre": "id",
+    "en": "path",
+    "requerido": true,
+    "tipo": "string"
+   }
+  ],
+  "ejemplos": []
+ },
+ {
+  "operationId": "downloadPayrollXml",
+  "metodo": "GET",
+  "ruta": "/payrolls/{id}/xml",
+  "recurso": "Payrolls",
+  "idempotente": false,
+  "reintento": "seguro",
+  "binario": "xml",
+  "lista": null,
+  "respuesta": null,
+  "cuerpo": null,
+  "cuerpoRequerido": false,
+  "parametros": [
+   {
+    "nombre": "id",
+    "en": "path",
+    "requerido": true,
+    "tipo": "string"
+   }
+  ],
+  "ejemplos": []
+ },
+ {
+  "operationId": "downloadPayrollZip",
+  "metodo": "GET",
+  "ruta": "/payrolls/{id}/zip",
+  "recurso": "Payrolls",
+  "idempotente": false,
+  "reintento": "seguro",
+  "binario": "zip",
+  "lista": null,
+  "respuesta": null,
+  "cuerpo": null,
+  "cuerpoRequerido": false,
+  "parametros": [
+   {
+    "nombre": "id",
+    "en": "path",
+    "requerido": true,
+    "tipo": "string"
+   }
+  ],
+  "ejemplos": []
+ },
+ {
+  "operationId": "downloadRadianEventXml",
+  "metodo": "GET",
+  "ruta": "/radian_events/{id}/xml",
+  "recurso": "RadianEvents",
+  "idempotente": false,
+  "reintento": "seguro",
+  "binario": "xml",
+  "lista": null,
+  "respuesta": null,
+  "cuerpo": null,
+  "cuerpoRequerido": false,
+  "parametros": [
+   {
+    "nombre": "id",
+    "en": "path",
+    "requerido": true,
+    "tipo": "string"
+   }
+  ],
+  "ejemplos": []
+ },
+ {
+  "operationId": "downloadSupportDocumentAdjustmentDianResponse",
+  "metodo": "GET",
+  "ruta": "/support_document_adjustments/{id}/dian_response",
+  "recurso": "SupportDocumentAdjustments",
+  "idempotente": false,
+  "reintento": "seguro",
+  "binario": "xml",
+  "lista": null,
+  "respuesta": null,
+  "cuerpo": null,
+  "cuerpoRequerido": false,
+  "parametros": [
+   {
+    "nombre": "id",
+    "en": "path",
+    "requerido": true,
+    "tipo": "string"
+   }
+  ],
+  "ejemplos": []
+ },
+ {
+  "operationId": "downloadSupportDocumentAdjustmentXml",
+  "metodo": "GET",
+  "ruta": "/support_document_adjustments/{id}/xml",
+  "recurso": "SupportDocumentAdjustments",
+  "idempotente": false,
+  "reintento": "seguro",
+  "binario": "xml",
+  "lista": null,
+  "respuesta": null,
+  "cuerpo": null,
+  "cuerpoRequerido": false,
+  "parametros": [
+   {
+    "nombre": "id",
+    "en": "path",
+    "requerido": true,
+    "tipo": "string"
+   }
+  ],
+  "ejemplos": []
+ },
+ {
+  "operationId": "downloadSupportDocumentDianResponse",
+  "metodo": "GET",
+  "ruta": "/support_documents/{id}/dian_response",
+  "recurso": "SupportDocuments",
+  "idempotente": false,
+  "reintento": "seguro",
+  "binario": "xml",
+  "lista": null,
+  "respuesta": null,
+  "cuerpo": null,
+  "cuerpoRequerido": false,
+  "parametros": [
+   {
+    "nombre": "id",
+    "en": "path",
+    "requerido": true,
+    "tipo": "string"
+   }
+  ],
+  "ejemplos": []
+ },
+ {
+  "operationId": "downloadSupportDocumentXml",
+  "metodo": "GET",
+  "ruta": "/support_documents/{id}/xml",
+  "recurso": "SupportDocuments",
+  "idempotente": false,
+  "reintento": "seguro",
+  "binario": "xml",
+  "lista": null,
+  "respuesta": null,
+  "cuerpo": null,
+  "cuerpoRequerido": false,
+  "parametros": [
+   {
+    "nombre": "id",
+    "en": "path",
+    "requerido": true,
+    "tipo": "string"
+   }
+  ],
+  "ejemplos": []
+ },
+ {
+  "operationId": "getHealth",
+  "metodo": "GET",
+  "ruta": "/health",
+  "recurso": "General",
+  "idempotente": false,
+  "reintento": "seguro",
+  "binario": null,
+  "lista": null,
+  "respuesta": null,
+  "cuerpo": null,
+  "cuerpoRequerido": false,
+  "parametros": [],
+  "ejemplos": []
+ },
+ {
+  "operationId": "listBalanceTransactions",
+  "metodo": "GET",
+  "ruta": "/balance/transactions",
+  "recurso": "Balance",
+  "idempotente": false,
+  "reintento": "seguro",
+  "binario": null,
+  "lista": "BalanceTransactionList",
+  "respuesta": "BalanceTransactionList",
+  "cuerpo": null,
+  "cuerpoRequerido": false,
+  "parametros": [
+   {
+    "nombre": "limit",
+    "en": "query",
+    "requerido": false,
+    "tipo": "integer"
+   },
+   {
+    "nombre": "starting_after",
+    "en": "query",
+    "requerido": false,
+    "tipo": "string"
+   },
+   {
+    "nombre": "type",
+    "en": "query",
+    "requerido": false,
+    "tipo": "string"
+   }
+  ],
+  "ejemplos": []
+ },
+ {
+  "operationId": "listCreditNotes",
+  "metodo": "GET",
+  "ruta": "/credit_notes",
+  "recurso": "CreditNotes",
+  "idempotente": false,
+  "reintento": "seguro",
+  "binario": null,
+  "lista": "CreditNoteList",
+  "respuesta": "CreditNoteList",
+  "cuerpo": null,
+  "cuerpoRequerido": false,
+  "parametros": [
+   {
+    "nombre": "limit",
+    "en": "query",
+    "requerido": false,
+    "tipo": "integer"
+   },
+   {
+    "nombre": "starting_after",
+    "en": "query",
+    "requerido": false,
+    "tipo": "string"
+   },
+   {
+    "nombre": "status",
+    "en": "query",
+    "requerido": false,
+    "tipo": "string"
+   },
+   {
+    "nombre": "external_id",
+    "en": "query",
+    "requerido": false,
+    "tipo": "string"
+   },
+   {
+    "nombre": "created_from",
+    "en": "query",
+    "requerido": false,
+    "tipo": "string"
+   },
+   {
+    "nombre": "created_to",
+    "en": "query",
+    "requerido": false,
+    "tipo": "string"
+   }
+  ],
+  "ejemplos": []
+ },
+ {
+  "operationId": "listDebitNotes",
+  "metodo": "GET",
+  "ruta": "/debit_notes",
+  "recurso": "DebitNotes",
+  "idempotente": false,
+  "reintento": "seguro",
+  "binario": null,
+  "lista": "DebitNoteList",
+  "respuesta": "DebitNoteList",
+  "cuerpo": null,
+  "cuerpoRequerido": false,
+  "parametros": [
+   {
+    "nombre": "limit",
+    "en": "query",
+    "requerido": false,
+    "tipo": "integer"
+   },
+   {
+    "nombre": "starting_after",
+    "en": "query",
+    "requerido": false,
+    "tipo": "string"
+   },
+   {
+    "nombre": "status",
+    "en": "query",
+    "requerido": false,
+    "tipo": "string"
+   },
+   {
+    "nombre": "external_id",
+    "en": "query",
+    "requerido": false,
+    "tipo": "string"
+   },
+   {
+    "nombre": "created_from",
+    "en": "query",
+    "requerido": false,
+    "tipo": "string"
+   },
+   {
+    "nombre": "created_to",
+    "en": "query",
+    "requerido": false,
+    "tipo": "string"
+   }
+  ],
+  "ejemplos": []
+ },
+ {
+  "operationId": "listEquivalentDocumentAdjustments",
+  "metodo": "GET",
+  "ruta": "/equivalent_document_adjustments",
+  "recurso": "EquivalentDocumentAdjustments",
+  "idempotente": false,
+  "reintento": "seguro",
+  "binario": null,
+  "lista": "EquivalentDocumentAdjustmentList",
+  "respuesta": "EquivalentDocumentAdjustmentList",
+  "cuerpo": null,
+  "cuerpoRequerido": false,
+  "parametros": [
+   {
+    "nombre": "limit",
+    "en": "query",
+    "requerido": false,
+    "tipo": "integer"
+   },
+   {
+    "nombre": "starting_after",
+    "en": "query",
+    "requerido": false,
+    "tipo": "string"
+   },
+   {
+    "nombre": "status",
+    "en": "query",
+    "requerido": false,
+    "tipo": "string"
+   },
+   {
+    "nombre": "external_id",
+    "en": "query",
+    "requerido": false,
+    "tipo": "string"
+   },
+   {
+    "nombre": "created_from",
+    "en": "query",
+    "requerido": false,
+    "tipo": "string"
+   },
+   {
+    "nombre": "created_to",
+    "en": "query",
+    "requerido": false,
+    "tipo": "string"
+   }
+  ],
+  "ejemplos": []
+ },
+ {
+  "operationId": "listEquivalentDocuments",
+  "metodo": "GET",
+  "ruta": "/equivalent_documents",
+  "recurso": "EquivalentDocuments",
+  "idempotente": false,
+  "reintento": "seguro",
+  "binario": null,
+  "lista": "EquivalentDocumentList",
+  "respuesta": "EquivalentDocumentList",
+  "cuerpo": null,
+  "cuerpoRequerido": false,
+  "parametros": [
+   {
+    "nombre": "limit",
+    "en": "query",
+    "requerido": false,
+    "tipo": "integer"
+   },
+   {
+    "nombre": "starting_after",
+    "en": "query",
+    "requerido": false,
+    "tipo": "string"
+   },
+   {
+    "nombre": "status",
+    "en": "query",
+    "requerido": false,
+    "tipo": "string"
+   },
+   {
+    "nombre": "external_id",
+    "en": "query",
+    "requerido": false,
+    "tipo": "string"
+   },
+   {
+    "nombre": "created_from",
+    "en": "query",
+    "requerido": false,
+    "tipo": "string"
+   },
+   {
+    "nombre": "created_to",
+    "en": "query",
+    "requerido": false,
+    "tipo": "string"
+   },
+   {
+    "nombre": "document_type",
+    "en": "query",
+    "requerido": false,
+    "tipo": "string"
+   }
+  ],
+  "ejemplos": []
+ },
+ {
+  "operationId": "listEvents",
+  "metodo": "GET",
+  "ruta": "/events",
+  "recurso": "Events",
+  "idempotente": false,
+  "reintento": "seguro",
+  "binario": null,
+  "lista": "EventList",
+  "respuesta": "EventList",
+  "cuerpo": null,
+  "cuerpoRequerido": false,
+  "parametros": [
+   {
+    "nombre": "limit",
+    "en": "query",
+    "requerido": false,
+    "tipo": "integer"
+   },
+   {
+    "nombre": "starting_after",
+    "en": "query",
+    "requerido": false,
+    "tipo": "string"
+   },
+   {
+    "nombre": "type",
+    "en": "query",
+    "requerido": false,
+    "tipo": "string"
+   },
+   {
+    "nombre": "created_from",
+    "en": "query",
+    "requerido": false,
+    "tipo": "string"
+   },
+   {
+    "nombre": "created_to",
+    "en": "query",
+    "requerido": false,
+    "tipo": "string"
+   }
+  ],
+  "ejemplos": []
+ },
+ {
+  "operationId": "listInvoices",
+  "metodo": "GET",
+  "ruta": "/invoices",
+  "recurso": "Invoices",
+  "idempotente": false,
+  "reintento": "seguro",
+  "binario": null,
+  "lista": "InvoiceList",
+  "respuesta": "InvoiceList",
+  "cuerpo": null,
+  "cuerpoRequerido": false,
+  "parametros": [
+   {
+    "nombre": "limit",
+    "en": "query",
+    "requerido": false,
+    "tipo": "integer"
+   },
+   {
+    "nombre": "starting_after",
+    "en": "query",
+    "requerido": false,
+    "tipo": "string"
+   },
+   {
+    "nombre": "status",
+    "en": "query",
+    "requerido": false,
+    "tipo": "string"
+   },
+   {
+    "nombre": "external_id",
+    "en": "query",
+    "requerido": false,
+    "tipo": "string"
+   },
+   {
+    "nombre": "created_from",
+    "en": "query",
+    "requerido": false,
+    "tipo": "string"
+   },
+   {
+    "nombre": "created_to",
+    "en": "query",
+    "requerido": false,
+    "tipo": "string"
+   }
+  ],
+  "ejemplos": []
+ },
+ {
+  "operationId": "listPayrollAdjustments",
+  "metodo": "GET",
+  "ruta": "/payroll_adjustments",
+  "recurso": "PayrollAdjustments",
+  "idempotente": false,
+  "reintento": "seguro",
+  "binario": null,
+  "lista": "PayrollAdjustmentList",
+  "respuesta": "PayrollAdjustmentList",
+  "cuerpo": null,
+  "cuerpoRequerido": false,
+  "parametros": [
+   {
+    "nombre": "limit",
+    "en": "query",
+    "requerido": false,
+    "tipo": "integer"
+   },
+   {
+    "nombre": "starting_after",
+    "en": "query",
+    "requerido": false,
+    "tipo": "string"
+   },
+   {
+    "nombre": "status",
+    "en": "query",
+    "requerido": false,
+    "tipo": "string"
+   },
+   {
+    "nombre": "external_id",
+    "en": "query",
+    "requerido": false,
+    "tipo": "string"
+   },
+   {
+    "nombre": "created_from",
+    "en": "query",
+    "requerido": false,
+    "tipo": "string"
+   },
+   {
+    "nombre": "created_to",
+    "en": "query",
+    "requerido": false,
+    "tipo": "string"
+   },
+   {
+    "nombre": "employee_code",
+    "en": "query",
+    "requerido": false,
+    "tipo": "string"
+   },
+   {
+    "nombre": "period_end_from",
+    "en": "query",
+    "requerido": false,
+    "tipo": "string"
+   },
+   {
+    "nombre": "period_end_to",
+    "en": "query",
+    "requerido": false,
+    "tipo": "string"
+   }
+  ],
+  "ejemplos": []
+ },
+ {
+  "operationId": "listPayrolls",
+  "metodo": "GET",
+  "ruta": "/payrolls",
+  "recurso": "Payrolls",
+  "idempotente": false,
+  "reintento": "seguro",
+  "binario": null,
+  "lista": "PayrollList",
+  "respuesta": "PayrollList",
+  "cuerpo": null,
+  "cuerpoRequerido": false,
+  "parametros": [
+   {
+    "nombre": "limit",
+    "en": "query",
+    "requerido": false,
+    "tipo": "integer"
+   },
+   {
+    "nombre": "starting_after",
+    "en": "query",
+    "requerido": false,
+    "tipo": "string"
+   },
+   {
+    "nombre": "status",
+    "en": "query",
+    "requerido": false,
+    "tipo": "string"
+   },
+   {
+    "nombre": "external_id",
+    "en": "query",
+    "requerido": false,
+    "tipo": "string"
+   },
+   {
+    "nombre": "created_from",
+    "en": "query",
+    "requerido": false,
+    "tipo": "string"
+   },
+   {
+    "nombre": "created_to",
+    "en": "query",
+    "requerido": false,
+    "tipo": "string"
+   },
+   {
+    "nombre": "employee_code",
+    "en": "query",
+    "requerido": false,
+    "tipo": "string"
+   },
+   {
+    "nombre": "period_end_from",
+    "en": "query",
+    "requerido": false,
+    "tipo": "string"
+   },
+   {
+    "nombre": "period_end_to",
+    "en": "query",
+    "requerido": false,
+    "tipo": "string"
+   }
+  ],
+  "ejemplos": []
+ },
+ {
+  "operationId": "listRadianEvents",
+  "metodo": "GET",
+  "ruta": "/radian_events",
+  "recurso": "RadianEvents",
+  "idempotente": false,
+  "reintento": "seguro",
+  "binario": null,
+  "lista": "RadianEventList",
+  "respuesta": "RadianEventList",
+  "cuerpo": null,
+  "cuerpoRequerido": false,
+  "parametros": [
+   {
+    "nombre": "limit",
+    "en": "query",
+    "requerido": false,
+    "tipo": "integer"
+   },
+   {
+    "nombre": "starting_after",
+    "en": "query",
+    "requerido": false,
+    "tipo": "string"
+   },
+   {
+    "nombre": "status",
+    "en": "query",
+    "requerido": false,
+    "tipo": "string"
+   },
+   {
+    "nombre": "external_id",
+    "en": "query",
+    "requerido": false,
+    "tipo": "string"
+   },
+   {
+    "nombre": "created_from",
+    "en": "query",
+    "requerido": false,
+    "tipo": "string"
+   },
+   {
+    "nombre": "created_to",
+    "en": "query",
+    "requerido": false,
+    "tipo": "string"
+   },
+   {
+    "nombre": "event_code",
+    "en": "query",
+    "requerido": false,
+    "tipo": "string"
+   },
+   {
+    "nombre": "invoice_cufe",
+    "en": "query",
+    "requerido": false,
+    "tipo": "string"
+   }
+  ],
+  "ejemplos": []
+ },
+ {
+  "operationId": "listRequests",
+  "metodo": "GET",
+  "ruta": "/requests",
+  "recurso": "Requests",
+  "idempotente": false,
+  "reintento": "seguro",
+  "binario": null,
+  "lista": "RequestList",
+  "respuesta": "RequestList",
+  "cuerpo": null,
+  "cuerpoRequerido": false,
+  "parametros": [
+   {
+    "nombre": "limit",
+    "en": "query",
+    "requerido": false,
+    "tipo": "integer"
+   },
+   {
+    "nombre": "starting_after",
+    "en": "query",
+    "requerido": false,
+    "tipo": "string"
+   },
+   {
+    "nombre": "status",
+    "en": "query",
+    "requerido": false,
+    "tipo": "integer"
+   },
+   {
+    "nombre": "key_id",
+    "en": "query",
+    "requerido": false,
+    "tipo": "string"
+   },
+   {
+    "nombre": "created_from",
+    "en": "query",
+    "requerido": false,
+    "tipo": "string"
+   },
+   {
+    "nombre": "created_to",
+    "en": "query",
+    "requerido": false,
+    "tipo": "string"
+   }
+  ],
+  "ejemplos": []
+ },
+ {
+  "operationId": "listSupportDocumentAdjustments",
+  "metodo": "GET",
+  "ruta": "/support_document_adjustments",
+  "recurso": "SupportDocumentAdjustments",
+  "idempotente": false,
+  "reintento": "seguro",
+  "binario": null,
+  "lista": "SupportDocumentAdjustmentList",
+  "respuesta": "SupportDocumentAdjustmentList",
+  "cuerpo": null,
+  "cuerpoRequerido": false,
+  "parametros": [
+   {
+    "nombre": "limit",
+    "en": "query",
+    "requerido": false,
+    "tipo": "integer"
+   },
+   {
+    "nombre": "starting_after",
+    "en": "query",
+    "requerido": false,
+    "tipo": "string"
+   },
+   {
+    "nombre": "status",
+    "en": "query",
+    "requerido": false,
+    "tipo": "string"
+   },
+   {
+    "nombre": "external_id",
+    "en": "query",
+    "requerido": false,
+    "tipo": "string"
+   },
+   {
+    "nombre": "created_from",
+    "en": "query",
+    "requerido": false,
+    "tipo": "string"
+   },
+   {
+    "nombre": "created_to",
+    "en": "query",
+    "requerido": false,
+    "tipo": "string"
+   }
+  ],
+  "ejemplos": []
+ },
+ {
+  "operationId": "listSupportDocuments",
+  "metodo": "GET",
+  "ruta": "/support_documents",
+  "recurso": "SupportDocuments",
+  "idempotente": false,
+  "reintento": "seguro",
+  "binario": null,
+  "lista": "SupportDocumentList",
+  "respuesta": "SupportDocumentList",
+  "cuerpo": null,
+  "cuerpoRequerido": false,
+  "parametros": [
+   {
+    "nombre": "limit",
+    "en": "query",
+    "requerido": false,
+    "tipo": "integer"
+   },
+   {
+    "nombre": "starting_after",
+    "en": "query",
+    "requerido": false,
+    "tipo": "string"
+   },
+   {
+    "nombre": "status",
+    "en": "query",
+    "requerido": false,
+    "tipo": "string"
+   },
+   {
+    "nombre": "external_id",
+    "en": "query",
+    "requerido": false,
+    "tipo": "string"
+   },
+   {
+    "nombre": "created_from",
+    "en": "query",
+    "requerido": false,
+    "tipo": "string"
+   },
+   {
+    "nombre": "created_to",
+    "en": "query",
+    "requerido": false,
+    "tipo": "string"
+   }
+  ],
+  "ejemplos": []
+ },
+ {
+  "operationId": "listWebhookEndpointDeliveries",
+  "metodo": "GET",
+  "ruta": "/webhook_endpoints/{id}/deliveries",
+  "recurso": "WebhookEndpoints",
+  "idempotente": false,
+  "reintento": "seguro",
+  "binario": null,
+  "lista": "WebhookDeliveryList",
+  "respuesta": "WebhookDeliveryList",
+  "cuerpo": null,
+  "cuerpoRequerido": false,
+  "parametros": [
+   {
+    "nombre": "id",
+    "en": "path",
+    "requerido": true,
+    "tipo": "string"
+   },
+   {
+    "nombre": "limit",
+    "en": "query",
+    "requerido": false,
+    "tipo": "integer"
+   },
+   {
+    "nombre": "starting_after",
+    "en": "query",
+    "requerido": false,
+    "tipo": "string"
+   },
+   {
+    "nombre": "status",
+    "en": "query",
+    "requerido": false,
+    "tipo": "string"
+   }
+  ],
+  "ejemplos": []
+ },
+ {
+  "operationId": "listWebhookEndpoints",
+  "metodo": "GET",
+  "ruta": "/webhook_endpoints",
+  "recurso": "WebhookEndpoints",
+  "idempotente": false,
+  "reintento": "seguro",
+  "binario": null,
+  "lista": "WebhookEndpointList",
+  "respuesta": "WebhookEndpointList",
+  "cuerpo": null,
+  "cuerpoRequerido": false,
+  "parametros": [],
+  "ejemplos": []
+ },
+ {
+  "operationId": "previewCreditNote",
+  "metodo": "POST",
+  "ruta": "/credit_notes/preview",
+  "recurso": "CreditNotes",
+  "idempotente": false,
+  "reintento": "seguro",
+  "binario": null,
+  "lista": null,
+  "respuesta": "Preview",
+  "cuerpo": "NoteInput",
+  "cuerpoRequerido": true,
+  "parametros": [],
+  "ejemplos": [
+   {
+    "nombre": "devolucion",
+    "resumen": "Devolución parcial de una factura de Trevol",
+    "valor": {
+     "external_id": "DEV-2026-000045",
+     "concept": "1",
+     "description": "Devolución de una unidad por empaque dañado",
+     "invoice": {
+      "id": "inv_3f0c1a2b3f0c1a2b3f0c1a2b3f0c1a2b"
+     },
+     "items": [
+      {
+       "description": "Café especial 500 g",
+       "code": "CAF-500",
+       "unit": "94",
+       "quantity": "1",
+       "unit_price": "32000",
+       "taxes": [
+        {
+         "code": "01",
+         "rate": "19"
+        }
+       ]
+      }
+     ]
+    }
+   }
+  ]
+ },
+ {
+  "operationId": "previewDebitNote",
+  "metodo": "POST",
+  "ruta": "/debit_notes/preview",
+  "recurso": "DebitNotes",
+  "idempotente": false,
+  "reintento": "seguro",
+  "binario": null,
+  "lista": null,
+  "respuesta": "Preview",
+  "cuerpo": "NoteInput",
+  "cuerpoRequerido": true,
+  "parametros": [],
+  "ejemplos": [
+   {
+    "nombre": "intereses",
+    "resumen": "Intereses de mora de una factura de Trevol",
+    "valor": {
+     "external_id": "INT-2026-000012",
+     "concept": "1",
+     "description": "Intereses de mora de la factura de septiembre",
+     "invoice": {
+      "id": "inv_3f0c1a2b3f0c1a2b3f0c1a2b3f0c1a2b"
+     },
+     "items": [
+      {
+       "description": "Intereses de mora",
+       "unit": "94",
+       "quantity": "1",
+       "unit_price": "45000"
+      }
+     ]
+    }
+   }
+  ]
+ },
+ {
+  "operationId": "previewEquivalentDocument",
+  "metodo": "POST",
+  "ruta": "/equivalent_documents/preview",
+  "recurso": "EquivalentDocuments",
+  "idempotente": false,
+  "reintento": "seguro",
+  "binario": null,
+  "lista": null,
+  "respuesta": "Preview",
+  "cuerpo": "EquivalentDocumentInput",
+  "cuerpoRequerido": true,
+  "parametros": [],
+  "ejemplos": [
+   {
+    "nombre": "pos",
+    "resumen": "Tiquete POS de consumidor final, en la caja de un prefijo",
+    "valor": {
+     "external_id": "TIQ-1",
+     "customer": {
+      "final_consumer": true
+     },
+     "pos": {
+      "register": {
+       "plate": "CJ-01",
+       "location": "Local 1, Jamundí",
+       "cashier": "PEREZ ANA",
+       "type": "Caja principal"
+      }
+     },
+     "numbering": {
+      "prefix": "POS2"
+     },
+     "payment": {
+      "form": "cash",
+      "methods": [
+       {
+        "code": "10"
+       }
+      ]
+     },
+     "items": [
+      {
+       "description": "Gaseosa 400 ml",
+       "code": "GAS-1",
+       "unit": "94",
+       "quantity": "2",
+       "unit_price": "3000",
+       "taxes": [
+        {
+         "code": "01",
+         "rate": "19"
+        }
+       ]
+      },
+      {
+       "description": "Almuerzo",
+       "unit": "94",
+       "quantity": "1",
+       "unit_price": "18000"
+      }
+     ]
+    }
+   }
+  ]
+ },
+ {
+  "operationId": "previewEquivalentDocumentAdjustment",
+  "metodo": "POST",
+  "ruta": "/equivalent_document_adjustments/preview",
+  "recurso": "EquivalentDocumentAdjustments",
+  "idempotente": false,
+  "reintento": "seguro",
+  "binario": null,
+  "lista": null,
+  "respuesta": "Preview",
+  "cuerpo": "EquivalentDocumentAdjustmentInput",
+  "cuerpoRequerido": true,
+  "parametros": [],
+  "ejemplos": [
+   {
+    "nombre": "devolucion",
+    "resumen": "Nota crédito: una devolución",
+    "valor": {
+     "external_id": "TIQ-1-DEV",
+     "note_type": "credit",
+     "concept": "1",
+     "equivalent_document": {
+      "id": "pos_3f0c1a2b3f0c1a2b3f0c1a2b3f0c1a2b"
+     },
+     "items": [
+      {
+       "description": "Devolución gaseosa",
+       "unit": "94",
+       "quantity": "1",
+       "unit_price": "3000",
+       "taxes": [
+        {
+         "code": "01",
+         "rate": "19"
+        }
+       ]
+      }
+     ]
+    }
+   }
+  ]
+ },
+ {
+  "operationId": "previewInvoice",
+  "metodo": "POST",
+  "ruta": "/invoices/preview",
+  "recurso": "Invoices",
+  "idempotente": false,
+  "reintento": "seguro",
+  "binario": null,
+  "lista": null,
+  "respuesta": "Preview",
+  "cuerpo": "InvoiceInput",
+  "cuerpoRequerido": true,
+  "parametros": [],
+  "ejemplos": [
+   {
+    "nombre": "exportacion",
+    "resumen": "Exportación en dólares (Fase 1B)",
+    "valor": {
+     "external_id": "EXP-77",
+     "document_type": "02",
+     "currency": {
+      "code": "USD",
+      "exchange_rate": "3950.12",
+      "rate_date": "2026-10-21"
+     },
+     "delivery_terms": {
+      "incoterm": "FOB",
+      "conditions": "Puerto de Cartagena"
+     },
+     "customer": {
+      "document_type": "50",
+      "document_number": "US123456789",
+      "name": "ACME INC",
+      "country": "US",
+      "city": "Miami",
+      "region": "Florida",
+      "postal_code": "33131",
+      "address": "200 S Biscayne Blvd"
+     },
+     "items": [
+      {
+       "description": "Consultoría",
+       "quantity": "1",
+       "unit_price": "1000",
+       "taxes": [
+        {
+         "code": "01",
+         "excluded": true
+        }
+       ]
+      }
+     ],
+     "payment": {
+      "form": "credit",
+      "term_days": 30
+     }
+    }
+   }
+  ]
+ },
+ {
+  "operationId": "previewPayroll",
+  "metodo": "POST",
+  "ruta": "/payrolls/preview",
+  "recurso": "Payrolls",
+  "idempotente": false,
+  "reintento": "seguro",
+  "binario": null,
+  "lista": null,
+  "respuesta": "Preview",
+  "cuerpo": "PayrollInput",
+  "cuerpoRequerido": true,
+  "parametros": [],
+  "ejemplos": [
+   {
+    "nombre": "mensual",
+    "resumen": "Nómina de un mes completo",
+    "valor": {
+     "external_id": "NOM-2026-09-001",
+     "period": {
+      "hire_date": "2024-03-01",
+      "start": "2026-09-01",
+      "end": "2026-09-30"
+     },
+     "pay_period": "5",
+     "notes": [
+      "Nómina de septiembre de 2026"
+     ],
+     "employee": {
+      "type": "01",
+      "subtype": "00",
+      "high_risk_pension": false,
+      "document_type": "13",
+      "document_number": "1000000101",
+      "first_surname": "PRUEBA",
+      "second_surname": "NOMINA01",
+      "first_name": "TRABAJADOR",
+      "other_names": "DE PRUEBA",
+      "workplace": {
+       "country": "CO",
+       "municipality_code": "76001",
+       "address": "Calle 1 # 1-1"
+      },
+      "integral_salary": false,
+      "contract_type": "2",
+      "salary": "1423500",
+      "code": "TRAB-01"
+     },
+     "payment": {
+      "form": "1",
+      "method": "42",
+      "bank": "Banco de Pruebas",
+      "account_type": "Ahorros",
+      "account_number": "0001234501"
+     },
+     "payment_dates": [
+      "2026-09-30"
+     ],
+     "earnings": {
+      "basic": {
+       "days": 30,
+       "amount": "1423500"
+      },
+      "transport": [
+       {
+        "allowance": "200000"
+       }
+      ]
+     },
+     "deductions": {
+      "health": {
+       "percent": "4",
+       "amount": "56940"
+      },
+      "pension": {
+       "percent": "4",
+       "amount": "56940"
+      }
+     }
+    }
+   }
+  ]
+ },
+ {
+  "operationId": "previewPayrollAdjustment",
+  "metodo": "POST",
+  "ruta": "/payroll_adjustments/preview",
+  "recurso": "PayrollAdjustments",
+  "idempotente": false,
+  "reintento": "seguro",
+  "binario": null,
+  "lista": null,
+  "respuesta": "Preview",
+  "cuerpo": "PayrollAdjustmentInput",
+  "cuerpoRequerido": true,
+  "parametros": [],
+  "ejemplos": [
+   {
+    "nombre": "reemplazar",
+    "resumen": "Reemplazar: la nómina corregida",
+    "valor": {
+     "external_id": "NOM-2026-09-001-R",
+     "period": {
+      "hire_date": "2024-03-01",
+      "start": "2026-09-01",
+      "end": "2026-09-30"
+     },
+     "pay_period": "5",
+     "notes": [
+      "Nómina de septiembre de 2026"
+     ],
+     "employee": {
+      "type": "01",
+      "subtype": "00",
+      "high_risk_pension": false,
+      "document_type": "13",
+      "document_number": "1000000101",
+      "first_surname": "PRUEBA",
+      "second_surname": "NOMINA01",
+      "first_name": "TRABAJADOR",
+      "other_names": "DE PRUEBA",
+      "workplace": {
+       "country": "CO",
+       "municipality_code": "76001",
+       "address": "Calle 1 # 1-1"
+      },
+      "integral_salary": false,
+      "contract_type": "2",
+      "salary": "1423500",
+      "code": "TRAB-01"
+     },
+     "payment": {
+      "form": "1",
+      "method": "42",
+      "bank": "Banco de Pruebas",
+      "account_type": "Ahorros",
+      "account_number": "0001234501"
+     },
+     "payment_dates": [
+      "2026-09-30"
+     ],
+     "earnings": {
+      "basic": {
+       "days": 30,
+       "amount": "1423500"
+      },
+      "transport": [
+       {
+        "allowance": "210000"
+       }
+      ]
+     },
+     "deductions": {
+      "health": {
+       "percent": "4",
+       "amount": "56940"
+      },
+      "pension": {
+       "percent": "4",
+       "amount": "56940"
+      }
+     },
+     "type": "replace",
+     "predecessor": {
+      "id": "pr_3f0c1a2b3f0c1a2b3f0c1a2b3f0c1a2b"
+     }
+    }
+   },
+   {
+    "nombre": "eliminar",
+    "resumen": "Eliminar: la nómina no debió enviarse",
+    "valor": {
+     "external_id": "NOM-2026-09-001-E",
+     "type": "delete",
+     "predecessor": {
+      "id": "pr_3f0c1a2b3f0c1a2b3f0c1a2b3f0c1a2b"
+     },
+     "notes": [
+      "Enviada por error"
+     ]
+    }
+   }
+  ]
+ },
+ {
+  "operationId": "previewSupportDocument",
+  "metodo": "POST",
+  "ruta": "/support_documents/preview",
+  "recurso": "SupportDocuments",
+  "idempotente": false,
+  "reintento": "seguro",
+  "binario": null,
+  "lista": null,
+  "respuesta": "Preview",
+  "cuerpo": "SupportDocumentInput",
+  "cuerpoRequerido": true,
+  "parametros": [],
+  "ejemplos": [
+   {
+    "nombre": "compra",
+    "resumen": "Compra de leche a un campesino",
+    "valor": {
+     "external_id": "OC-991",
+     "seller": {
+      "resident": true,
+      "person_type": "natural",
+      "document_type": "31",
+      "document_number": "1020304050",
+      "name": "PEREZ GOMEZ ANA MARIA",
+      "address": "Vereda El Silencio, finca La Esperanza",
+      "municipality_code": "25053",
+      "postal_code": "252007",
+      "tax_responsibilities": [
+       "R-99-PN"
+      ]
+     },
+     "items": [
+      {
+       "description": "Leche cruda",
+       "unit": "LTR",
+       "quantity": "120",
+       "unit_price": "1800"
+      }
+     ],
+     "payment": {
+      "form": "cash",
+      "methods": [
+       {
+        "code": "10"
+       }
+      ]
+     },
+     "notes": [
+      "Compra de la semana 42 de octubre"
+     ]
+    }
+   }
+  ]
+ },
+ {
+  "operationId": "previewSupportDocumentAdjustment",
+  "metodo": "POST",
+  "ruta": "/support_document_adjustments/preview",
+  "recurso": "SupportDocumentAdjustments",
+  "idempotente": false,
+  "reintento": "seguro",
+  "binario": null,
+  "lista": null,
+  "respuesta": "Preview",
+  "cuerpo": "SupportDocumentAdjustmentInput",
+  "cuerpoRequerido": true,
+  "parametros": [],
+  "ejemplos": [
+   {
+    "nombre": "anulacion",
+    "resumen": "Anulación de un documento soporte de Trevol",
+    "valor": {
+     "external_id": "OC-991-ANULA",
+     "concept": "2",
+     "description": "Anulación: la compra de leche se registró dos veces en el ERP",
+     "support_document": {
+      "id": "sd_3f0c1a2b3f0c1a2b3f0c1a2b3f0c1a2b"
+     },
+     "items": [
+      {
+       "description": "Leche cruda",
+       "unit": "LTR",
+       "quantity": "120",
+       "unit_price": "1800"
+      }
+     ]
+    }
+   }
+  ]
+ },
+ {
+  "operationId": "resendEvent",
+  "metodo": "POST",
+  "ruta": "/events/{id}/resend",
+  "recurso": "Events",
+  "idempotente": false,
+  "reintento": "solo_429",
+  "binario": null,
+  "lista": null,
+  "respuesta": "WebhookDelivery",
+  "cuerpo": "EventResendInput",
+  "cuerpoRequerido": true,
+  "parametros": [
+   {
+    "nombre": "id",
+    "en": "path",
+    "requerido": true,
+    "tipo": "string"
+   }
+  ],
+  "ejemplos": [
+   {
+    "nombre": "reenviar",
+    "resumen": "Reenviar al endpoint indicado",
+    "valor": {
+     "endpoint_id": "we_3f0c1a2b3f0c1a2b3f0c1a2b3f0c1a2b"
+    }
+   }
+  ]
+ },
+ {
+  "operationId": "retrieveBalance",
+  "metodo": "GET",
+  "ruta": "/balance",
+  "recurso": "Balance",
+  "idempotente": false,
+  "reintento": "seguro",
+  "binario": null,
+  "lista": null,
+  "respuesta": "Balance",
+  "cuerpo": null,
+  "cuerpoRequerido": false,
+  "parametros": [],
+  "ejemplos": []
+ },
+ {
+  "operationId": "retrieveCompany",
+  "metodo": "GET",
+  "ruta": "/company",
+  "recurso": "General",
+  "idempotente": false,
+  "reintento": "seguro",
+  "binario": null,
+  "lista": null,
+  "respuesta": "Company",
+  "cuerpo": null,
+  "cuerpoRequerido": false,
+  "parametros": [],
+  "ejemplos": []
+ },
+ {
+  "operationId": "retrieveCreditNote",
+  "metodo": "GET",
+  "ruta": "/credit_notes/{id}",
+  "recurso": "CreditNotes",
+  "idempotente": false,
+  "reintento": "seguro",
+  "binario": null,
+  "lista": null,
+  "respuesta": "Document",
+  "cuerpo": null,
+  "cuerpoRequerido": false,
+  "parametros": [
+   {
+    "nombre": "id",
+    "en": "path",
+    "requerido": true,
+    "tipo": "string"
+   }
+  ],
+  "ejemplos": []
+ },
+ {
+  "operationId": "retrieveDebitNote",
+  "metodo": "GET",
+  "ruta": "/debit_notes/{id}",
+  "recurso": "DebitNotes",
+  "idempotente": false,
+  "reintento": "seguro",
+  "binario": null,
+  "lista": null,
+  "respuesta": "Document",
+  "cuerpo": null,
+  "cuerpoRequerido": false,
+  "parametros": [
+   {
+    "nombre": "id",
+    "en": "path",
+    "requerido": true,
+    "tipo": "string"
+   }
+  ],
+  "ejemplos": []
+ },
+ {
+  "operationId": "retrieveDianAcquirer",
+  "metodo": "GET",
+  "ruta": "/dian/acquirer",
+  "recurso": "General",
+  "idempotente": false,
+  "reintento": "seguro",
+  "binario": null,
+  "lista": null,
+  "respuesta": "Acquirer",
+  "cuerpo": null,
+  "cuerpoRequerido": false,
+  "parametros": [
+   {
+    "nombre": "document_type",
+    "en": "query",
+    "requerido": true,
+    "tipo": "string"
+   },
+   {
+    "nombre": "document_number",
+    "en": "query",
+    "requerido": true,
+    "tipo": "string"
+   }
+  ],
+  "ejemplos": []
+ },
+ {
+  "operationId": "retrieveEquivalentDocument",
+  "metodo": "GET",
+  "ruta": "/equivalent_documents/{id}",
+  "recurso": "EquivalentDocuments",
+  "idempotente": false,
+  "reintento": "seguro",
+  "binario": null,
+  "lista": null,
+  "respuesta": "EquivalentDocument",
+  "cuerpo": null,
+  "cuerpoRequerido": false,
+  "parametros": [
+   {
+    "nombre": "id",
+    "en": "path",
+    "requerido": true,
+    "tipo": "string"
+   }
+  ],
+  "ejemplos": []
+ },
+ {
+  "operationId": "retrieveEquivalentDocumentAdjustment",
+  "metodo": "GET",
+  "ruta": "/equivalent_document_adjustments/{id}",
+  "recurso": "EquivalentDocumentAdjustments",
+  "idempotente": false,
+  "reintento": "seguro",
+  "binario": null,
+  "lista": null,
+  "respuesta": "EquivalentDocumentAdjustment",
+  "cuerpo": null,
+  "cuerpoRequerido": false,
+  "parametros": [
+   {
+    "nombre": "id",
+    "en": "path",
+    "requerido": true,
+    "tipo": "string"
+   }
+  ],
+  "ejemplos": []
+ },
+ {
+  "operationId": "retrieveEvent",
+  "metodo": "GET",
+  "ruta": "/events/{id}",
+  "recurso": "Events",
+  "idempotente": false,
+  "reintento": "seguro",
+  "binario": null,
+  "lista": null,
+  "respuesta": "Event",
+  "cuerpo": null,
+  "cuerpoRequerido": false,
+  "parametros": [
+   {
+    "nombre": "id",
+    "en": "path",
+    "requerido": true,
+    "tipo": "string"
+   }
+  ],
+  "ejemplos": []
+ },
+ {
+  "operationId": "retrieveInvoice",
+  "metodo": "GET",
+  "ruta": "/invoices/{id}",
+  "recurso": "Invoices",
+  "idempotente": false,
+  "reintento": "seguro",
+  "binario": null,
+  "lista": null,
+  "respuesta": "Document",
+  "cuerpo": null,
+  "cuerpoRequerido": false,
+  "parametros": [
+   {
+    "nombre": "id",
+    "en": "path",
+    "requerido": true,
+    "tipo": "string"
+   }
+  ],
+  "ejemplos": []
+ },
+ {
+  "operationId": "retrieveInvoiceTacitAcceptance",
+  "metodo": "GET",
+  "ruta": "/invoices/{id}/tacit_acceptance",
+  "recurso": "Invoices",
+  "idempotente": false,
+  "reintento": "seguro",
+  "binario": null,
+  "lista": null,
+  "respuesta": "TacitAcceptance",
+  "cuerpo": null,
+  "cuerpoRequerido": false,
+  "parametros": [
+   {
+    "nombre": "id",
+    "en": "path",
+    "requerido": true,
+    "tipo": "string"
+   }
+  ],
+  "ejemplos": []
+ },
+ {
+  "operationId": "retrievePayroll",
+  "metodo": "GET",
+  "ruta": "/payrolls/{id}",
+  "recurso": "Payrolls",
+  "idempotente": false,
+  "reintento": "seguro",
+  "binario": null,
+  "lista": null,
+  "respuesta": "Payroll",
+  "cuerpo": null,
+  "cuerpoRequerido": false,
+  "parametros": [
+   {
+    "nombre": "id",
+    "en": "path",
+    "requerido": true,
+    "tipo": "string"
+   }
+  ],
+  "ejemplos": []
+ },
+ {
+  "operationId": "retrievePayrollAdjustment",
+  "metodo": "GET",
+  "ruta": "/payroll_adjustments/{id}",
+  "recurso": "PayrollAdjustments",
+  "idempotente": false,
+  "reintento": "seguro",
+  "binario": null,
+  "lista": null,
+  "respuesta": "PayrollAdjustment",
+  "cuerpo": null,
+  "cuerpoRequerido": false,
+  "parametros": [
+   {
+    "nombre": "id",
+    "en": "path",
+    "requerido": true,
+    "tipo": "string"
+   }
+  ],
+  "ejemplos": []
+ },
+ {
+  "operationId": "retrieveRadianEvent",
+  "metodo": "GET",
+  "ruta": "/radian_events/{id}",
+  "recurso": "RadianEvents",
+  "idempotente": false,
+  "reintento": "seguro",
+  "binario": null,
+  "lista": null,
+  "respuesta": "RadianEvent",
+  "cuerpo": null,
+  "cuerpoRequerido": false,
+  "parametros": [
+   {
+    "nombre": "id",
+    "en": "path",
+    "requerido": true,
+    "tipo": "string"
+   }
+  ],
+  "ejemplos": []
+ },
+ {
+  "operationId": "retrieveSupportDocument",
+  "metodo": "GET",
+  "ruta": "/support_documents/{id}",
+  "recurso": "SupportDocuments",
+  "idempotente": false,
+  "reintento": "seguro",
+  "binario": null,
+  "lista": null,
+  "respuesta": "SupportDocument",
+  "cuerpo": null,
+  "cuerpoRequerido": false,
+  "parametros": [
+   {
+    "nombre": "id",
+    "en": "path",
+    "requerido": true,
+    "tipo": "string"
+   }
+  ],
+  "ejemplos": []
+ },
+ {
+  "operationId": "retrieveSupportDocumentAdjustment",
+  "metodo": "GET",
+  "ruta": "/support_document_adjustments/{id}",
+  "recurso": "SupportDocumentAdjustments",
+  "idempotente": false,
+  "reintento": "seguro",
+  "binario": null,
+  "lista": null,
+  "respuesta": "SupportDocumentAdjustment",
+  "cuerpo": null,
+  "cuerpoRequerido": false,
+  "parametros": [
+   {
+    "nombre": "id",
+    "en": "path",
+    "requerido": true,
+    "tipo": "string"
+   }
+  ],
+  "ejemplos": []
+ },
+ {
+  "operationId": "retrieveTacitAcceptanceByCufe",
+  "metodo": "GET",
+  "ruta": "/radian_events/tacit_acceptance",
+  "recurso": "RadianEvents",
+  "idempotente": false,
+  "reintento": "seguro",
+  "binario": null,
+  "lista": null,
+  "respuesta": "TacitAcceptance",
+  "cuerpo": null,
+  "cuerpoRequerido": false,
+  "parametros": [
+   {
+    "nombre": "cufe",
+    "en": "query",
+    "requerido": true,
+    "tipo": "string"
+   }
+  ],
+  "ejemplos": []
+ },
+ {
+  "operationId": "retrieveWebhookEndpoint",
+  "metodo": "GET",
+  "ruta": "/webhook_endpoints/{id}",
+  "recurso": "WebhookEndpoints",
+  "idempotente": false,
+  "reintento": "seguro",
+  "binario": null,
+  "lista": null,
+  "respuesta": "WebhookEndpoint",
+  "cuerpo": null,
+  "cuerpoRequerido": false,
+  "parametros": [
+   {
+    "nombre": "id",
+    "en": "path",
+    "requerido": true,
+    "tipo": "string"
+   }
+  ],
+  "ejemplos": []
+ },
+ {
+  "operationId": "rotateWebhookEndpointSecret",
+  "metodo": "POST",
+  "ruta": "/webhook_endpoints/{id}/rotate_secret",
+  "recurso": "WebhookEndpoints",
+  "idempotente": false,
+  "reintento": "solo_429",
+  "binario": null,
+  "lista": null,
+  "respuesta": "WebhookEndpoint",
+  "cuerpo": "WebhookEndpointRotateInput",
+  "cuerpoRequerido": false,
+  "parametros": [
+   {
+    "nombre": "id",
+    "en": "path",
+    "requerido": true,
+    "tipo": "string"
+   }
+  ],
+  "ejemplos": [
+   {
+    "nombre": "gracia",
+    "resumen": "El secreto anterior firma 24 horas más",
+    "valor": {
+     "grace_period_hours": 24
+    }
+   }
+  ]
+ },
+ {
+  "operationId": "sendCreditNote",
+  "metodo": "POST",
+  "ruta": "/credit_notes/{id}/send",
+  "recurso": "CreditNotes",
+  "idempotente": false,
+  "reintento": "solo_429",
+  "binario": null,
+  "lista": null,
+  "respuesta": "Document",
+  "cuerpo": null,
+  "cuerpoRequerido": false,
+  "parametros": [
+   {
+    "nombre": "id",
+    "en": "path",
+    "requerido": true,
+    "tipo": "string"
+   }
+  ],
+  "ejemplos": []
+ },
+ {
+  "operationId": "sendDebitNote",
+  "metodo": "POST",
+  "ruta": "/debit_notes/{id}/send",
+  "recurso": "DebitNotes",
+  "idempotente": false,
+  "reintento": "solo_429",
+  "binario": null,
+  "lista": null,
+  "respuesta": "Document",
+  "cuerpo": null,
+  "cuerpoRequerido": false,
+  "parametros": [
+   {
+    "nombre": "id",
+    "en": "path",
+    "requerido": true,
+    "tipo": "string"
+   }
+  ],
+  "ejemplos": []
+ },
+ {
+  "operationId": "sendEquivalentDocument",
+  "metodo": "POST",
+  "ruta": "/equivalent_documents/{id}/send",
+  "recurso": "EquivalentDocuments",
+  "idempotente": false,
+  "reintento": "solo_429",
+  "binario": null,
+  "lista": null,
+  "respuesta": "EquivalentDocument",
+  "cuerpo": null,
+  "cuerpoRequerido": false,
+  "parametros": [
+   {
+    "nombre": "id",
+    "en": "path",
+    "requerido": true,
+    "tipo": "string"
+   }
+  ],
+  "ejemplos": []
+ },
+ {
+  "operationId": "sendEquivalentDocumentAdjustment",
+  "metodo": "POST",
+  "ruta": "/equivalent_document_adjustments/{id}/send",
+  "recurso": "EquivalentDocumentAdjustments",
+  "idempotente": false,
+  "reintento": "solo_429",
+  "binario": null,
+  "lista": null,
+  "respuesta": "EquivalentDocumentAdjustment",
+  "cuerpo": null,
+  "cuerpoRequerido": false,
+  "parametros": [
+   {
+    "nombre": "id",
+    "en": "path",
+    "requerido": true,
+    "tipo": "string"
+   }
+  ],
+  "ejemplos": []
+ },
+ {
+  "operationId": "sendInvoice",
+  "metodo": "POST",
+  "ruta": "/invoices/{id}/send",
+  "recurso": "Invoices",
+  "idempotente": false,
+  "reintento": "solo_429",
+  "binario": null,
+  "lista": null,
+  "respuesta": "Document",
+  "cuerpo": null,
+  "cuerpoRequerido": false,
+  "parametros": [
+   {
+    "nombre": "id",
+    "en": "path",
+    "requerido": true,
+    "tipo": "string"
+   }
+  ],
+  "ejemplos": []
+ },
+ {
+  "operationId": "sendPayroll",
+  "metodo": "POST",
+  "ruta": "/payrolls/{id}/send",
+  "recurso": "Payrolls",
+  "idempotente": false,
+  "reintento": "solo_429",
+  "binario": null,
+  "lista": null,
+  "respuesta": "Payroll",
+  "cuerpo": null,
+  "cuerpoRequerido": false,
+  "parametros": [
+   {
+    "nombre": "id",
+    "en": "path",
+    "requerido": true,
+    "tipo": "string"
+   }
+  ],
+  "ejemplos": []
+ },
+ {
+  "operationId": "sendPayrollAdjustment",
+  "metodo": "POST",
+  "ruta": "/payroll_adjustments/{id}/send",
+  "recurso": "PayrollAdjustments",
+  "idempotente": false,
+  "reintento": "solo_429",
+  "binario": null,
+  "lista": null,
+  "respuesta": "PayrollAdjustment",
+  "cuerpo": null,
+  "cuerpoRequerido": false,
+  "parametros": [
+   {
+    "nombre": "id",
+    "en": "path",
+    "requerido": true,
+    "tipo": "string"
+   }
+  ],
+  "ejemplos": []
+ },
+ {
+  "operationId": "sendRadianEvent",
+  "metodo": "POST",
+  "ruta": "/radian_events/{id}/send",
+  "recurso": "RadianEvents",
+  "idempotente": false,
+  "reintento": "solo_429",
+  "binario": null,
+  "lista": null,
+  "respuesta": "RadianEvent",
+  "cuerpo": null,
+  "cuerpoRequerido": false,
+  "parametros": [
+   {
+    "nombre": "id",
+    "en": "path",
+    "requerido": true,
+    "tipo": "string"
+   }
+  ],
+  "ejemplos": []
+ },
+ {
+  "operationId": "sendSupportDocument",
+  "metodo": "POST",
+  "ruta": "/support_documents/{id}/send",
+  "recurso": "SupportDocuments",
+  "idempotente": false,
+  "reintento": "solo_429",
+  "binario": null,
+  "lista": null,
+  "respuesta": "SupportDocument",
+  "cuerpo": null,
+  "cuerpoRequerido": false,
+  "parametros": [
+   {
+    "nombre": "id",
+    "en": "path",
+    "requerido": true,
+    "tipo": "string"
+   }
+  ],
+  "ejemplos": []
+ },
+ {
+  "operationId": "sendSupportDocumentAdjustment",
+  "metodo": "POST",
+  "ruta": "/support_document_adjustments/{id}/send",
+  "recurso": "SupportDocumentAdjustments",
+  "idempotente": false,
+  "reintento": "solo_429",
+  "binario": null,
+  "lista": null,
+  "respuesta": "SupportDocumentAdjustment",
+  "cuerpo": null,
+  "cuerpoRequerido": false,
+  "parametros": [
+   {
+    "nombre": "id",
+    "en": "path",
+    "requerido": true,
+    "tipo": "string"
+   }
+  ],
+  "ejemplos": []
+ },
+ {
+  "operationId": "testWebhookEndpoint",
+  "metodo": "POST",
+  "ruta": "/webhook_endpoints/{id}/test",
+  "recurso": "WebhookEndpoints",
+  "idempotente": false,
+  "reintento": "solo_429",
+  "binario": null,
+  "lista": null,
+  "respuesta": "WebhookDelivery",
+  "cuerpo": null,
+  "cuerpoRequerido": false,
+  "parametros": [
+   {
+    "nombre": "id",
+    "en": "path",
+    "requerido": true,
+    "tipo": "string"
+   }
+  ],
+  "ejemplos": []
+ },
+ {
+  "operationId": "updateWebhookEndpoint",
+  "metodo": "PATCH",
+  "ruta": "/webhook_endpoints/{id}",
+  "recurso": "WebhookEndpoints",
+  "idempotente": false,
+  "reintento": "seguro",
+  "binario": null,
+  "lista": null,
+  "respuesta": "WebhookEndpoint",
+  "cuerpo": "WebhookEndpointUpdate",
+  "cuerpoRequerido": true,
+  "parametros": [
+   {
+    "nombre": "id",
+    "en": "path",
+    "requerido": true,
+    "tipo": "string"
+   }
+  ],
+  "ejemplos": [
+   {
+    "nombre": "ejemplo",
+    "resumen": "Pausar el endpoint",
+    "valor": {
+     "description": "Pausado mientras migramos el servidor",
+     "status": "paused"
+    }
+   }
+  ]
+ }
+]

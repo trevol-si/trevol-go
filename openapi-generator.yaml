@@ -1,0 +1,18 @@
+# Configuración de OpenAPI Generator para el SDK de Go (docs/api/43-sdks-y-documentacion.md §2.5).
+# La corre sdks/generar.sh sobre sdks/especificacion/openapi.sdk.json. Lo generado va a generado/ (paquete `generado`);
+# la capa propia (paquete trevol, en la raíz) lo importa. Del generador solo se conservan los *.go (generar.sh descarta README,
+# docs/, test/, .travis.yml, git_push.sh, api/openapi.yaml).
+generatorName: go
+inputSpec: especificacion/openapi.sdk.json
+additionalProperties:
+  packageName: generado
+  packageVersion: 0.1.0
+  isGoSubmodule: true
+  withGoMod: false
+  enumClassPrefix: true
+  generateInterfaces: false
+  hideGenerationTimestamp: true
+  sortParamsByRequiredFlag: true
+  disallowAdditionalPropertiesIfNotPresent: false
+  enumUnknownDefaultCase: true
+  withXml: false

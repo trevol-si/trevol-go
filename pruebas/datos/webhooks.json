@@ -1,0 +1,342 @@
+{
+ "descripcion": "Vectores de verificación de webhooks (Standard Webhooks). Los generó sdks/herramientas/vectores.py con trevol_dian.webhooks.firmar: no se editan a mano. `motivo` es la causa del rechazo: firma, fecha o cabeceras.",
+ "tolerancia": 300,
+ "casos": [
+  {
+   "nombre": "valido",
+   "secreto": "whsec_AQIDBAUGBwgJCgsMDQ4PEBESExQVFhcYGRobHB0eHyA=",
+   "cuerpo": "{\"id\":\"evt_0a1b2c3d000040008000000000000001\",\"object\":\"event\",\"type\":\"invoice.accepted\",\"timestamp\":\"2026-10-31T14:20:05Z\",\"environment\":\"test\",\"api_version\":\"2026-10-22\",\"data\":{\"object\":\"invoice\",\"id\":\"inv_3f0c1a2b3f0c1a2b3f0c1a2b3f0c1a2b\",\"status\":\"accepted\",\"number\":\"SETP990012345\",\"customer_name\":\"CAFÉ DEL VALLE S.A.S.\",\"total\":\"119000.00\",\"dian\":{\"status_code\":\"00\",\"message\":\"Procesado Correctamente.\",\"rules\":[]}}}",
+   "cabeceras": {
+    "webhook-id": "evt_0a1b2c3d000040008000000000000001",
+    "webhook-timestamp": "1793491200",
+    "webhook-signature": "v1,GK3ywiVms3Kt/M/HBLlTTCTtOV/21179qIv3t38qH2o="
+   },
+   "ahora": 1793491200,
+   "valido": true,
+   "evento": {
+    "id": "evt_0a1b2c3d000040008000000000000001",
+    "type": "invoice.accepted"
+   }
+  },
+  {
+   "nombre": "valido con tildes y eñes en el cuerpo (UTF-8)",
+   "secreto": "whsec_AQIDBAUGBwgJCgsMDQ4PEBESExQVFhcYGRobHB0eHyA=",
+   "cuerpo": "{\"id\":\"evt_0a1b2c3d000040008000000000000001\",\"object\":\"event\",\"type\":\"invoice.accepted\",\"timestamp\":\"2026-10-31T14:20:05Z\",\"environment\":\"test\",\"api_version\":\"2026-10-22\",\"data\":{\"object\":\"invoice\",\"id\":\"inv_3f0c1a2b3f0c1a2b3f0c1a2b3f0c1a2b\",\"status\":\"accepted\",\"number\":\"SETP990012345\",\"customer_name\":\"CAFÉ DEL VALLE S.A.S.\",\"total\":\"119000.00\",\"dian\":{\"status_code\":\"00\",\"message\":\"Procesado Correctamente.\",\"rules\":[]}}}",
+   "cabeceras": {
+    "webhook-id": "evt_0a1b2c3d000040008000000000000001",
+    "webhook-timestamp": "1793491200",
+    "webhook-signature": "v1,GK3ywiVms3Kt/M/HBLlTTCTtOV/21179qIv3t38qH2o="
+   },
+   "ahora": 1793491200,
+   "valido": true,
+   "evento": {
+    "id": "evt_0a1b2c3d000040008000000000000001",
+    "type": "invoice.accepted"
+   },
+   "nota": "El cuerpo trae «CAFÉ»: se firma sobre los bytes UTF-8, no sobre el texto reescrito."
+  },
+  {
+   "nombre": "valido, el reloj va 4 minutos adelantado",
+   "secreto": "whsec_AQIDBAUGBwgJCgsMDQ4PEBESExQVFhcYGRobHB0eHyA=",
+   "cuerpo": "{\"id\":\"evt_0a1b2c3d000040008000000000000001\",\"object\":\"event\",\"type\":\"invoice.accepted\",\"timestamp\":\"2026-10-31T14:20:05Z\",\"environment\":\"test\",\"api_version\":\"2026-10-22\",\"data\":{\"object\":\"invoice\",\"id\":\"inv_3f0c1a2b3f0c1a2b3f0c1a2b3f0c1a2b\",\"status\":\"accepted\",\"number\":\"SETP990012345\",\"customer_name\":\"CAFÉ DEL VALLE S.A.S.\",\"total\":\"119000.00\",\"dian\":{\"status_code\":\"00\",\"message\":\"Procesado Correctamente.\",\"rules\":[]}}}",
+   "cabeceras": {
+    "webhook-id": "evt_0a1b2c3d000040008000000000000001",
+    "webhook-timestamp": "1793491200",
+    "webhook-signature": "v1,GK3ywiVms3Kt/M/HBLlTTCTtOV/21179qIv3t38qH2o="
+   },
+   "ahora": 1793491440,
+   "valido": true,
+   "evento": {
+    "id": "evt_0a1b2c3d000040008000000000000001",
+    "type": "invoice.accepted"
+   }
+  },
+  {
+   "nombre": "valido, el reloj va 4 minutos atrasado",
+   "secreto": "whsec_AQIDBAUGBwgJCgsMDQ4PEBESExQVFhcYGRobHB0eHyA=",
+   "cuerpo": "{\"id\":\"evt_0a1b2c3d000040008000000000000001\",\"object\":\"event\",\"type\":\"invoice.accepted\",\"timestamp\":\"2026-10-31T14:20:05Z\",\"environment\":\"test\",\"api_version\":\"2026-10-22\",\"data\":{\"object\":\"invoice\",\"id\":\"inv_3f0c1a2b3f0c1a2b3f0c1a2b3f0c1a2b\",\"status\":\"accepted\",\"number\":\"SETP990012345\",\"customer_name\":\"CAFÉ DEL VALLE S.A.S.\",\"total\":\"119000.00\",\"dian\":{\"status_code\":\"00\",\"message\":\"Procesado Correctamente.\",\"rules\":[]}}}",
+   "cabeceras": {
+    "webhook-id": "evt_0a1b2c3d000040008000000000000001",
+    "webhook-timestamp": "1793491200",
+    "webhook-signature": "v1,GK3ywiVms3Kt/M/HBLlTTCTtOV/21179qIv3t38qH2o="
+   },
+   "ahora": 1793490960,
+   "valido": true,
+   "evento": {
+    "id": "evt_0a1b2c3d000040008000000000000001",
+    "type": "invoice.accepted"
+   }
+  },
+  {
+   "nombre": "dos firmas en rotacion, el secreto nuevo",
+   "secreto": "whsec_ZWZnaGlqa2xtbm9wcXJzdHV2d3h5ent8fX5/gIGCg4Q=",
+   "cuerpo": "{\"id\":\"evt_0a1b2c3d000040008000000000000001\",\"object\":\"event\",\"type\":\"invoice.accepted\",\"timestamp\":\"2026-10-31T14:20:05Z\",\"environment\":\"test\",\"api_version\":\"2026-10-22\",\"data\":{\"object\":\"invoice\",\"id\":\"inv_3f0c1a2b3f0c1a2b3f0c1a2b3f0c1a2b\",\"status\":\"accepted\",\"number\":\"SETP990012345\",\"customer_name\":\"CAFÉ DEL VALLE S.A.S.\",\"total\":\"119000.00\",\"dian\":{\"status_code\":\"00\",\"message\":\"Procesado Correctamente.\",\"rules\":[]}}}",
+   "cabeceras": {
+    "webhook-id": "evt_0a1b2c3d000040008000000000000001",
+    "webhook-timestamp": "1793491200",
+    "webhook-signature": "v1,C8z/LHzEi8oOSjtdT4aQ+3rcPQIawXI3AisLkWvf6v8= v1,GK3ywiVms3Kt/M/HBLlTTCTtOV/21179qIv3t38qH2o="
+   },
+   "ahora": 1793491200,
+   "valido": true,
+   "evento": {
+    "id": "evt_0a1b2c3d000040008000000000000001",
+    "type": "invoice.accepted"
+   }
+  },
+  {
+   "nombre": "dos firmas en rotacion, el secreto anterior",
+   "secreto": "whsec_AQIDBAUGBwgJCgsMDQ4PEBESExQVFhcYGRobHB0eHyA=",
+   "cuerpo": "{\"id\":\"evt_0a1b2c3d000040008000000000000001\",\"object\":\"event\",\"type\":\"invoice.accepted\",\"timestamp\":\"2026-10-31T14:20:05Z\",\"environment\":\"test\",\"api_version\":\"2026-10-22\",\"data\":{\"object\":\"invoice\",\"id\":\"inv_3f0c1a2b3f0c1a2b3f0c1a2b3f0c1a2b\",\"status\":\"accepted\",\"number\":\"SETP990012345\",\"customer_name\":\"CAFÉ DEL VALLE S.A.S.\",\"total\":\"119000.00\",\"dian\":{\"status_code\":\"00\",\"message\":\"Procesado Correctamente.\",\"rules\":[]}}}",
+   "cabeceras": {
+    "webhook-id": "evt_0a1b2c3d000040008000000000000001",
+    "webhook-timestamp": "1793491200",
+    "webhook-signature": "v1,C8z/LHzEi8oOSjtdT4aQ+3rcPQIawXI3AisLkWvf6v8= v1,GK3ywiVms3Kt/M/HBLlTTCTtOV/21179qIv3t38qH2o="
+   },
+   "ahora": 1793491200,
+   "valido": true,
+   "evento": {
+    "id": "evt_0a1b2c3d000040008000000000000001",
+    "type": "invoice.accepted"
+   }
+  },
+  {
+   "nombre": "una firma v1a (asimetrica) antes de la v1 valida",
+   "secreto": "whsec_AQIDBAUGBwgJCgsMDQ4PEBESExQVFhcYGRobHB0eHyA=",
+   "cuerpo": "{\"id\":\"evt_0a1b2c3d000040008000000000000001\",\"object\":\"event\",\"type\":\"invoice.accepted\",\"timestamp\":\"2026-10-31T14:20:05Z\",\"environment\":\"test\",\"api_version\":\"2026-10-22\",\"data\":{\"object\":\"invoice\",\"id\":\"inv_3f0c1a2b3f0c1a2b3f0c1a2b3f0c1a2b\",\"status\":\"accepted\",\"number\":\"SETP990012345\",\"customer_name\":\"CAFÉ DEL VALLE S.A.S.\",\"total\":\"119000.00\",\"dian\":{\"status_code\":\"00\",\"message\":\"Procesado Correctamente.\",\"rules\":[]}}}",
+   "cabeceras": {
+    "webhook-id": "evt_0a1b2c3d000040008000000000000001",
+    "webhook-timestamp": "1793491200",
+    "webhook-signature": "v1a,GK3ywiVms3Kt/M/HBLlTTCTtOV/21179qIv3t38qH2o= v1,GK3ywiVms3Kt/M/HBLlTTCTtOV/21179qIv3t38qH2o="
+   },
+   "ahora": 1793491200,
+   "valido": true,
+   "evento": {
+    "id": "evt_0a1b2c3d000040008000000000000001",
+    "type": "invoice.accepted"
+   }
+  },
+  {
+   "nombre": "secreto sin el prefijo whsec_",
+   "secreto": "MzQ1Njc4OTo7PD0+P0BBQkNERUZHSElKS0xNTk9QUVI=",
+   "cuerpo": "{\"id\":\"evt_0a1b2c3d000040008000000000000001\",\"object\":\"event\",\"type\":\"invoice.accepted\",\"timestamp\":\"2026-10-31T14:20:05Z\",\"environment\":\"test\",\"api_version\":\"2026-10-22\",\"data\":{\"object\":\"invoice\",\"id\":\"inv_3f0c1a2b3f0c1a2b3f0c1a2b3f0c1a2b\",\"status\":\"accepted\",\"number\":\"SETP990012345\",\"customer_name\":\"CAFÉ DEL VALLE S.A.S.\",\"total\":\"119000.00\",\"dian\":{\"status_code\":\"00\",\"message\":\"Procesado Correctamente.\",\"rules\":[]}}}",
+   "cabeceras": {
+    "webhook-id": "evt_0a1b2c3d000040008000000000000001",
+    "webhook-timestamp": "1793491200",
+    "webhook-signature": "v1,O61JfpW2asDLcxypU77OocB6XlCi0tWYgik75U06tA8="
+   },
+   "ahora": 1793491200,
+   "valido": true,
+   "evento": {
+    "id": "evt_0a1b2c3d000040008000000000000001",
+    "type": "invoice.accepted"
+   },
+   "nota": "Igual que el Lambda: sin prefijo, el secreto se toma como base64 a secas."
+  },
+  {
+   "nombre": "secreto equivocado",
+   "secreto": "whsec_ycrLzM3Oz9DR0tPU1dbX2Nna29zd3t/g4eLj5OXm5+g=",
+   "cuerpo": "{\"id\":\"evt_0a1b2c3d000040008000000000000001\",\"object\":\"event\",\"type\":\"invoice.accepted\",\"timestamp\":\"2026-10-31T14:20:05Z\",\"environment\":\"test\",\"api_version\":\"2026-10-22\",\"data\":{\"object\":\"invoice\",\"id\":\"inv_3f0c1a2b3f0c1a2b3f0c1a2b3f0c1a2b\",\"status\":\"accepted\",\"number\":\"SETP990012345\",\"customer_name\":\"CAFÉ DEL VALLE S.A.S.\",\"total\":\"119000.00\",\"dian\":{\"status_code\":\"00\",\"message\":\"Procesado Correctamente.\",\"rules\":[]}}}",
+   "cabeceras": {
+    "webhook-id": "evt_0a1b2c3d000040008000000000000001",
+    "webhook-timestamp": "1793491200",
+    "webhook-signature": "v1,GK3ywiVms3Kt/M/HBLlTTCTtOV/21179qIv3t38qH2o="
+   },
+   "ahora": 1793491200,
+   "valido": false,
+   "motivo": "firma"
+  },
+  {
+   "nombre": "cuerpo alterado",
+   "secreto": "whsec_AQIDBAUGBwgJCgsMDQ4PEBESExQVFhcYGRobHB0eHyA=",
+   "cuerpo": "{\"id\":\"evt_0a1b2c3d000040008000000000000001\",\"object\":\"event\",\"type\":\"invoice.accepted\",\"timestamp\":\"2026-10-31T14:20:05Z\",\"environment\":\"test\",\"api_version\":\"2026-10-22\",\"data\":{\"object\":\"invoice\",\"id\":\"inv_3f0c1a2b3f0c1a2b3f0c1a2b3f0c1a2b\",\"status\":\"accepted\",\"number\":\"SETP990012345\",\"customer_name\":\"CAFÉ DEL VALLE S.A.S.\",\"total\":\"1.00\",\"dian\":{\"status_code\":\"00\",\"message\":\"Procesado Correctamente.\",\"rules\":[]}}}",
+   "cabeceras": {
+    "webhook-id": "evt_0a1b2c3d000040008000000000000001",
+    "webhook-timestamp": "1793491200",
+    "webhook-signature": "v1,GK3ywiVms3Kt/M/HBLlTTCTtOV/21179qIv3t38qH2o="
+   },
+   "ahora": 1793491200,
+   "valido": false,
+   "motivo": "firma"
+  },
+  {
+   "nombre": "cuerpo con un espacio de mas al final",
+   "secreto": "whsec_AQIDBAUGBwgJCgsMDQ4PEBESExQVFhcYGRobHB0eHyA=",
+   "cuerpo": "{\"id\":\"evt_0a1b2c3d000040008000000000000001\",\"object\":\"event\",\"type\":\"invoice.accepted\",\"timestamp\":\"2026-10-31T14:20:05Z\",\"environment\":\"test\",\"api_version\":\"2026-10-22\",\"data\":{\"object\":\"invoice\",\"id\":\"inv_3f0c1a2b3f0c1a2b3f0c1a2b3f0c1a2b\",\"status\":\"accepted\",\"number\":\"SETP990012345\",\"customer_name\":\"CAFÉ DEL VALLE S.A.S.\",\"total\":\"119000.00\",\"dian\":{\"status_code\":\"00\",\"message\":\"Procesado Correctamente.\",\"rules\":[]}}} ",
+   "cabeceras": {
+    "webhook-id": "evt_0a1b2c3d000040008000000000000001",
+    "webhook-timestamp": "1793491200",
+    "webhook-signature": "v1,GK3ywiVms3Kt/M/HBLlTTCTtOV/21179qIv3t38qH2o="
+   },
+   "ahora": 1793491200,
+   "valido": false,
+   "motivo": "firma"
+  },
+  {
+   "nombre": "fecha vieja (6 minutos)",
+   "secreto": "whsec_AQIDBAUGBwgJCgsMDQ4PEBESExQVFhcYGRobHB0eHyA=",
+   "cuerpo": "{\"id\":\"evt_0a1b2c3d000040008000000000000001\",\"object\":\"event\",\"type\":\"invoice.accepted\",\"timestamp\":\"2026-10-31T14:20:05Z\",\"environment\":\"test\",\"api_version\":\"2026-10-22\",\"data\":{\"object\":\"invoice\",\"id\":\"inv_3f0c1a2b3f0c1a2b3f0c1a2b3f0c1a2b\",\"status\":\"accepted\",\"number\":\"SETP990012345\",\"customer_name\":\"CAFÉ DEL VALLE S.A.S.\",\"total\":\"119000.00\",\"dian\":{\"status_code\":\"00\",\"message\":\"Procesado Correctamente.\",\"rules\":[]}}}",
+   "cabeceras": {
+    "webhook-id": "evt_0a1b2c3d000040008000000000000001",
+    "webhook-timestamp": "1793491200",
+    "webhook-signature": "v1,GK3ywiVms3Kt/M/HBLlTTCTtOV/21179qIv3t38qH2o="
+   },
+   "ahora": 1793491560,
+   "valido": false,
+   "motivo": "fecha"
+  },
+  {
+   "nombre": "fecha futura (6 minutos)",
+   "secreto": "whsec_AQIDBAUGBwgJCgsMDQ4PEBESExQVFhcYGRobHB0eHyA=",
+   "cuerpo": "{\"id\":\"evt_0a1b2c3d000040008000000000000001\",\"object\":\"event\",\"type\":\"invoice.accepted\",\"timestamp\":\"2026-10-31T14:20:05Z\",\"environment\":\"test\",\"api_version\":\"2026-10-22\",\"data\":{\"object\":\"invoice\",\"id\":\"inv_3f0c1a2b3f0c1a2b3f0c1a2b3f0c1a2b\",\"status\":\"accepted\",\"number\":\"SETP990012345\",\"customer_name\":\"CAFÉ DEL VALLE S.A.S.\",\"total\":\"119000.00\",\"dian\":{\"status_code\":\"00\",\"message\":\"Procesado Correctamente.\",\"rules\":[]}}}",
+   "cabeceras": {
+    "webhook-id": "evt_0a1b2c3d000040008000000000000001",
+    "webhook-timestamp": "1793491200",
+    "webhook-signature": "v1,GK3ywiVms3Kt/M/HBLlTTCTtOV/21179qIv3t38qH2o="
+   },
+   "ahora": 1793490840,
+   "valido": false,
+   "motivo": "fecha"
+  },
+  {
+   "nombre": "solo una firma v1a (se ignora)",
+   "secreto": "whsec_AQIDBAUGBwgJCgsMDQ4PEBESExQVFhcYGRobHB0eHyA=",
+   "cuerpo": "{\"id\":\"evt_0a1b2c3d000040008000000000000001\",\"object\":\"event\",\"type\":\"invoice.accepted\",\"timestamp\":\"2026-10-31T14:20:05Z\",\"environment\":\"test\",\"api_version\":\"2026-10-22\",\"data\":{\"object\":\"invoice\",\"id\":\"inv_3f0c1a2b3f0c1a2b3f0c1a2b3f0c1a2b\",\"status\":\"accepted\",\"number\":\"SETP990012345\",\"customer_name\":\"CAFÉ DEL VALLE S.A.S.\",\"total\":\"119000.00\",\"dian\":{\"status_code\":\"00\",\"message\":\"Procesado Correctamente.\",\"rules\":[]}}}",
+   "cabeceras": {
+    "webhook-id": "evt_0a1b2c3d000040008000000000000001",
+    "webhook-timestamp": "1793491200",
+    "webhook-signature": "v1a,GK3ywiVms3Kt/M/HBLlTTCTtOV/21179qIv3t38qH2o="
+   },
+   "ahora": 1793491200,
+   "valido": false,
+   "motivo": "firma"
+  },
+  {
+   "nombre": "firma con otra version (v2)",
+   "secreto": "whsec_AQIDBAUGBwgJCgsMDQ4PEBESExQVFhcYGRobHB0eHyA=",
+   "cuerpo": "{\"id\":\"evt_0a1b2c3d000040008000000000000001\",\"object\":\"event\",\"type\":\"invoice.accepted\",\"timestamp\":\"2026-10-31T14:20:05Z\",\"environment\":\"test\",\"api_version\":\"2026-10-22\",\"data\":{\"object\":\"invoice\",\"id\":\"inv_3f0c1a2b3f0c1a2b3f0c1a2b3f0c1a2b\",\"status\":\"accepted\",\"number\":\"SETP990012345\",\"customer_name\":\"CAFÉ DEL VALLE S.A.S.\",\"total\":\"119000.00\",\"dian\":{\"status_code\":\"00\",\"message\":\"Procesado Correctamente.\",\"rules\":[]}}}",
+   "cabeceras": {
+    "webhook-id": "evt_0a1b2c3d000040008000000000000001",
+    "webhook-timestamp": "1793491200",
+    "webhook-signature": "v2,GK3ywiVms3Kt/M/HBLlTTCTtOV/21179qIv3t38qH2o="
+   },
+   "ahora": 1793491200,
+   "valido": false,
+   "motivo": "firma"
+  },
+  {
+   "nombre": "firma que no es base64",
+   "secreto": "whsec_AQIDBAUGBwgJCgsMDQ4PEBESExQVFhcYGRobHB0eHyA=",
+   "cuerpo": "{\"id\":\"evt_0a1b2c3d000040008000000000000001\",\"object\":\"event\",\"type\":\"invoice.accepted\",\"timestamp\":\"2026-10-31T14:20:05Z\",\"environment\":\"test\",\"api_version\":\"2026-10-22\",\"data\":{\"object\":\"invoice\",\"id\":\"inv_3f0c1a2b3f0c1a2b3f0c1a2b3f0c1a2b\",\"status\":\"accepted\",\"number\":\"SETP990012345\",\"customer_name\":\"CAFÉ DEL VALLE S.A.S.\",\"total\":\"119000.00\",\"dian\":{\"status_code\":\"00\",\"message\":\"Procesado Correctamente.\",\"rules\":[]}}}",
+   "cabeceras": {
+    "webhook-id": "evt_0a1b2c3d000040008000000000000001",
+    "webhook-timestamp": "1793491200",
+    "webhook-signature": "v1,@@@@"
+   },
+   "ahora": 1793491200,
+   "valido": false,
+   "motivo": "firma"
+  },
+  {
+   "nombre": "firma vacia (cuenta como cabecera faltante)",
+   "secreto": "whsec_AQIDBAUGBwgJCgsMDQ4PEBESExQVFhcYGRobHB0eHyA=",
+   "cuerpo": "{\"id\":\"evt_0a1b2c3d000040008000000000000001\",\"object\":\"event\",\"type\":\"invoice.accepted\",\"timestamp\":\"2026-10-31T14:20:05Z\",\"environment\":\"test\",\"api_version\":\"2026-10-22\",\"data\":{\"object\":\"invoice\",\"id\":\"inv_3f0c1a2b3f0c1a2b3f0c1a2b3f0c1a2b\",\"status\":\"accepted\",\"number\":\"SETP990012345\",\"customer_name\":\"CAFÉ DEL VALLE S.A.S.\",\"total\":\"119000.00\",\"dian\":{\"status_code\":\"00\",\"message\":\"Procesado Correctamente.\",\"rules\":[]}}}",
+   "cabeceras": {
+    "webhook-id": "evt_0a1b2c3d000040008000000000000001",
+    "webhook-timestamp": "1793491200",
+    "webhook-signature": ""
+   },
+   "ahora": 1793491200,
+   "valido": false,
+   "motivo": "cabeceras"
+  },
+  {
+   "nombre": "firma de un id distinto",
+   "secreto": "whsec_AQIDBAUGBwgJCgsMDQ4PEBESExQVFhcYGRobHB0eHyA=",
+   "cuerpo": "{\"id\":\"evt_0a1b2c3d000040008000000000000001\",\"object\":\"event\",\"type\":\"invoice.accepted\",\"timestamp\":\"2026-10-31T14:20:05Z\",\"environment\":\"test\",\"api_version\":\"2026-10-22\",\"data\":{\"object\":\"invoice\",\"id\":\"inv_3f0c1a2b3f0c1a2b3f0c1a2b3f0c1a2b\",\"status\":\"accepted\",\"number\":\"SETP990012345\",\"customer_name\":\"CAFÉ DEL VALLE S.A.S.\",\"total\":\"119000.00\",\"dian\":{\"status_code\":\"00\",\"message\":\"Procesado Correctamente.\",\"rules\":[]}}}",
+   "cabeceras": {
+    "webhook-id": "evt_99999999999999999999999999999999",
+    "webhook-timestamp": "1793491200",
+    "webhook-signature": "v1,GK3ywiVms3Kt/M/HBLlTTCTtOV/21179qIv3t38qH2o="
+   },
+   "ahora": 1793491200,
+   "valido": false,
+   "motivo": "firma"
+  },
+  {
+   "nombre": "falta webhook-id",
+   "secreto": "whsec_AQIDBAUGBwgJCgsMDQ4PEBESExQVFhcYGRobHB0eHyA=",
+   "cuerpo": "{\"id\":\"evt_0a1b2c3d000040008000000000000001\",\"object\":\"event\",\"type\":\"invoice.accepted\",\"timestamp\":\"2026-10-31T14:20:05Z\",\"environment\":\"test\",\"api_version\":\"2026-10-22\",\"data\":{\"object\":\"invoice\",\"id\":\"inv_3f0c1a2b3f0c1a2b3f0c1a2b3f0c1a2b\",\"status\":\"accepted\",\"number\":\"SETP990012345\",\"customer_name\":\"CAFÉ DEL VALLE S.A.S.\",\"total\":\"119000.00\",\"dian\":{\"status_code\":\"00\",\"message\":\"Procesado Correctamente.\",\"rules\":[]}}}",
+   "cabeceras": {
+    "webhook-timestamp": "1793491200",
+    "webhook-signature": "v1,GK3ywiVms3Kt/M/HBLlTTCTtOV/21179qIv3t38qH2o="
+   },
+   "ahora": 1793491200,
+   "valido": false,
+   "motivo": "cabeceras"
+  },
+  {
+   "nombre": "falta webhook-timestamp",
+   "secreto": "whsec_AQIDBAUGBwgJCgsMDQ4PEBESExQVFhcYGRobHB0eHyA=",
+   "cuerpo": "{\"id\":\"evt_0a1b2c3d000040008000000000000001\",\"object\":\"event\",\"type\":\"invoice.accepted\",\"timestamp\":\"2026-10-31T14:20:05Z\",\"environment\":\"test\",\"api_version\":\"2026-10-22\",\"data\":{\"object\":\"invoice\",\"id\":\"inv_3f0c1a2b3f0c1a2b3f0c1a2b3f0c1a2b\",\"status\":\"accepted\",\"number\":\"SETP990012345\",\"customer_name\":\"CAFÉ DEL VALLE S.A.S.\",\"total\":\"119000.00\",\"dian\":{\"status_code\":\"00\",\"message\":\"Procesado Correctamente.\",\"rules\":[]}}}",
+   "cabeceras": {
+    "webhook-id": "evt_0a1b2c3d000040008000000000000001",
+    "webhook-signature": "v1,GK3ywiVms3Kt/M/HBLlTTCTtOV/21179qIv3t38qH2o="
+   },
+   "ahora": 1793491200,
+   "valido": false,
+   "motivo": "cabeceras"
+  },
+  {
+   "nombre": "falta webhook-signature",
+   "secreto": "whsec_AQIDBAUGBwgJCgsMDQ4PEBESExQVFhcYGRobHB0eHyA=",
+   "cuerpo": "{\"id\":\"evt_0a1b2c3d000040008000000000000001\",\"object\":\"event\",\"type\":\"invoice.accepted\",\"timestamp\":\"2026-10-31T14:20:05Z\",\"environment\":\"test\",\"api_version\":\"2026-10-22\",\"data\":{\"object\":\"invoice\",\"id\":\"inv_3f0c1a2b3f0c1a2b3f0c1a2b3f0c1a2b\",\"status\":\"accepted\",\"number\":\"SETP990012345\",\"customer_name\":\"CAFÉ DEL VALLE S.A.S.\",\"total\":\"119000.00\",\"dian\":{\"status_code\":\"00\",\"message\":\"Procesado Correctamente.\",\"rules\":[]}}}",
+   "cabeceras": {
+    "webhook-id": "evt_0a1b2c3d000040008000000000000001",
+    "webhook-timestamp": "1793491200"
+   },
+   "ahora": 1793491200,
+   "valido": false,
+   "motivo": "cabeceras"
+  },
+  {
+   "nombre": "webhook-timestamp con basura (123abc)",
+   "secreto": "whsec_AQIDBAUGBwgJCgsMDQ4PEBESExQVFhcYGRobHB0eHyA=",
+   "cuerpo": "{\"id\":\"evt_0a1b2c3d000040008000000000000001\",\"object\":\"event\",\"type\":\"invoice.accepted\",\"timestamp\":\"2026-10-31T14:20:05Z\",\"environment\":\"test\",\"api_version\":\"2026-10-22\",\"data\":{\"object\":\"invoice\",\"id\":\"inv_3f0c1a2b3f0c1a2b3f0c1a2b3f0c1a2b\",\"status\":\"accepted\",\"number\":\"SETP990012345\",\"customer_name\":\"CAFÉ DEL VALLE S.A.S.\",\"total\":\"119000.00\",\"dian\":{\"status_code\":\"00\",\"message\":\"Procesado Correctamente.\",\"rules\":[]}}}",
+   "cabeceras": {
+    "webhook-id": "evt_0a1b2c3d000040008000000000000001",
+    "webhook-timestamp": "1793491200abc",
+    "webhook-signature": "v1,GK3ywiVms3Kt/M/HBLlTTCTtOV/21179qIv3t38qH2o="
+   },
+   "ahora": 1793491200,
+   "valido": false,
+   "motivo": "fecha",
+   "nota": "parseInt aceptaría «123abc»: el SDK exige solo dígitos (C15)."
+  },
+  {
+   "nombre": "webhook-timestamp vacio (cuenta como cabecera faltante)",
+   "secreto": "whsec_AQIDBAUGBwgJCgsMDQ4PEBESExQVFhcYGRobHB0eHyA=",
+   "cuerpo": "{\"id\":\"evt_0a1b2c3d000040008000000000000001\",\"object\":\"event\",\"type\":\"invoice.accepted\",\"timestamp\":\"2026-10-31T14:20:05Z\",\"environment\":\"test\",\"api_version\":\"2026-10-22\",\"data\":{\"object\":\"invoice\",\"id\":\"inv_3f0c1a2b3f0c1a2b3f0c1a2b3f0c1a2b\",\"status\":\"accepted\",\"number\":\"SETP990012345\",\"customer_name\":\"CAFÉ DEL VALLE S.A.S.\",\"total\":\"119000.00\",\"dian\":{\"status_code\":\"00\",\"message\":\"Procesado Correctamente.\",\"rules\":[]}}}",
+   "cabeceras": {
+    "webhook-id": "evt_0a1b2c3d000040008000000000000001",
+    "webhook-timestamp": "",
+    "webhook-signature": "v1,GK3ywiVms3Kt/M/HBLlTTCTtOV/21179qIv3t38qH2o="
+   },
+   "ahora": 1793491200,
+   "valido": false,
+   "motivo": "cabeceras"
+  },
+  {
+   "nombre": "webhook-timestamp negativo",
+   "secreto": "whsec_AQIDBAUGBwgJCgsMDQ4PEBESExQVFhcYGRobHB0eHyA=",
+   "cuerpo": "{\"id\":\"evt_0a1b2c3d000040008000000000000001\",\"object\":\"event\",\"type\":\"invoice.accepted\",\"timestamp\":\"2026-10-31T14:20:05Z\",\"environment\":\"test\",\"api_version\":\"2026-10-22\",\"data\":{\"object\":\"invoice\",\"id\":\"inv_3f0c1a2b3f0c1a2b3f0c1a2b3f0c1a2b\",\"status\":\"accepted\",\"number\":\"SETP990012345\",\"customer_name\":\"CAFÉ DEL VALLE S.A.S.\",\"total\":\"119000.00\",\"dian\":{\"status_code\":\"00\",\"message\":\"Procesado Correctamente.\",\"rules\":[]}}}",
+   "cabeceras": {
+    "webhook-id": "evt_0a1b2c3d000040008000000000000001",
+    "webhook-timestamp": "-5",
+    "webhook-signature": "v1,GK3ywiVms3Kt/M/HBLlTTCTtOV/21179qIv3t38qH2o="
+   },
+   "ahora": 1793491200,
+   "valido": false,
+   "motivo": "fecha"
+  }
+ ]
+}

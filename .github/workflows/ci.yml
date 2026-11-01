@@ -1,0 +1,33 @@
+# CI del SDK de Go (docs/api/43 §2.13). Escrita, NO activa: se activa sola cuando este directorio sea su propio repo (trevol-go).
+name: CI
+on:
+  push:
+    branches: [main]
+  pull_request:
+permissions:
+  contents: read
+jobs:
+  probar:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        go: ['1.23', '1.24', 'stable']
+    env:
+      TREVOL_API_KEY: tvl_test_a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version: ${{ matrix.go }}
+      - run: go vet ./...
+      - run: test -z "$(gofmt -l *.go pruebas)"
+      - run: go test ./...
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Contra Prism (servidor simulado desde la especificación pública) y los fragmentos de la documentación
+        run: |
+          npx --yes @stoplight/prism-cli@5.16.0 mock pruebas/datos/openapi.json -p 4010 -h 127.0.0.1 > /tmp/prism.log 2>&1 &
+          for i in $(seq 1 60); do curl -s -o /dev/null http://127.0.0.1:4010/health && break; sleep 1; done
+          TREVOL_PRISM_URL=http://127.0.0.1:4010 go test -count=1 ./pruebas/prism ./pruebas/fragmentos

@@ -1,0 +1,889 @@
+{
+ "descripcion": "Casos de la función pura decidir(intento, reintento, resultado) de los 7 SDK (docs/api/43 §2.6.4 y §2.10.1). `intento` es el que acaba de fallar (1 = el primero). `reintento` es la clase de la operación en operaciones.json (seguro: GET, preview, PATCH y todo POST/PUT con Idempotency-Key; solo_429: el resto). `azar` sustituye al número al azar en [0,1): el factor de la espera es 0,75 + 0,25·azar. `retryAfter` ya viene resuelto (la cabecera, o `retry_after` del cuerpo). `espera` en segundos; `motivo` explica un «no»: exito, agotado o retry_after_excede.",
+ "casos": [
+  {
+   "nombre": "409 request_in_progress con Retry-After 30 (reintenta y espera lo que pide)",
+   "reintento": "seguro",
+   "intento": 1,
+   "maxReintentos": 2,
+   "maxRetryAfter": 60,
+   "azar": 1,
+   "resultado": {
+    "tipo": "respuesta",
+    "estado": 409,
+    "code": "request_in_progress",
+    "retryable": true,
+    "retryAfter": 30
+   },
+   "esperado": {
+    "reintentar": true,
+    "espera": 30
+   }
+  },
+  {
+   "nombre": "409 previous_event_pending (reintenta)",
+   "reintento": "seguro",
+   "intento": 1,
+   "maxReintentos": 2,
+   "maxRetryAfter": 60,
+   "azar": 1,
+   "resultado": {
+    "tipo": "respuesta",
+    "estado": 409,
+    "code": "previous_event_pending",
+    "retryable": true
+   },
+   "esperado": {
+    "reintentar": true,
+    "espera": 0.5
+   }
+  },
+  {
+   "nombre": "409 invalid_state es final",
+   "reintento": "seguro",
+   "intento": 1,
+   "maxReintentos": 2,
+   "maxRetryAfter": 60,
+   "azar": 1,
+   "resultado": {
+    "tipo": "respuesta",
+    "estado": 409,
+    "code": "invalid_state",
+    "retryable": false
+   },
+   "esperado": {
+    "reintentar": false
+   }
+  },
+  {
+   "nombre": "409 external_id_in_use es final",
+   "reintento": "seguro",
+   "intento": 1,
+   "maxReintentos": 2,
+   "maxRetryAfter": 60,
+   "azar": 1,
+   "resultado": {
+    "tipo": "respuesta",
+    "estado": 409,
+    "code": "external_id_in_use",
+    "retryable": false
+   },
+   "esperado": {
+    "reintentar": false
+   }
+  },
+  {
+   "nombre": "409 duplicate_document es final",
+   "reintento": "seguro",
+   "intento": 1,
+   "maxReintentos": 2,
+   "maxRetryAfter": 60,
+   "azar": 1,
+   "resultado": {
+    "tipo": "respuesta",
+    "estado": 409,
+    "code": "duplicate_document",
+    "retryable": false
+   },
+   "esperado": {
+    "reintentar": false
+   }
+  },
+  {
+   "nombre": "409 file_unavailable es final",
+   "reintento": "seguro",
+   "intento": 1,
+   "maxReintentos": 2,
+   "maxRetryAfter": 60,
+   "azar": 1,
+   "resultado": {
+    "tipo": "respuesta",
+    "estado": 409,
+    "code": "file_unavailable",
+    "retryable": false
+   },
+   "esperado": {
+    "reintentar": false
+   }
+  },
+  {
+   "nombre": "409 webhook_limit_reached es final",
+   "reintento": "seguro",
+   "intento": 1,
+   "maxReintentos": 2,
+   "maxRetryAfter": 60,
+   "azar": 1,
+   "resultado": {
+    "tipo": "respuesta",
+    "estado": 409,
+    "code": "webhook_limit_reached",
+    "retryable": false
+   },
+   "esperado": {
+    "reintentar": false
+   }
+  },
+  {
+   "nombre": "409 con un code desconocido y retryable false es final",
+   "reintento": "seguro",
+   "intento": 1,
+   "maxReintentos": 2,
+   "maxRetryAfter": 60,
+   "azar": 1,
+   "resultado": {
+    "tipo": "respuesta",
+    "estado": 409,
+    "code": "code_nuevo",
+    "retryable": false
+   },
+   "esperado": {
+    "reintentar": false
+   }
+  },
+  {
+   "nombre": "409 con un code desconocido y retryable true reintenta",
+   "reintento": "seguro",
+   "intento": 1,
+   "maxReintentos": 2,
+   "maxRetryAfter": 60,
+   "azar": 1,
+   "resultado": {
+    "tipo": "respuesta",
+    "estado": 409,
+    "code": "code_nuevo",
+    "retryable": true
+   },
+   "esperado": {
+    "reintentar": true,
+    "espera": 0.5
+   }
+  },
+  {
+   "nombre": "409 sin code ni retryable es final",
+   "reintento": "seguro",
+   "intento": 1,
+   "maxReintentos": 2,
+   "maxRetryAfter": 60,
+   "azar": 1,
+   "resultado": {
+    "tipo": "respuesta",
+    "estado": 409
+   },
+   "esperado": {
+    "reintentar": false
+   }
+  },
+  {
+   "nombre": "429 con Retry-After 120 mayor que maxRetryAfter (no espera: lanza con retryAfter)",
+   "reintento": "seguro",
+   "intento": 1,
+   "maxReintentos": 2,
+   "maxRetryAfter": 60,
+   "azar": 1,
+   "resultado": {
+    "tipo": "respuesta",
+    "estado": 429,
+    "code": "rate_limited",
+    "retryable": true,
+    "retryAfter": 120
+   },
+   "esperado": {
+    "reintentar": false,
+    "motivo": "retry_after_excede"
+   }
+  },
+  {
+   "nombre": "429 con Retry-After 60 igual al tope (espera)",
+   "reintento": "seguro",
+   "intento": 1,
+   "maxReintentos": 2,
+   "maxRetryAfter": 60,
+   "azar": 1,
+   "resultado": {
+    "tipo": "respuesta",
+    "estado": 429,
+    "code": "rate_limited",
+    "retryable": true,
+    "retryAfter": 60
+   },
+   "esperado": {
+    "reintentar": true,
+    "espera": 60
+   }
+  },
+  {
+   "nombre": "429 con Retry-After menor que la espera propia (manda la propia)",
+   "reintento": "seguro",
+   "intento": 3,
+   "maxReintentos": 3,
+   "maxRetryAfter": 60,
+   "azar": 1,
+   "resultado": {
+    "tipo": "respuesta",
+    "estado": 429,
+    "code": "rate_limited",
+    "retryable": true,
+    "retryAfter": 1
+   },
+   "esperado": {
+    "reintentar": true,
+    "espera": 2
+   }
+  },
+  {
+   "nombre": "429 sin Retry-After",
+   "reintento": "seguro",
+   "intento": 1,
+   "maxReintentos": 2,
+   "maxRetryAfter": 60,
+   "azar": 1,
+   "resultado": {
+    "tipo": "respuesta",
+    "estado": 429,
+    "code": "rate_limited",
+    "retryable": true
+   },
+   "esperado": {
+    "reintentar": true,
+    "espera": 0.5
+   }
+  },
+  {
+   "nombre": "503 dian_unavailable (reintenta)",
+   "reintento": "seguro",
+   "intento": 1,
+   "maxReintentos": 2,
+   "maxRetryAfter": 60,
+   "azar": 1,
+   "resultado": {
+    "tipo": "respuesta",
+    "estado": 503,
+    "code": "dian_unavailable",
+    "retryable": true
+   },
+   "esperado": {
+    "reintentar": true,
+    "espera": 0.5
+   }
+  },
+  {
+   "nombre": "503 file_unavailable en un GET (reintentable)",
+   "reintento": "seguro",
+   "intento": 1,
+   "maxReintentos": 2,
+   "maxRetryAfter": 60,
+   "azar": 1,
+   "resultado": {
+    "tipo": "respuesta",
+    "estado": 503,
+    "code": "file_unavailable",
+    "retryable": true
+   },
+   "esperado": {
+    "reintentar": true,
+    "espera": 0.5
+   }
+  },
+  {
+   "nombre": "500 internal_error",
+   "reintento": "seguro",
+   "intento": 1,
+   "maxReintentos": 2,
+   "maxRetryAfter": 60,
+   "azar": 1,
+   "resultado": {
+    "tipo": "respuesta",
+    "estado": 500,
+    "code": "internal_error",
+    "retryable": true
+   },
+   "esperado": {
+    "reintentar": true,
+    "espera": 0.5
+   }
+  },
+  {
+   "nombre": "500 sin code",
+   "reintento": "seguro",
+   "intento": 1,
+   "maxReintentos": 2,
+   "maxRetryAfter": 60,
+   "azar": 1,
+   "resultado": {
+    "tipo": "respuesta",
+    "estado": 500
+   },
+   "esperado": {
+    "reintentar": true,
+    "espera": 0.5
+   }
+  },
+  {
+   "nombre": "502",
+   "reintento": "seguro",
+   "intento": 1,
+   "maxReintentos": 2,
+   "maxRetryAfter": 60,
+   "azar": 1,
+   "resultado": {
+    "tipo": "respuesta",
+    "estado": 502
+   },
+   "esperado": {
+    "reintentar": true,
+    "espera": 0.5
+   }
+  },
+  {
+   "nombre": "504",
+   "reintento": "seguro",
+   "intento": 1,
+   "maxReintentos": 2,
+   "maxRetryAfter": 60,
+   "azar": 1,
+   "resultado": {
+    "tipo": "respuesta",
+    "estado": 504
+   },
+   "esperado": {
+    "reintentar": true,
+    "espera": 0.5
+   }
+  },
+  {
+   "nombre": "5xx desconocido (599 con retryable true)",
+   "reintento": "seguro",
+   "intento": 1,
+   "maxReintentos": 2,
+   "maxRetryAfter": 60,
+   "azar": 1,
+   "resultado": {
+    "tipo": "respuesta",
+    "estado": 599,
+    "code": "code_nuevo",
+    "retryable": true
+   },
+   "esperado": {
+    "reintentar": true,
+    "espera": 0.5
+   }
+  },
+  {
+   "nombre": "202 processing es un resultado, no se reintenta",
+   "reintento": "seguro",
+   "intento": 1,
+   "maxReintentos": 2,
+   "maxRetryAfter": 60,
+   "azar": 1,
+   "resultado": {
+    "tipo": "respuesta",
+    "estado": 202
+   },
+   "esperado": {
+    "reintentar": false,
+    "motivo": "exito"
+   }
+  },
+  {
+   "nombre": "200",
+   "reintento": "seguro",
+   "intento": 1,
+   "maxReintentos": 2,
+   "maxRetryAfter": 60,
+   "azar": 1,
+   "resultado": {
+    "tipo": "respuesta",
+    "estado": 200
+   },
+   "esperado": {
+    "reintentar": false,
+    "motivo": "exito"
+   }
+  },
+  {
+   "nombre": "201",
+   "reintento": "seguro",
+   "intento": 1,
+   "maxReintentos": 2,
+   "maxRetryAfter": 60,
+   "azar": 1,
+   "resultado": {
+    "tipo": "respuesta",
+    "estado": 201
+   },
+   "esperado": {
+    "reintentar": false,
+    "motivo": "exito"
+   }
+  },
+  {
+   "nombre": "402 insufficient_balance nunca se reintenta, aunque diga retryable",
+   "reintento": "seguro",
+   "intento": 1,
+   "maxReintentos": 2,
+   "maxRetryAfter": 60,
+   "azar": 1,
+   "resultado": {
+    "tipo": "respuesta",
+    "estado": 402,
+    "code": "insufficient_balance",
+    "retryable": true
+   },
+   "esperado": {
+    "reintentar": false
+   }
+  },
+  {
+   "nombre": "400",
+   "reintento": "seguro",
+   "intento": 1,
+   "maxReintentos": 2,
+   "maxRetryAfter": 60,
+   "azar": 1,
+   "resultado": {
+    "tipo": "respuesta",
+    "estado": 400,
+    "code": "invalid_json",
+    "retryable": false
+   },
+   "esperado": {
+    "reintentar": false
+   }
+  },
+  {
+   "nombre": "401",
+   "reintento": "seguro",
+   "intento": 1,
+   "maxReintentos": 2,
+   "maxRetryAfter": 60,
+   "azar": 1,
+   "resultado": {
+    "tipo": "respuesta",
+    "estado": 401,
+    "code": "invalid_api_key",
+    "retryable": false
+   },
+   "esperado": {
+    "reintentar": false
+   }
+  },
+  {
+   "nombre": "403",
+   "reintento": "seguro",
+   "intento": 1,
+   "maxReintentos": 2,
+   "maxRetryAfter": 60,
+   "azar": 1,
+   "resultado": {
+    "tipo": "respuesta",
+    "estado": 403,
+    "code": "permission_denied",
+    "retryable": false
+   },
+   "esperado": {
+    "reintentar": false
+   }
+  },
+  {
+   "nombre": "404",
+   "reintento": "seguro",
+   "intento": 1,
+   "maxReintentos": 2,
+   "maxRetryAfter": 60,
+   "azar": 1,
+   "resultado": {
+    "tipo": "respuesta",
+    "estado": 404,
+    "code": "not_found",
+    "retryable": false
+   },
+   "esperado": {
+    "reintentar": false
+   }
+  },
+  {
+   "nombre": "422 validation_error",
+   "reintento": "seguro",
+   "intento": 1,
+   "maxReintentos": 2,
+   "maxRetryAfter": 60,
+   "azar": 1,
+   "resultado": {
+    "tipo": "respuesta",
+    "estado": 422,
+    "code": "validation_error",
+    "retryable": false
+   },
+   "esperado": {
+    "reintentar": false
+   }
+  },
+  {
+   "nombre": "422 dian_rejected",
+   "reintento": "seguro",
+   "intento": 1,
+   "maxReintentos": 2,
+   "maxRetryAfter": 60,
+   "azar": 1,
+   "resultado": {
+    "tipo": "respuesta",
+    "estado": 422,
+    "code": "dian_rejected",
+    "retryable": false
+   },
+   "esperado": {
+    "reintentar": false
+   }
+  },
+  {
+   "nombre": "422 con retryable true se reintenta (la regla es retryable, salvo el 402)",
+   "reintento": "seguro",
+   "intento": 1,
+   "maxReintentos": 2,
+   "maxRetryAfter": 60,
+   "azar": 1,
+   "resultado": {
+    "tipo": "respuesta",
+    "estado": 422,
+    "code": "validation_error",
+    "retryable": true
+   },
+   "esperado": {
+    "reintentar": true,
+    "espera": 0.5
+   }
+  },
+  {
+   "nombre": "error de red en POST /invoices (con clave: reintenta)",
+   "reintento": "seguro",
+   "intento": 1,
+   "maxReintentos": 2,
+   "maxRetryAfter": 60,
+   "azar": 1,
+   "resultado": {
+    "tipo": "red"
+   },
+   "esperado": {
+    "reintentar": true,
+    "espera": 0.5
+   }
+  },
+  {
+   "nombre": "error de red en POST /webhook_endpoints (sin clave: no)",
+   "reintento": "solo_429",
+   "intento": 1,
+   "maxReintentos": 2,
+   "maxRetryAfter": 60,
+   "azar": 1,
+   "resultado": {
+    "tipo": "red"
+   },
+   "esperado": {
+    "reintentar": false
+   }
+  },
+  {
+   "nombre": "error de red en GET",
+   "reintento": "seguro",
+   "intento": 2,
+   "maxReintentos": 2,
+   "maxRetryAfter": 60,
+   "azar": 1,
+   "resultado": {
+    "tipo": "red"
+   },
+   "esperado": {
+    "reintentar": true,
+    "espera": 1
+   }
+  },
+  {
+   "nombre": "429 en una operación solo_429 (reintenta)",
+   "reintento": "solo_429",
+   "intento": 1,
+   "maxReintentos": 2,
+   "maxRetryAfter": 60,
+   "azar": 1,
+   "resultado": {
+    "tipo": "respuesta",
+    "estado": 429,
+    "code": "rate_limited",
+    "retryable": true,
+    "retryAfter": 5
+   },
+   "esperado": {
+    "reintentar": true,
+    "espera": 5
+   }
+  },
+  {
+   "nombre": "503 en una operación solo_429 no se reintenta",
+   "reintento": "solo_429",
+   "intento": 1,
+   "maxReintentos": 2,
+   "maxRetryAfter": 60,
+   "azar": 1,
+   "resultado": {
+    "tipo": "respuesta",
+    "estado": 503,
+    "code": "dian_unavailable",
+    "retryable": true
+   },
+   "esperado": {
+    "reintentar": false
+   }
+  },
+  {
+   "nombre": "500 en una operación solo_429 no se reintenta",
+   "reintento": "solo_429",
+   "intento": 1,
+   "maxReintentos": 2,
+   "maxRetryAfter": 60,
+   "azar": 1,
+   "resultado": {
+    "tipo": "respuesta",
+    "estado": 500,
+    "code": "internal_error",
+    "retryable": true
+   },
+   "esperado": {
+    "reintentar": false
+   }
+  },
+  {
+   "nombre": "409 request_in_progress en una operación solo_429 no se reintenta",
+   "reintento": "solo_429",
+   "intento": 1,
+   "maxReintentos": 2,
+   "maxRetryAfter": 60,
+   "azar": 1,
+   "resultado": {
+    "tipo": "respuesta",
+    "estado": 409,
+    "code": "request_in_progress",
+    "retryable": true,
+    "retryAfter": 10
+   },
+   "esperado": {
+    "reintentar": false
+   }
+  },
+  {
+   "nombre": "429 en solo_429 con Retry-After mayor que el tope",
+   "reintento": "solo_429",
+   "intento": 1,
+   "maxReintentos": 2,
+   "maxRetryAfter": 60,
+   "azar": 1,
+   "resultado": {
+    "tipo": "respuesta",
+    "estado": 429,
+    "code": "rate_limited",
+    "retryable": true,
+    "retryAfter": 300
+   },
+   "esperado": {
+    "reintentar": false,
+    "motivo": "retry_after_excede"
+   }
+  },
+  {
+   "nombre": "se agotaron los reintentos (intento 3, maxReintentos 2)",
+   "reintento": "seguro",
+   "intento": 3,
+   "maxReintentos": 2,
+   "maxRetryAfter": 60,
+   "azar": 1,
+   "resultado": {
+    "tipo": "respuesta",
+    "estado": 503,
+    "code": "dian_unavailable",
+    "retryable": true
+   },
+   "esperado": {
+    "reintentar": false,
+    "motivo": "agotado"
+   }
+  },
+  {
+   "nombre": "maxReintentos 0 apaga los reintentos",
+   "reintento": "seguro",
+   "intento": 1,
+   "maxReintentos": 0,
+   "maxRetryAfter": 60,
+   "azar": 1,
+   "resultado": {
+    "tipo": "respuesta",
+    "estado": 503,
+    "code": "dian_unavailable",
+    "retryable": true
+   },
+   "esperado": {
+    "reintentar": false,
+    "motivo": "agotado"
+   }
+  },
+  {
+   "nombre": "error de red con maxReintentos 0",
+   "reintento": "seguro",
+   "intento": 1,
+   "maxReintentos": 0,
+   "maxRetryAfter": 60,
+   "azar": 1,
+   "resultado": {
+    "tipo": "red"
+   },
+   "esperado": {
+    "reintentar": false,
+    "motivo": "agotado"
+   }
+  },
+  {
+   "nombre": "espera creciente: intento 1 = 0,5 s",
+   "reintento": "seguro",
+   "intento": 1,
+   "maxReintentos": 9,
+   "maxRetryAfter": 60,
+   "azar": 1,
+   "resultado": {
+    "tipo": "respuesta",
+    "estado": 503
+   },
+   "esperado": {
+    "reintentar": true,
+    "espera": 0.5
+   }
+  },
+  {
+   "nombre": "espera creciente: intento 2 = 1 s",
+   "reintento": "seguro",
+   "intento": 2,
+   "maxReintentos": 9,
+   "maxRetryAfter": 60,
+   "azar": 1,
+   "resultado": {
+    "tipo": "respuesta",
+    "estado": 503
+   },
+   "esperado": {
+    "reintentar": true,
+    "espera": 1
+   }
+  },
+  {
+   "nombre": "espera creciente: intento 3 = 2 s",
+   "reintento": "seguro",
+   "intento": 3,
+   "maxReintentos": 9,
+   "maxRetryAfter": 60,
+   "azar": 1,
+   "resultado": {
+    "tipo": "respuesta",
+    "estado": 503
+   },
+   "esperado": {
+    "reintentar": true,
+    "espera": 2
+   }
+  },
+  {
+   "nombre": "espera creciente: intento 4 = 4 s",
+   "reintento": "seguro",
+   "intento": 4,
+   "maxReintentos": 9,
+   "maxRetryAfter": 60,
+   "azar": 1,
+   "resultado": {
+    "tipo": "respuesta",
+    "estado": 503
+   },
+   "esperado": {
+    "reintentar": true,
+    "espera": 4
+   }
+  },
+  {
+   "nombre": "espera creciente: intento 5 = 8 s",
+   "reintento": "seguro",
+   "intento": 5,
+   "maxReintentos": 9,
+   "maxRetryAfter": 60,
+   "azar": 1,
+   "resultado": {
+    "tipo": "respuesta",
+    "estado": 503
+   },
+   "esperado": {
+    "reintentar": true,
+    "espera": 8
+   }
+  },
+  {
+   "nombre": "la espera propia tiene tope de 8 s (intento 7)",
+   "reintento": "seguro",
+   "intento": 7,
+   "maxReintentos": 9,
+   "maxRetryAfter": 60,
+   "azar": 1,
+   "resultado": {
+    "tipo": "respuesta",
+    "estado": 503
+   },
+   "esperado": {
+    "reintentar": true,
+    "espera": 8
+   }
+  },
+  {
+   "nombre": "azar 0 = el 75 % de la espera (intento 1)",
+   "reintento": "seguro",
+   "intento": 1,
+   "maxReintentos": 2,
+   "maxRetryAfter": 60,
+   "azar": 0,
+   "resultado": {
+    "tipo": "respuesta",
+    "estado": 503
+   },
+   "esperado": {
+    "reintentar": true,
+    "espera": 0.375
+   }
+  },
+  {
+   "nombre": "azar 0,5 = el 87,5 % de la espera (intento 2)",
+   "reintento": "seguro",
+   "intento": 2,
+   "maxReintentos": 2,
+   "maxRetryAfter": 60,
+   "azar": 0.5,
+   "resultado": {
+    "tipo": "respuesta",
+    "estado": 503
+   },
+   "esperado": {
+    "reintentar": true,
+    "espera": 0.875
+   }
+  },
+  {
+   "nombre": "Retry-After 0 cuenta como no pedido",
+   "reintento": "seguro",
+   "intento": 1,
+   "maxReintentos": 2,
+   "maxRetryAfter": 60,
+   "azar": 1,
+   "resultado": {
+    "tipo": "respuesta",
+    "estado": 429,
+    "code": "rate_limited",
+    "retryable": true,
+    "retryAfter": 0
+   },
+   "esperado": {
+    "reintentar": true,
+    "espera": 0.5
+   }
+  }
+ ]
+}

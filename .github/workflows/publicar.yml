@@ -1,0 +1,23 @@
+# Publicación del SDK de Go (docs/api/43 §2.13 y §2.14). Escrita, NO activa. En Go "publicar" es solo el tag: proxy.golang.org lo toma del
+# repositorio. Este flujo prueba, comprueba que el tag coincide con la versión del código y deja el tag listo; el environment `publicacion`
+# exige la aprobación del dueño. La ruta del módulo (github.com/trevol/trevol-go) no se puede cambiar después sin romper a quien ya lo usa.
+name: Publicar
+on:
+  push:
+    tags: ['v*']
+permissions:
+  contents: read
+jobs:
+  go:
+    runs-on: ubuntu-latest
+    environment: publicacion
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version: 'stable'
+      - run: go vet ./... && go test ./...
+      - name: El tag coincide con la versión del SDK
+        run: grep -q "Version = \"${GITHUB_REF_NAME#v}\"" generado/tablas.go
+      - name: Pedirle al proxy de módulos que indexe la versión
+        run: GOPROXY=https://proxy.golang.org GO111MODULE=on go list -m "github.com/trevol/trevol-go@${GITHUB_REF_NAME}"

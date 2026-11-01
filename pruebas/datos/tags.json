@@ -1,0 +1,17 @@
+[
+	"Balance",
+	"CreditNotes",
+	"DebitNotes",
+	"EquivalentDocumentAdjustments",
+	"EquivalentDocuments",
+	"Events",
+	"General",
+	"Invoices",
+	"PayrollAdjustments",
+	"Payrolls",
+	"RadianEvents",
+	"Requests",
+	"SupportDocumentAdjustments",
+	"SupportDocuments",
+	"WebhookEndpoints"
+]
