@@ -24,7 +24,10 @@ type Acquirer struct {
 	DocumentNumber *string `json:"document_number,omitempty"`
 	Found *bool `json:"found,omitempty"`
 	Name NullableString `json:"name,omitempty"`
+	// Null si la DIAN no lo tiene o si la llave no tiene el permiso `customers:read` (es un dato personal).
 	Email NullableString `json:"email,omitempty"`
+	// Solo si la llave no tiene el permiso `customers:read`: `email` viene en null.
+	PersonalData *string `json:"personal_data,omitempty"`
 	AdditionalProperties map[string]interface{}
 }
 
@@ -259,6 +262,38 @@ func (o *Acquirer) UnsetEmail() {
 	o.Email.Unset()
 }
 
+// GetPersonalData returns the PersonalData field value if set, zero value otherwise.
+func (o *Acquirer) GetPersonalData() string {
+	if o == nil || IsNil(o.PersonalData) {
+		var ret string
+		return ret
+	}
+	return *o.PersonalData
+}
+
+// GetPersonalDataOk returns a tuple with the PersonalData field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *Acquirer) GetPersonalDataOk() (*string, bool) {
+	if o == nil || IsNil(o.PersonalData) {
+		return nil, false
+	}
+	return o.PersonalData, true
+}
+
+// HasPersonalData returns a boolean if a field has been set.
+func (o *Acquirer) HasPersonalData() bool {
+	if o != nil && !IsNil(o.PersonalData) {
+		return true
+	}
+
+	return false
+}
+
+// SetPersonalData gets a reference to the given string and assigns it to the PersonalData field.
+func (o *Acquirer) SetPersonalData(v string) {
+	o.PersonalData = &v
+}
+
 func (o Acquirer) MarshalJSON() ([]byte, error) {
 	toSerialize,err := o.ToMap()
 	if err != nil {
@@ -286,6 +321,9 @@ func (o Acquirer) ToMap() (map[string]interface{}, error) {
 	}
 	if o.Email.IsSet() {
 		toSerialize["email"] = o.Email.Get()
+	}
+	if !IsNil(o.PersonalData) {
+		toSerialize["personal_data"] = o.PersonalData
 	}
 
 	for key, value := range o.AdditionalProperties {
@@ -315,6 +353,7 @@ func (o *Acquirer) UnmarshalJSON(data []byte) (err error) {
 		delete(additionalProperties, "found")
 		delete(additionalProperties, "name")
 		delete(additionalProperties, "email")
+		delete(additionalProperties, "personal_data")
 		o.AdditionalProperties = additionalProperties
 	}
 

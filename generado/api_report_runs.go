@@ -475,7 +475,7 @@ func (r ApiRetrieveReportRunFileRequest) Execute() (*ReportFile, *http.Response,
 /*
 RetrieveReportRunFile El enlace de descarga del archivo de un reporte
 
-El archivo de un reporte listo: un enlace firmado que vale 5 minutos y descarga el CSV o el Excel con el nombre `trevol-documentos-<desde>_<hasta>.<csv|xlsx>` (sin el NIT ni el nombre de la empresa). Es JSON, no una redirección: descarga `url` SIN tu llave (el enlace ya lleva su permiso). Pide uno nuevo cuando venza. Si el reporte todavía se genera, falló o su archivo venció: 409 `file_unavailable` con `reason` (`not_ready`, `failed` o `expired`).
+El archivo de un reporte listo: un enlace firmado que vale 5 minutos y descarga el CSV o el Excel con el nombre `trevol-documentos-<desde>_<hasta>.<csv|xlsx>` (sin el NIT ni el nombre de la empresa). Es JSON, no una redirección: descarga `url` SIN tu llave (el enlace ya lleva su permiso). Pide uno nuevo cuando venza. Si el reporte todavía se genera, falló o su archivo venció: 409 `file_unavailable` con `reason` (`not_ready`, `failed` o `expired`). Si lo pidió una llave con `customers:read`, el archivo trae el número de documento de los clientes y bajarlo pide ese permiso a la llave que lo baja: sin él, 403 `permission_denied` con `required_permission: "customers:read"`.
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @param id
@@ -549,6 +549,17 @@ func (a *ReportRunsAPIService) RetrieveReportRunFileExecute(r ApiRetrieveReportR
 		newErr := &GenericOpenAPIError{
 			body:  localVarBody,
 			error: localVarHTTPResponse.Status,
+		}
+		if localVarHTTPResponse.StatusCode == 403 {
+			var v Problem
+			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.error = err.Error()
+				return localVarReturnValue, localVarHTTPResponse, newErr
+			}
+					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+					newErr.model = v
+			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 404 {
 			var v Problem

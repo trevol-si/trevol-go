@@ -4205,6 +4205,24 @@
         "$ref": "#/components/headers/Trevol-Version"
        }
       }
+     },
+     "403": {
+      "description": "Sin el permiso `customers:read` (trae los datos personales del cliente)",
+      "content": {
+       "application/problem+json": {
+        "schema": {
+         "$ref": "#/components/schemas/Problem"
+        }
+       }
+      },
+      "headers": {
+       "Request-Id": {
+        "$ref": "#/components/headers/Request-Id"
+       },
+       "Trevol-Version": {
+        "$ref": "#/components/headers/Trevol-Version"
+       }
+      }
      }
     },
     "tags": [
@@ -4263,6 +4281,24 @@
         "$ref": "#/components/headers/Trevol-Version"
        }
       }
+     },
+     "403": {
+      "description": "Sin el permiso `customers:read` (trae los datos personales del cliente)",
+      "content": {
+       "application/problem+json": {
+        "schema": {
+         "$ref": "#/components/schemas/Problem"
+        }
+       }
+      },
+      "headers": {
+       "Request-Id": {
+        "$ref": "#/components/headers/Request-Id"
+       },
+       "Trevol-Version": {
+        "$ref": "#/components/headers/Trevol-Version"
+       }
+      }
      }
     },
     "tags": [
@@ -4306,6 +4342,24 @@
      },
      "default": {
       "description": "Error (application/problem+json)",
+      "content": {
+       "application/problem+json": {
+        "schema": {
+         "$ref": "#/components/schemas/Problem"
+        }
+       }
+      },
+      "headers": {
+       "Request-Id": {
+        "$ref": "#/components/headers/Request-Id"
+       },
+       "Trevol-Version": {
+        "$ref": "#/components/headers/Trevol-Version"
+       }
+      }
+     },
+     "403": {
+      "description": "Sin el permiso `customers:read` (trae los datos personales del cliente)",
       "content": {
        "application/problem+json": {
         "schema": {
@@ -5238,6 +5292,24 @@
         "$ref": "#/components/headers/Trevol-Version"
        }
       }
+     },
+     "403": {
+      "description": "Sin el permiso `customers:read` (trae los datos personales del cliente)",
+      "content": {
+       "application/problem+json": {
+        "schema": {
+         "$ref": "#/components/schemas/Problem"
+        }
+       }
+      },
+      "headers": {
+       "Request-Id": {
+        "$ref": "#/components/headers/Request-Id"
+       },
+       "Trevol-Version": {
+        "$ref": "#/components/headers/Trevol-Version"
+       }
+      }
      }
     },
     "tags": [
@@ -5296,6 +5368,24 @@
         "$ref": "#/components/headers/Trevol-Version"
        }
       }
+     },
+     "403": {
+      "description": "Sin el permiso `customers:read` (trae los datos personales del cliente)",
+      "content": {
+       "application/problem+json": {
+        "schema": {
+         "$ref": "#/components/schemas/Problem"
+        }
+       }
+      },
+      "headers": {
+       "Request-Id": {
+        "$ref": "#/components/headers/Request-Id"
+       },
+       "Trevol-Version": {
+        "$ref": "#/components/headers/Trevol-Version"
+       }
+      }
      }
     },
     "tags": [
@@ -5339,6 +5429,24 @@
      },
      "default": {
       "description": "Error (application/problem+json)",
+      "content": {
+       "application/problem+json": {
+        "schema": {
+         "$ref": "#/components/schemas/Problem"
+        }
+       }
+      },
+      "headers": {
+       "Request-Id": {
+        "$ref": "#/components/headers/Request-Id"
+       },
+       "Trevol-Version": {
+        "$ref": "#/components/headers/Trevol-Version"
+       }
+      }
+     },
+     "403": {
+      "description": "Sin el permiso `customers:read` (trae los datos personales del cliente)",
       "content": {
        "application/problem+json": {
         "schema": {
@@ -6250,6 +6358,24 @@
         "$ref": "#/components/headers/Trevol-Version"
        }
       }
+     },
+     "403": {
+      "description": "Sin el permiso `customers:read` (trae los datos personales del cliente)",
+      "content": {
+       "application/problem+json": {
+        "schema": {
+         "$ref": "#/components/schemas/Problem"
+        }
+       }
+      },
+      "headers": {
+       "Request-Id": {
+        "$ref": "#/components/headers/Request-Id"
+       },
+       "Trevol-Version": {
+        "$ref": "#/components/headers/Trevol-Version"
+       }
+      }
      }
     },
     "tags": [
@@ -6308,6 +6434,24 @@
         "$ref": "#/components/headers/Trevol-Version"
        }
       }
+     },
+     "403": {
+      "description": "Sin el permiso `customers:read` (trae los datos personales del cliente)",
+      "content": {
+       "application/problem+json": {
+        "schema": {
+         "$ref": "#/components/schemas/Problem"
+        }
+       }
+      },
+      "headers": {
+       "Request-Id": {
+        "$ref": "#/components/headers/Request-Id"
+       },
+       "Trevol-Version": {
+        "$ref": "#/components/headers/Trevol-Version"
+       }
+      }
      }
     },
     "tags": [
@@ -6351,6 +6495,24 @@
      },
      "default": {
       "description": "Error (application/problem+json)",
+      "content": {
+       "application/problem+json": {
+        "schema": {
+         "$ref": "#/components/schemas/Problem"
+        }
+       }
+      },
+      "headers": {
+       "Request-Id": {
+        "$ref": "#/components/headers/Request-Id"
+       },
+       "Trevol-Version": {
+        "$ref": "#/components/headers/Trevol-Version"
+       }
+      }
+     },
+     "403": {
+      "description": "Sin el permiso `customers:read` (trae los datos personales del cliente)",
       "content": {
        "application/problem+json": {
         "schema": {
@@ -7656,6 +7818,24 @@
         "$ref": "#/components/headers/Trevol-Version"
        }
       }
+     },
+     "403": {
+      "description": "Sin el permiso `customers:read` (trae los datos personales del cliente)",
+      "content": {
+       "application/problem+json": {
+        "schema": {
+         "$ref": "#/components/schemas/Problem"
+        }
+       }
+      },
+      "headers": {
+       "Request-Id": {
+        "$ref": "#/components/headers/Request-Id"
+       },
+       "Trevol-Version": {
+        "$ref": "#/components/headers/Trevol-Version"
+       }
+      }
      }
     },
     "description": "El XML firmado que se mandó a la DIAN (`application/xml`).",
@@ -8545,6 +8725,24 @@
      },
      "default": {
       "description": "Error (application/problem+json)",
+      "content": {
+       "application/problem+json": {
+        "schema": {
+         "$ref": "#/components/schemas/Problem"
+        }
+       }
+      },
+      "headers": {
+       "Request-Id": {
+        "$ref": "#/components/headers/Request-Id"
+       },
+       "Trevol-Version": {
+        "$ref": "#/components/headers/Trevol-Version"
+       }
+      }
+     },
+     "403": {
+      "description": "Sin el permiso `customers:read` (trae los datos personales del cliente)",
       "content": {
        "application/problem+json": {
         "schema": {
@@ -10021,6 +10219,24 @@
         "$ref": "#/components/headers/Trevol-Version"
        }
       }
+     },
+     "403": {
+      "description": "Sin el permiso `customers:read` (trae los datos personales del cliente)",
+      "content": {
+       "application/problem+json": {
+        "schema": {
+         "$ref": "#/components/schemas/Problem"
+        }
+       }
+      },
+      "headers": {
+       "Request-Id": {
+        "$ref": "#/components/headers/Request-Id"
+       },
+       "Trevol-Version": {
+        "$ref": "#/components/headers/Trevol-Version"
+       }
+      }
      }
     },
     "description": "La representación gráfica (`application/pdf`). Si todavía no se hizo, se genera en el momento.",
@@ -10080,6 +10296,24 @@
         "$ref": "#/components/headers/Trevol-Version"
        }
       }
+     },
+     "403": {
+      "description": "Sin el permiso `customers:read` (trae los datos personales del cliente)",
+      "content": {
+       "application/problem+json": {
+        "schema": {
+         "$ref": "#/components/schemas/Problem"
+        }
+       }
+      },
+      "headers": {
+       "Request-Id": {
+        "$ref": "#/components/headers/Request-Id"
+       },
+       "Trevol-Version": {
+        "$ref": "#/components/headers/Trevol-Version"
+       }
+      }
      }
     },
     "description": "El XML firmado que se mandó a la DIAN (`application/xml`).",
@@ -10124,6 +10358,24 @@
      },
      "default": {
       "description": "Error (application/problem+json)",
+      "content": {
+       "application/problem+json": {
+        "schema": {
+         "$ref": "#/components/schemas/Problem"
+        }
+       }
+      },
+      "headers": {
+       "Request-Id": {
+        "$ref": "#/components/headers/Request-Id"
+       },
+       "Trevol-Version": {
+        "$ref": "#/components/headers/Trevol-Version"
+       }
+      }
+     },
+     "403": {
+      "description": "Sin el permiso `customers:read` (trae los datos personales del cliente)",
       "content": {
        "application/problem+json": {
         "schema": {
@@ -11061,6 +11313,24 @@
         "$ref": "#/components/headers/Trevol-Version"
        }
       }
+     },
+     "403": {
+      "description": "Sin el permiso `customers:read` (trae los datos personales del cliente)",
+      "content": {
+       "application/problem+json": {
+        "schema": {
+         "$ref": "#/components/schemas/Problem"
+        }
+       }
+      },
+      "headers": {
+       "Request-Id": {
+        "$ref": "#/components/headers/Request-Id"
+       },
+       "Trevol-Version": {
+        "$ref": "#/components/headers/Trevol-Version"
+       }
+      }
      }
     },
     "description": "La representación gráfica (`application/pdf`).",
@@ -11120,6 +11390,24 @@
         "$ref": "#/components/headers/Trevol-Version"
        }
       }
+     },
+     "403": {
+      "description": "Sin el permiso `customers:read` (trae los datos personales del cliente)",
+      "content": {
+       "application/problem+json": {
+        "schema": {
+         "$ref": "#/components/schemas/Problem"
+        }
+       }
+      },
+      "headers": {
+       "Request-Id": {
+        "$ref": "#/components/headers/Request-Id"
+       },
+       "Trevol-Version": {
+        "$ref": "#/components/headers/Trevol-Version"
+       }
+      }
      }
     },
     "description": "El XML firmado que se mandó a la DIAN (`application/xml`).",
@@ -11164,6 +11452,24 @@
      },
      "default": {
       "description": "Error (application/problem+json)",
+      "content": {
+       "application/problem+json": {
+        "schema": {
+         "$ref": "#/components/schemas/Problem"
+        }
+       }
+      },
+      "headers": {
+       "Request-Id": {
+        "$ref": "#/components/headers/Request-Id"
+       },
+       "Trevol-Version": {
+        "$ref": "#/components/headers/Trevol-Version"
+       }
+      }
+     },
+     "403": {
+      "description": "Sin el permiso `customers:read` (trae los datos personales del cliente)",
       "content": {
        "application/problem+json": {
         "schema": {
@@ -19792,7 +20098,7 @@
   "/report_runs/{id}/file": {
    "get": {
     "summary": "El enlace de descarga del archivo de un reporte",
-    "description": "El archivo de un reporte listo: un enlace firmado que vale 5 minutos y descarga el CSV o el Excel con el nombre `trevol-documentos-<desde>_<hasta>.<csv|xlsx>` (sin el NIT ni el nombre de la empresa). Es JSON, no una redirección: descarga `url` SIN tu llave (el enlace ya lleva su permiso). Pide uno nuevo cuando venza. Si el reporte todavía se genera, falló o su archivo venció: 409 `file_unavailable` con `reason` (`not_ready`, `failed` o `expired`).",
+    "description": "El archivo de un reporte listo: un enlace firmado que vale 5 minutos y descarga el CSV o el Excel con el nombre `trevol-documentos-<desde>_<hasta>.<csv|xlsx>` (sin el NIT ni el nombre de la empresa). Es JSON, no una redirección: descarga `url` SIN tu llave (el enlace ya lleva su permiso). Pide uno nuevo cuando venza. Si el reporte todavía se genera, falló o su archivo venció: 409 `file_unavailable` con `reason` (`not_ready`, `failed` o `expired`). Si lo pidió una llave con `customers:read`, el archivo trae el número de documento de los clientes y bajarlo pide ese permiso a la llave que lo baja: sin él, 403 `permission_denied` con `required_permission: \"customers:read\"`.",
     "tags": [
      "Reportes"
     ],
@@ -19821,6 +20127,24 @@
          "expires_at": "2026-11-18T09:40:00-05:00",
          "filename": "trevol-documentos-2026-01-01_2026-10-31.xlsx",
          "size_bytes": 6829104
+        }
+       }
+      },
+      "headers": {
+       "Request-Id": {
+        "$ref": "#/components/headers/Request-Id"
+       },
+       "Trevol-Version": {
+        "$ref": "#/components/headers/Trevol-Version"
+       }
+      }
+     },
+     "403": {
+      "description": "Error (application/problem+json)",
+      "content": {
+       "application/problem+json": {
+        "schema": {
+         "$ref": "#/components/schemas/Problem"
         }
        }
       },
@@ -35063,7 +35387,15 @@
       "type": [
        "string",
        "null"
-      ]
+      ],
+      "description": "Null si la DIAN no lo tiene o si la llave no tiene el permiso `customers:read` (es un dato personal)."
+     },
+     "personal_data": {
+      "type": "string",
+      "enum": [
+       "redacted"
+      ],
+      "description": "Solo si la llave no tiene el permiso `customers:read`: `email` viene en null."
      }
     }
    },

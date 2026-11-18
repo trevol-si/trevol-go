@@ -15,6 +15,8 @@ Regenerado con la API de noviembre de 2026 (versión `2026-11-18`, la de los err
   `portal_read_required`, `report_too_large` → precondición).
 - Las líneas de factura, notas y documento equivalente aceptan la línea completa o la del catálogo (`product_id`) en un mismo modelo.
 - La exportación de documentos (`exportDocuments`) se descarga como archivo (CSV o Excel).
+- `Acquirer` trae `personal_data` (`redacted` si la llave no tiene `customers:read`: `email` viene en null). El PDF, el XML y el
+  ZIP de lo emitido y el archivo de un reporte asíncrono con datos personales responden 403 `permission_denied` sin ese permiso.
 
 ## [0.1.0] — sin publicar
 
