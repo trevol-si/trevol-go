@@ -1,5 +1,63 @@
 [
  {
+  "operationId": "associateNumberingRange",
+  "metodo": "POST",
+  "ruta": "/numbering_ranges/{id}/associate",
+  "recurso": "NumberingRanges",
+  "idempotente": true,
+  "reintento": "seguro",
+  "binario": null,
+  "lista": null,
+  "respuesta": "NumberingAssociation",
+  "cuerpo": "NumberingAssociationInput",
+  "cuerpoRequerido": false,
+  "parametros": [
+   {
+    "nombre": "id",
+    "en": "path",
+    "requerido": true,
+    "tipo": "string"
+   },
+   {
+    "nombre": "Idempotency-Key",
+    "en": "header",
+    "requerido": false,
+    "tipo": "string"
+   }
+  ],
+  "ejemplos": [
+   {
+    "nombre": "quitar",
+    "resumen": "Quitarlo del software donde está",
+    "valor": {
+     "remove_from_current_software": true
+    }
+   }
+  ]
+ },
+ {
+  "operationId": "cancelNumberingRequest",
+  "metodo": "POST",
+  "ruta": "/numbering_requests/{id}/cancel",
+  "recurso": "NumberingRequests",
+  "idempotente": false,
+  "reintento": "solo_429",
+  "binario": null,
+  "lista": null,
+  "respuesta": "NumberingRequest",
+  "cuerpo": null,
+  "cuerpoRequerido": false,
+  "parametros": [
+   {
+    "nombre": "id",
+    "en": "path",
+    "requerido": true,
+    "tipo": "string"
+   }
+  ],
+  "ejemplos": []
+ },
+ {
   "operationId": "correctCreditNote",
   "metodo": "PUT",
   "ruta": "/credit_notes/{id}",
@@ -355,6 +413,47 @@
      "payment": {
       "form": "credit",
       "term_days": 30
+     }
+    }
+   },
+   {
+    "nombre": "contingencia",
+    "resumen": "Transcripción (03) de una factura de talonario o de papel",
+    "valor": {
+     "external_id": "PAPEL-TP-0451",
+     "contingency": {
+      "physical_document": {
+       "number": "TP-0451",
+       "date": "2026-11-10"
+      },
+      "resolved_at": "2026-11-10T16:30:00-05:00"
+     },
+     "customer": {
+      "document_type": "31",
+      "document_number": "900373427",
+      "name": "DISTRIBUIDORA LOS ANDES SAS",
+      "person_type": "legal",
+      "municipality_code": "11001",
+      "tax_responsibilities": [
+       "O-13"
+      ]
+     },
+     "items": [
+      {
+       "code": "HERR-01",
+       "description": "Caja de herramientas",
+       "quantity": "2",
+       "unit_price": "85000",
+       "taxes": [
+        {
+         "code": "01",
+         "rate": "19"
+        }
+       ]
+      }
+     ],
+     "payment": {
+      "form": "cash"
      }
     }
    }
@@ -786,6 +885,54 @@
   ]
  },
  {
+  "operationId": "createCustomer",
+  "metodo": "POST",
+  "ruta": "/customers",
+  "recurso": "Customers",
+  "idempotente": true,
+  "reintento": "seguro",
+  "binario": null,
+  "lista": null,
+  "respuesta": "CatalogCustomer",
+  "cuerpo": "CatalogCustomerInput",
+  "cuerpoRequerido": true,
+  "parametros": [
+   {
+    "nombre": "Idempotency-Key",
+    "en": "header",
+    "requerido": false,
+    "tipo": "string"
+   }
+  ],
+  "ejemplos": [
+   {
+    "nombre": "nit",
+    "resumen": "Una empresa con NIT, a crédito",
+    "valor": {
+     "external_id": "ERP-CLI-0042",
+     "document_type": "31",
+     "document_number": "900373427",
+     "name": "DISTRIBUIDORA LOS ANDES SAS",
+     "person_type": "legal",
+     "tax_responsibilities": [
+      "O-13"
+     ],
+     "email": "facturacion@distribuidoralosandes.example",
+     "phone": "6045550142",
+     "address": "Carrera 43A # 1-50, Oficina 302",
+     "city": "Medellín",
+     "municipality_code": "05001",
+     "defaults": {
+      "payment_form": "credit",
+      "term_days": 30,
+      "payment_method": "47",
+      "withholding_agent": true
+     }
+    }
+   }
+  ]
+ },
+ {
   "operationId": "createDebitNote",
   "metodo": "POST",
   "ruta": "/debit_notes",
@@ -824,6 +971,38 @@
        "unit_price": "45000"
       }
      ]
+    }
+   }
+  ]
+ },
+ {
+  "operationId": "createDianSync",
+  "metodo": "POST",
+  "ruta": "/dian_syncs",
+  "recurso": "DianSyncs",
+  "idempotente": true,
+  "reintento": "seguro",
+  "binario": null,
+  "lista": null,
+  "respuesta": "DianSync",
+  "cuerpo": "DianSyncInput",
+  "cuerpoRequerido": false,
+  "parametros": [
+   {
+    "nombre": "Idempotency-Key",
+    "en": "header",
+    "requerido": false,
+    "tipo": "string"
+   }
+  ],
+  "ejemplos": [
+   {
+    "nombre": "todo",
+    "resumen": "Lo emitido y lo recibido de los últimos 3 meses",
+    "valor": {
+     "from": "2026-08-18",
+     "to": "2026-11-18",
+     "direction": "all"
     }
    }
   ]
@@ -1063,6 +1242,223 @@
       "term_days": 30
      }
     }
+   },
+   {
+    "nombre": "contingencia",
+    "resumen": "Transcripción (03) de una factura de talonario o de papel",
+    "valor": {
+     "external_id": "PAPEL-TP-0451",
+     "contingency": {
+      "physical_document": {
+       "number": "TP-0451",
+       "date": "2026-11-10"
+      },
+      "resolved_at": "2026-11-10T16:30:00-05:00"
+     },
+     "customer": {
+      "document_type": "31",
+      "document_number": "900373427",
+      "name": "DISTRIBUIDORA LOS ANDES SAS",
+      "person_type": "legal",
+      "municipality_code": "11001",
+      "tax_responsibilities": [
+       "O-13"
+      ]
+     },
+     "items": [
+      {
+       "code": "HERR-01",
+       "description": "Caja de herramientas",
+       "quantity": "2",
+       "unit_price": "85000",
+       "taxes": [
+        {
+         "code": "01",
+         "rate": "19"
+        }
+       ]
+      }
+     ],
+     "payment": {
+      "form": "cash"
+     }
+    }
+   }
+  ]
+ },
+ {
+  "operationId": "createInvoiceBatch",
+  "metodo": "POST",
+  "ruta": "/invoice_batches",
+  "recurso": "InvoiceBatches",
+  "idempotente": true,
+  "reintento": "seguro",
+  "binario": null,
+  "lista": null,
+  "respuesta": "InvoiceBatch",
+  "cuerpo": "InvoiceBatchInput",
+  "cuerpoRequerido": true,
+  "parametros": [
+   {
+    "nombre": "Idempotency-Key",
+    "en": "header",
+    "requerido": false,
+    "tipo": "string"
+   }
+  ],
+  "ejemplos": [
+   {
+    "nombre": "dos",
+    "resumen": "Dos facturas, una con un problema",
+    "valor": {
+     "invoices": [
+      {
+       "customer": {
+        "document_type": "31",
+        "document_number": "900123456",
+        "name": "COMERCIALIZADORA ANDINA SAS",
+        "person_type": "legal",
+        "email": "facturacion@comercializadoraandina.example",
+        "address": "Calle 72 # 10-34, Oficina 501",
+        "municipality_code": "11001"
+       },
+       "items": [
+        {
+         "code": "LIC-ANUAL",
+         "description": "Licencia anual de software",
+         "quantity": "2",
+         "unit_price": "150000",
+         "taxes": [
+          {
+           "code": "01",
+           "rate": "19"
+          }
+         ]
+        },
+        {
+         "code": "SOP-MES",
+         "description": "Soporte técnico mensual",
+         "quantity": "1",
+         "unit_price": "80000",
+         "taxes": [
+          {
+           "code": "01",
+           "rate": "19"
+          }
+         ]
+        }
+       ],
+       "payment": {
+        "form": "credit",
+        "term_days": 30
+       },
+       "notes": [
+        "Gracias por su compra"
+       ],
+       "external_id": "VENTA-2026-000124",
+       "idempotency_key": "VENTA-2026-000124"
+      },
+      {
+       "external_id": "VENTA-2026-000125",
+       "idempotency_key": "VENTA-2026-000125",
+       "customer": {
+        "final_consumer": true
+       },
+       "items": [
+        {
+         "description": "Soporte técnico mensual",
+         "quantity": "0",
+         "unit_price": "80000",
+         "taxes": [
+          {
+           "code": "01",
+           "rate": "19"
+          }
+         ]
+        }
+       ]
+      }
+     ]
+    }
+   }
+  ]
+ },
+ {
+  "operationId": "createNumberingRequest",
+  "metodo": "POST",
+  "ruta": "/numbering_requests",
+  "recurso": "NumberingRequests",
+  "idempotente": true,
+  "reintento": "seguro",
+  "binario": null,
+  "lista": null,
+  "respuesta": "NumberingRequest",
+  "cuerpo": "NumberingRequestInput",
+  "cuerpoRequerido": true,
+  "parametros": [
+   {
+    "nombre": "Idempotency-Key",
+    "en": "header",
+    "requerido": false,
+    "tipo": "string"
+   }
+  ],
+  "ejemplos": [
+   {
+    "nombre": "manual",
+    "resumen": "La empresa hace el 1302",
+    "valor": {
+     "prefix": "LAN",
+     "from": 1,
+     "to": 5000,
+     "mode": "manual"
+    }
+   },
+   {
+    "nombre": "automatica",
+    "resumen": "Trevol hace el 1302",
+    "valor": {
+     "prefix": "LAN",
+     "from": 1,
+     "to": 5000,
+     "mode": "automatic",
+     "document": "invoice"
+    }
+   }
+  ]
+ },
+ {
+  "operationId": "createPaperNumberingRange",
+  "metodo": "POST",
+  "ruta": "/paper_numbering_ranges",
+  "recurso": "PaperNumberingRanges",
+  "idempotente": true,
+  "reintento": "seguro",
+  "binario": null,
+  "lista": null,
+  "respuesta": "PaperNumberingRange",
+  "cuerpo": "PaperNumberingRangeInput",
+  "cuerpoRequerido": true,
+  "parametros": [
+   {
+    "nombre": "Idempotency-Key",
+    "en": "header",
+    "requerido": false,
+    "tipo": "string"
+   }
+  ],
+  "ejemplos": [
+   {
+    "nombre": "talonario",
+    "resumen": "Un talonario TP del 1 al 5000",
+    "valor": {
+     "resolution_number": "18764000004521",
+     "prefix": "TP",
+     "from": 1,
+     "to": 5000,
+     "valid_from": "2026-01-15",
+     "valid_to": "2028-01-15"
+    }
    }
   ]
  },
@@ -1265,6 +1661,46 @@
   ]
  },
  {
+  "operationId": "createProduct",
+  "metodo": "POST",
+  "ruta": "/products",
+  "recurso": "Products",
+  "idempotente": true,
+  "reintento": "seguro",
+  "binario": null,
+  "lista": null,
+  "respuesta": "CatalogProduct",
+  "cuerpo": "CatalogProductInput",
+  "cuerpoRequerido": true,
+  "parametros": [
+   {
+    "nombre": "Idempotency-Key",
+    "en": "header",
+    "requerido": false,
+    "tipo": "string"
+   }
+  ],
+  "ejemplos": [
+   {
+    "nombre": "cafe",
+    "resumen": "Un producto con IVA del 5 %",
+    "valor": {
+     "external_id": "ERP-SKU-CAF500",
+     "code": "CAF-500",
+     "name": "Café especial tostado 500 g",
+     "unit": "94",
+     "unit_price": "32000",
+     "taxes": [
+      {
+       "code": "01",
+       "rate": "5"
+      }
+     ]
+    }
+   }
+  ]
+ },
+ {
   "operationId": "createRadianEvent",
   "metodo": "POST",
   "ruta": "/radian_events",
@@ -1346,6 +1782,40 @@
       "cufe": "abababababababababababababababababababababababababababababababababababababababababababababababab",
       "number": "FE4722"
      }
+    }
+   }
+  ]
+ },
+ {
+  "operationId": "createReportRun",
+  "metodo": "POST",
+  "ruta": "/report_runs",
+  "recurso": "ReportRuns",
+  "idempotente": true,
+  "reintento": "seguro",
+  "binario": null,
+  "lista": null,
+  "respuesta": "ReportRun",
+  "cuerpo": "ReportRunInput",
+  "cuerpoRequerido": true,
+  "parametros": [
+   {
+    "nombre": "Idempotency-Key",
+    "en": "header",
+    "requerido": false,
+    "tipo": "string"
+   }
+  ],
+  "ejemplos": [
+   {
+    "nombre": "anio",
+    "resumen": "Lo de 2026 hasta octubre, en Excel",
+    "valor": {
+     "report": "documents",
+     "format": "xlsx",
+     "issued_from": "2026-01-01",
+     "issued_to": "2026-10-31",
+     "direction": "all"
     }
    }
   ]
@@ -1483,6 +1953,28 @@
     }
    }
   ]
+ },
+ {
+  "operationId": "deactivatePaperNumberingRange",
+  "metodo": "POST",
+  "ruta": "/paper_numbering_ranges/{id}/deactivate",
+  "recurso": "PaperNumberingRanges",
+  "idempotente": false,
+  "reintento": "solo_429",
+  "binario": null,
+  "lista": null,
+  "respuesta": "PaperNumberingRange",
+  "cuerpo": null,
+  "cuerpoRequerido": false,
+  "parametros": [
+   {
+    "nombre": "id",
+    "en": "path",
+    "requerido": true,
+    "tipo": "string"
+   }
+  ],
+  "ejemplos": []
  },
  {
   "operationId": "deleteWebhookEndpoint",
@@ -1668,6 +2160,28 @@
   "idempotente": false,
   "reintento": "seguro",
   "binario": "zip",
+  "lista": null,
+  "respuesta": null,
+  "cuerpo": null,
+  "cuerpoRequerido": false,
+  "parametros": [
+   {
+    "nombre": "id",
+    "en": "path",
+    "requerido": true,
+    "tipo": "string"
+   }
+  ],
+  "ejemplos": []
+ },
+ {
+  "operationId": "downloadDianDocumentXml",
+  "metodo": "GET",
+  "ruta": "/dian_documents/{id}/xml",
+  "recurso": "DianDocuments",
+  "idempotente": false,
+  "reintento": "seguro",
+  "binario": "xml",
   "lista": null,
   "respuesta": null,
   "cuerpo": null,
@@ -2189,6 +2703,96 @@
   "ejemplos": []
  },
  {
+  "operationId": "exportDocuments",
+  "metodo": "GET",
+  "ruta": "/reports/documents",
+  "recurso": "Reports",
+  "idempotente": false,
+  "reintento": "seguro",
+  "binario": "csv",
+  "lista": null,
+  "respuesta": null,
+  "cuerpo": null,
+  "cuerpoRequerido": false,
+  "parametros": [
+   {
+    "nombre": "format",
+    "en": "query",
+    "requerido": true,
+    "tipo": "string"
+   },
+   {
+    "nombre": "issued_from",
+    "en": "query",
+    "requerido": true,
+    "tipo": "string"
+   },
+   {
+    "nombre": "issued_to",
+    "en": "query",
+    "requerido": true,
+    "tipo": "string"
+   },
+   {
+    "nombre": "direction",
+    "en": "query",
+    "requerido": false,
+    "tipo": "string"
+   },
+   {
+    "nombre": "type",
+    "en": "query",
+    "requerido": false,
+    "tipo": "string"
+   }
+  ],
+  "ejemplos": []
+ },
+ {
+  "operationId": "getDianDocument",
+  "metodo": "GET",
+  "ruta": "/dian_documents/{id}",
+  "recurso": "DianDocuments",
+  "idempotente": false,
+  "reintento": "seguro",
+  "binario": null,
+  "lista": null,
+  "respuesta": "DianDocument",
+  "cuerpo": null,
+  "cuerpoRequerido": false,
+  "parametros": [
+   {
+    "nombre": "id",
+    "en": "path",
+    "requerido": true,
+    "tipo": "string"
+   }
+  ],
+  "ejemplos": []
+ },
+ {
+  "operationId": "getDianSync",
+  "metodo": "GET",
+  "ruta": "/dian_syncs/{id}",
+  "recurso": "DianSyncs",
+  "idempotente": false,
+  "reintento": "seguro",
+  "binario": null,
+  "lista": null,
+  "respuesta": "DianSync",
+  "cuerpo": null,
+  "cuerpoRequerido": false,
+  "parametros": [
+   {
+    "nombre": "id",
+    "en": "path",
+    "requerido": true,
+    "tipo": "string"
+   }
+  ],
+  "ejemplos": []
+ },
+ {
   "operationId": "getHealth",
   "metodo": "GET",
   "ruta": "/health",
@@ -2201,6 +2805,28 @@
   "cuerpo": null,
   "cuerpoRequerido": false,
   "parametros": [],
+  "ejemplos": []
+ },
+ {
+  "operationId": "getRadianStatus",
+  "metodo": "GET",
+  "ruta": "/radian_status",
+  "recurso": "RadianStatus",
+  "idempotente": false,
+  "reintento": "seguro",
+  "binario": null,
+  "lista": null,
+  "respuesta": "RadianStatus",
+  "cuerpo": null,
+  "cuerpoRequerido": false,
+  "parametros": [
+   {
+    "nombre": "cufe",
+    "en": "query",
+    "requerido": true,
+    "tipo": "string"
+   }
+  ],
   "ejemplos": []
  },
  {
@@ -2290,6 +2916,58 @@
   "ejemplos": []
  },
  {
+  "operationId": "listCustomers",
+  "metodo": "GET",
+  "ruta": "/customers",
+  "recurso": "Customers",
+  "idempotente": false,
+  "reintento": "seguro",
+  "binario": null,
+  "lista": "CustomerList",
+  "respuesta": "CustomerList",
+  "cuerpo": null,
+  "cuerpoRequerido": false,
+  "parametros": [
+   {
+    "nombre": "q",
+    "en": "query",
+    "requerido": false,
+    "tipo": "string"
+   },
+   {
+    "nombre": "document_number",
+    "en": "query",
+    "requerido": false,
+    "tipo": "string"
+   },
+   {
+    "nombre": "external_id",
+    "en": "query",
+    "requerido": false,
+    "tipo": "string"
+   },
+   {
+    "nombre": "active",
+    "en": "query",
+    "requerido": false,
+    "tipo": "boolean"
+   },
+   {
+    "nombre": "limit",
+    "en": "query",
+    "requerido": false,
+    "tipo": "integer"
+   },
+   {
+    "nombre": "starting_after",
+    "en": "query",
+    "requerido": false,
+    "tipo": "string"
+   }
+  ],
+  "ejemplos": []
+ },
+ {
   "operationId": "listDebitNotes",
   "metodo": "GET",
   "ruta": "/debit_notes",
@@ -2334,6 +3012,92 @@
    },
    {
     "nombre": "created_to",
+    "en": "query",
+    "requerido": false,
+    "tipo": "string"
+   }
+  ],
+  "ejemplos": []
+ },
+ {
+  "operationId": "listDianDocuments",
+  "metodo": "GET",
+  "ruta": "/dian_documents",
+  "recurso": "DianDocuments",
+  "idempotente": false,
+  "reintento": "seguro",
+  "binario": null,
+  "lista": "DianDocumentList",
+  "respuesta": "DianDocumentList",
+  "cuerpo": null,
+  "cuerpoRequerido": false,
+  "parametros": [
+   {
+    "nombre": "limit",
+    "en": "query",
+    "requerido": false,
+    "tipo": "integer"
+   },
+   {
+    "nombre": "starting_after",
+    "en": "query",
+    "requerido": false,
+    "tipo": "string"
+   },
+   {
+    "nombre": "type",
+    "en": "query",
+    "requerido": false,
+    "tipo": "string"
+   },
+   {
+    "nombre": "issued_from",
+    "en": "query",
+    "requerido": false,
+    "tipo": "string"
+   },
+   {
+    "nombre": "issued_to",
+    "en": "query",
+    "requerido": false,
+    "tipo": "string"
+   },
+   {
+    "nombre": "direction",
+    "en": "query",
+    "requerido": false,
+    "tipo": "string"
+   }
+  ],
+  "ejemplos": []
+ },
+ {
+  "operationId": "listDianSyncs",
+  "metodo": "GET",
+  "ruta": "/dian_syncs",
+  "recurso": "DianSyncs",
+  "idempotente": false,
+  "reintento": "seguro",
+  "binario": null,
+  "lista": "DianSyncList",
+  "respuesta": "DianSyncList",
+  "cuerpo": null,
+  "cuerpoRequerido": false,
+  "parametros": [
+   {
+    "nombre": "limit",
+    "en": "query",
+    "requerido": false,
+    "tipo": "integer"
+   },
+   {
+    "nombre": "starting_after",
+    "en": "query",
+    "requerido": false,
+    "tipo": "string"
+   },
+   {
+    "nombre": "status",
     "en": "query",
     "requerido": false,
     "tipo": "string"
@@ -2498,6 +3262,52 @@
   "ejemplos": []
  },
  {
+  "operationId": "listInvoiceBatches",
+  "metodo": "GET",
+  "ruta": "/invoice_batches",
+  "recurso": "InvoiceBatches",
+  "idempotente": false,
+  "reintento": "seguro",
+  "binario": null,
+  "lista": "InvoiceBatchList",
+  "respuesta": "InvoiceBatchList",
+  "cuerpo": null,
+  "cuerpoRequerido": false,
+  "parametros": [
+   {
+    "nombre": "limit",
+    "en": "query",
+    "requerido": false,
+    "tipo": "integer"
+   },
+   {
+    "nombre": "starting_after",
+    "en": "query",
+    "requerido": false,
+    "tipo": "string"
+   },
+   {
+    "nombre": "status",
+    "en": "query",
+    "requerido": false,
+    "tipo": "string"
+   },
+   {
+    "nombre": "created_from",
+    "en": "query",
+    "requerido": false,
+    "tipo": "string"
+   },
+   {
+    "nombre": "created_to",
+    "en": "query",
+    "requerido": false,
+    "tipo": "string"
+   }
+  ],
+  "ejemplos": []
+ },
+ {
   "operationId": "listInvoices",
   "metodo": "GET",
   "ruta": "/invoices",
@@ -2547,6 +3357,101 @@
     "tipo": "string"
    }
   ],
+  "ejemplos": []
+ },
+ {
+  "operationId": "listNumberingRanges",
+  "metodo": "GET",
+  "ruta": "/numbering_ranges",
+  "recurso": "NumberingRanges",
+  "idempotente": false,
+  "reintento": "seguro",
+  "binario": null,
+  "lista": "NumberingRangeList",
+  "respuesta": "NumberingRangeList",
+  "cuerpo": null,
+  "cuerpoRequerido": false,
+  "parametros": [
+   {
+    "nombre": "limit",
+    "en": "query",
+    "requerido": false,
+    "tipo": "integer"
+   },
+   {
+    "nombre": "starting_after",
+    "en": "query",
+    "requerido": false,
+    "tipo": "string"
+   },
+   {
+    "nombre": "document",
+    "en": "query",
+    "requerido": false,
+    "tipo": "string"
+   },
+   {
+    "nombre": "association",
+    "en": "query",
+    "requerido": false,
+    "tipo": "string"
+   },
+   {
+    "nombre": "include_expired",
+    "en": "query",
+    "requerido": false,
+    "tipo": "boolean"
+   }
+  ],
+  "ejemplos": []
+ },
+ {
+  "operationId": "listNumberingRequests",
+  "metodo": "GET",
+  "ruta": "/numbering_requests",
+  "recurso": "NumberingRequests",
+  "idempotente": false,
+  "reintento": "seguro",
+  "binario": null,
+  "lista": "NumberingRequestList",
+  "respuesta": "NumberingRequestList",
+  "cuerpo": null,
+  "cuerpoRequerido": false,
+  "parametros": [
+   {
+    "nombre": "limit",
+    "en": "query",
+    "requerido": false,
+    "tipo": "integer"
+   },
+   {
+    "nombre": "starting_after",
+    "en": "query",
+    "requerido": false,
+    "tipo": "string"
+   },
+   {
+    "nombre": "status",
+    "en": "query",
+    "requerido": false,
+    "tipo": "string"
+   }
+  ],
+  "ejemplos": []
+ },
+ {
+  "operationId": "listPaperNumberingRanges",
+  "metodo": "GET",
+  "ruta": "/paper_numbering_ranges",
+  "recurso": "PaperNumberingRanges",
+  "idempotente": false,
+  "reintento": "seguro",
+  "binario": null,
+  "lista": "PaperNumberingRangeList",
+  "respuesta": "PaperNumberingRangeList",
+  "cuerpo": null,
+  "cuerpoRequerido": false,
+  "parametros": [],
   "ejemplos": []
  },
  {
@@ -2690,6 +3595,58 @@
   "ejemplos": []
  },
  {
+  "operationId": "listProducts",
+  "metodo": "GET",
+  "ruta": "/products",
+  "recurso": "Products",
+  "idempotente": false,
+  "reintento": "seguro",
+  "binario": null,
+  "lista": "ProductList",
+  "respuesta": "ProductList",
+  "cuerpo": null,
+  "cuerpoRequerido": false,
+  "parametros": [
+   {
+    "nombre": "q",
+    "en": "query",
+    "requerido": false,
+    "tipo": "string"
+   },
+   {
+    "nombre": "code",
+    "en": "query",
+    "requerido": false,
+    "tipo": "string"
+   },
+   {
+    "nombre": "external_id",
+    "en": "query",
+    "requerido": false,
+    "tipo": "string"
+   },
+   {
+    "nombre": "active",
+    "en": "query",
+    "requerido": false,
+    "tipo": "boolean"
+   },
+   {
+    "nombre": "limit",
+    "en": "query",
+    "requerido": false,
+    "tipo": "integer"
+   },
+   {
+    "nombre": "starting_after",
+    "en": "query",
+    "requerido": false,
+    "tipo": "string"
+   }
+  ],
+  "ejemplos": []
+ },
+ {
   "operationId": "listRadianEvents",
   "metodo": "GET",
   "ruta": "/radian_events",
@@ -2746,6 +3703,40 @@
    },
    {
     "nombre": "invoice_cufe",
+    "en": "query",
+    "requerido": false,
+    "tipo": "string"
+   }
+  ],
+  "ejemplos": []
+ },
+ {
+  "operationId": "listReportRuns",
+  "metodo": "GET",
+  "ruta": "/report_runs",
+  "recurso": "ReportRuns",
+  "idempotente": false,
+  "reintento": "seguro",
+  "binario": null,
+  "lista": "ReportRunList",
+  "respuesta": "ReportRunList",
+  "cuerpo": null,
+  "cuerpoRequerido": false,
+  "parametros": [
+   {
+    "nombre": "limit",
+    "en": "query",
+    "requerido": false,
+    "tipo": "integer"
+   },
+   {
+    "nombre": "starting_after",
+    "en": "query",
+    "requerido": false,
+    "tipo": "string"
+   },
+   {
+    "nombre": "status",
     "en": "query",
     "requerido": false,
     "tipo": "string"
@@ -2962,6 +3953,28 @@
   "cuerpo": null,
   "cuerpoRequerido": false,
   "parametros": [],
+  "ejemplos": []
+ },
+ {
+  "operationId": "markNumberingRequestSubmitted",
+  "metodo": "POST",
+  "ruta": "/numbering_requests/{id}/submitted",
+  "recurso": "NumberingRequests",
+  "idempotente": false,
+  "reintento": "solo_429",
+  "binario": null,
+  "lista": null,
+  "respuesta": "NumberingRequest",
+  "cuerpo": null,
+  "cuerpoRequerido": false,
+  "parametros": [
+   {
+    "nombre": "id",
+    "en": "path",
+    "requerido": true,
+    "tipo": "string"
+   }
+  ],
   "ejemplos": []
  },
  {
@@ -3257,6 +4270,47 @@
       "term_days": 30
      }
     }
+   },
+   {
+    "nombre": "contingencia",
+    "resumen": "Transcripción (03) de una factura de talonario o de papel",
+    "valor": {
+     "external_id": "PAPEL-TP-0451",
+     "contingency": {
+      "physical_document": {
+       "number": "TP-0451",
+       "date": "2026-11-10"
+      },
+      "resolved_at": "2026-11-10T16:30:00-05:00"
+     },
+     "customer": {
+      "document_type": "31",
+      "document_number": "900373427",
+      "name": "DISTRIBUIDORA LOS ANDES SAS",
+      "person_type": "legal",
+      "municipality_code": "11001",
+      "tax_responsibilities": [
+       "O-13"
+      ]
+     },
+     "items": [
+      {
+       "code": "HERR-01",
+       "description": "Caja de herramientas",
+       "quantity": "2",
+       "unit_price": "85000",
+       "taxes": [
+        {
+         "code": "01",
+         "rate": "19"
+        }
+       ]
+      }
+     ],
+     "payment": {
+      "form": "cash"
+     }
+    }
    }
   ]
  },
@@ -3536,6 +4590,21 @@
   ]
  },
  {
+  "operationId": "refreshNumberingRanges",
+  "metodo": "POST",
+  "ruta": "/numbering_ranges/refresh",
+  "recurso": "NumberingRanges",
+  "idempotente": false,
+  "reintento": "solo_429",
+  "binario": null,
+  "lista": null,
+  "respuesta": "NumberingRefresh",
+  "cuerpo": null,
+  "cuerpoRequerido": false,
+  "parametros": [],
+  "ejemplos": []
+ },
+ {
   "operationId": "resendEvent",
   "metodo": "POST",
   "ruta": "/events/{id}/resend",
@@ -3605,6 +4674,28 @@
   "binario": null,
   "lista": null,
   "respuesta": "Document",
+  "cuerpo": null,
+  "cuerpoRequerido": false,
+  "parametros": [
+   {
+    "nombre": "id",
+    "en": "path",
+    "requerido": true,
+    "tipo": "string"
+   }
+  ],
+  "ejemplos": []
+ },
+ {
+  "operationId": "retrieveCustomer",
+  "metodo": "GET",
+  "ruta": "/customers/{id}",
+  "recurso": "Customers",
+  "idempotente": false,
+  "reintento": "seguro",
+  "binario": null,
+  "lista": null,
+  "respuesta": "CatalogCustomer",
   "cuerpo": null,
   "cuerpoRequerido": false,
   "parametros": [
@@ -3756,6 +4847,28 @@
   "ejemplos": []
  },
  {
+  "operationId": "retrieveInvoiceBatch",
+  "metodo": "GET",
+  "ruta": "/invoice_batches/{id}",
+  "recurso": "InvoiceBatches",
+  "idempotente": false,
+  "reintento": "seguro",
+  "binario": null,
+  "lista": null,
+  "respuesta": "InvoiceBatch",
+  "cuerpo": null,
+  "cuerpoRequerido": false,
+  "parametros": [
+   {
+    "nombre": "id",
+    "en": "path",
+    "requerido": true,
+    "tipo": "string"
+   }
+  ],
+  "ejemplos": []
+ },
+ {
   "operationId": "retrieveInvoiceTacitAcceptance",
   "metodo": "GET",
   "ruta": "/invoices/{id}/tacit_acceptance",
@@ -3765,6 +4878,94 @@
   "binario": null,
   "lista": null,
   "respuesta": "TacitAcceptance",
+  "cuerpo": null,
+  "cuerpoRequerido": false,
+  "parametros": [
+   {
+    "nombre": "id",
+    "en": "path",
+    "requerido": true,
+    "tipo": "string"
+   }
+  ],
+  "ejemplos": []
+ },
+ {
+  "operationId": "retrieveNumberingAssociation",
+  "metodo": "GET",
+  "ruta": "/numbering_associations/{id}",
+  "recurso": "NumberingAssociations",
+  "idempotente": false,
+  "reintento": "seguro",
+  "binario": null,
+  "lista": null,
+  "respuesta": "NumberingAssociation",
+  "cuerpo": null,
+  "cuerpoRequerido": false,
+  "parametros": [
+   {
+    "nombre": "id",
+    "en": "path",
+    "requerido": true,
+    "tipo": "string"
+   }
+  ],
+  "ejemplos": []
+ },
+ {
+  "operationId": "retrieveNumberingRange",
+  "metodo": "GET",
+  "ruta": "/numbering_ranges/{id}",
+  "recurso": "NumberingRanges",
+  "idempotente": false,
+  "reintento": "seguro",
+  "binario": null,
+  "lista": null,
+  "respuesta": "NumberingRange",
+  "cuerpo": null,
+  "cuerpoRequerido": false,
+  "parametros": [
+   {
+    "nombre": "id",
+    "en": "path",
+    "requerido": true,
+    "tipo": "string"
+   }
+  ],
+  "ejemplos": []
+ },
+ {
+  "operationId": "retrieveNumberingRequest",
+  "metodo": "GET",
+  "ruta": "/numbering_requests/{id}",
+  "recurso": "NumberingRequests",
+  "idempotente": false,
+  "reintento": "seguro",
+  "binario": null,
+  "lista": null,
+  "respuesta": "NumberingRequest",
+  "cuerpo": null,
+  "cuerpoRequerido": false,
+  "parametros": [
+   {
+    "nombre": "id",
+    "en": "path",
+    "requerido": true,
+    "tipo": "string"
+   }
+  ],
+  "ejemplos": []
+ },
+ {
+  "operationId": "retrievePaperNumberingRange",
+  "metodo": "GET",
+  "ruta": "/paper_numbering_ranges/{id}",
+  "recurso": "PaperNumberingRanges",
+  "idempotente": false,
+  "reintento": "seguro",
+  "binario": null,
+  "lista": null,
+  "respuesta": "PaperNumberingRange",
   "cuerpo": null,
   "cuerpoRequerido": false,
   "parametros": [
@@ -3822,6 +5023,28 @@
   "ejemplos": []
  },
  {
+  "operationId": "retrieveProduct",
+  "metodo": "GET",
+  "ruta": "/products/{id}",
+  "recurso": "Products",
+  "idempotente": false,
+  "reintento": "seguro",
+  "binario": null,
+  "lista": null,
+  "respuesta": "CatalogProduct",
+  "cuerpo": null,
+  "cuerpoRequerido": false,
+  "parametros": [
+   {
+    "nombre": "id",
+    "en": "path",
+    "requerido": true,
+    "tipo": "string"
+   }
+  ],
+  "ejemplos": []
+ },
+ {
   "operationId": "retrieveRadianEvent",
   "metodo": "GET",
   "ruta": "/radian_events/{id}",
@@ -3831,6 +5054,50 @@
   "binario": null,
   "lista": null,
   "respuesta": "RadianEvent",
+  "cuerpo": null,
+  "cuerpoRequerido": false,
+  "parametros": [
+   {
+    "nombre": "id",
+    "en": "path",
+    "requerido": true,
+    "tipo": "string"
+   }
+  ],
+  "ejemplos": []
+ },
+ {
+  "operationId": "retrieveReportRun",
+  "metodo": "GET",
+  "ruta": "/report_runs/{id}",
+  "recurso": "ReportRuns",
+  "idempotente": false,
+  "reintento": "seguro",
+  "binario": null,
+  "lista": null,
+  "respuesta": "ReportRun",
+  "cuerpo": null,
+  "cuerpoRequerido": false,
+  "parametros": [
+   {
+    "nombre": "id",
+    "en": "path",
+    "requerido": true,
+    "tipo": "string"
+   }
+  ],
+  "ejemplos": []
+ },
+ {
+  "operationId": "retrieveReportRunFile",
+  "metodo": "GET",
+  "ruta": "/report_runs/{id}/file",
+  "recurso": "ReportRuns",
+  "idempotente": false,
+  "reintento": "seguro",
+  "binario": null,
+  "lista": null,
+  "respuesta": "ReportFile",
   "cuerpo": null,
   "cuerpoRequerido": false,
   "parametros": [
@@ -3910,6 +5177,40 @@
   "ejemplos": []
  },
  {
+  "operationId": "retrieveTaxSummary",
+  "metodo": "GET",
+  "ruta": "/reports/tax_summary",
+  "recurso": "Reports",
+  "idempotente": false,
+  "reintento": "seguro",
+  "binario": null,
+  "lista": null,
+  "respuesta": "TaxSummary",
+  "cuerpo": null,
+  "cuerpoRequerido": false,
+  "parametros": [
+   {
+    "nombre": "issued_from",
+    "en": "query",
+    "requerido": true,
+    "tipo": "string"
+   },
+   {
+    "nombre": "issued_to",
+    "en": "query",
+    "requerido": true,
+    "tipo": "string"
+   },
+   {
+    "nombre": "direction",
+    "en": "query",
+    "requerido": false,
+    "tipo": "string"
+   }
+  ],
+  "ejemplos": []
+ },
+ {
   "operationId": "retrieveWebhookEndpoint",
   "metodo": "GET",
   "ruta": "/webhook_endpoints/{id}",
@@ -3919,6 +5220,28 @@
   "binario": null,
   "lista": null,
   "respuesta": "WebhookEndpoint",
+  "cuerpo": null,
+  "cuerpoRequerido": false,
+  "parametros": [
+   {
+    "nombre": "id",
+    "en": "path",
+    "requerido": true,
+    "tipo": "string"
+   }
+  ],
+  "ejemplos": []
+ },
+ {
+  "operationId": "retryNumberingRequestAutomatic",
+  "metodo": "POST",
+  "ruta": "/numbering_requests/{id}/retry_automatic",
+  "recurso": "NumberingRequests",
+  "idempotente": false,
+  "reintento": "solo_429",
+  "binario": null,
+  "lista": null,
+  "respuesta": "NumberingRequest",
   "cuerpo": null,
   "cuerpoRequerido": false,
   "parametros": [
@@ -4202,6 +5525,113 @@
    }
   ],
   "ejemplos": []
+ },
+ {
+  "operationId": "updateCustomer",
+  "metodo": "PATCH",
+  "ruta": "/customers/{id}",
+  "recurso": "Customers",
+  "idempotente": false,
+  "reintento": "seguro",
+  "binario": null,
+  "lista": null,
+  "respuesta": "CatalogCustomer",
+  "cuerpo": "CatalogCustomerUpdate",
+  "cuerpoRequerido": true,
+  "parametros": [
+   {
+    "nombre": "id",
+    "en": "path",
+    "requerido": true,
+    "tipo": "string"
+   }
+  ],
+  "ejemplos": [
+   {
+    "nombre": "cambio",
+    "resumen": "Otro correo y otro plazo",
+    "valor": {
+     "email": "cartera@distribuidoralosandes.example",
+     "defaults": {
+      "term_days": 45
+     }
+    }
+   },
+   {
+    "nombre": "desactivar",
+    "resumen": "Desactivarlo",
+    "valor": {
+     "active": false
+    }
+   }
+  ]
+ },
+ {
+  "operationId": "updatePaperNumberingRange",
+  "metodo": "PATCH",
+  "ruta": "/paper_numbering_ranges/{id}",
+  "recurso": "PaperNumberingRanges",
+  "idempotente": false,
+  "reintento": "seguro",
+  "binario": null,
+  "lista": null,
+  "respuesta": "PaperNumberingRange",
+  "cuerpo": "PaperNumberingRangeUpdate",
+  "cuerpoRequerido": true,
+  "parametros": [
+   {
+    "nombre": "id",
+    "en": "path",
+    "requerido": true,
+    "tipo": "string"
+   }
+  ],
+  "ejemplos": [
+   {
+    "nombre": "vigencia",
+    "resumen": "Extender la vigencia",
+    "valor": {
+     "valid_to": "2028-06-30"
+    }
+   }
+  ]
+ },
+ {
+  "operationId": "updateProduct",
+  "metodo": "PATCH",
+  "ruta": "/products/{id}",
+  "recurso": "Products",
+  "idempotente": false,
+  "reintento": "seguro",
+  "binario": null,
+  "lista": null,
+  "respuesta": "CatalogProduct",
+  "cuerpo": "CatalogProductUpdate",
+  "cuerpoRequerido": true,
+  "parametros": [
+   {
+    "nombre": "id",
+    "en": "path",
+    "requerido": true,
+    "tipo": "string"
+   }
+  ],
+  "ejemplos": [
+   {
+    "nombre": "precio",
+    "resumen": "Otro precio",
+    "valor": {
+     "unit_price": "34500"
+    }
+   },
+   {
+    "nombre": "desactivar",
+    "resumen": "Desactivarlo",
+    "valor": {
+     "active": false
+    }
+   }
+  ]
  },
  {
   "operationId": "updateWebhookEndpoint",

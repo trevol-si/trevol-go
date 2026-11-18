@@ -135,6 +135,8 @@ func aceptar(binario string) string {
 		return "application/xml, " + problema
 	case "zip":
 		return "application/zip, " + problema
+	case "csv": // los reportes: CSV o Excel según el formato
+		return "text/csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, " + problema
 	}
 	return "application/json, " + problema
 }

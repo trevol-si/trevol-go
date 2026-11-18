@@ -35,7 +35,7 @@ func TestAuthorizationTrevolVersionFijaUserAgentYNingunaXTrevol(t *testing.T) {
 	if h.Get("Authorization") != "Bearer "+llaveTest {
 		t.Errorf("Authorization = %q", h.Get("Authorization"))
 	}
-	if h.Get("Trevol-Version") != "2026-10-22" || APIVersion != "2026-10-22" {
+	if h.Get("Trevol-Version") != "2026-11-18" || APIVersion != "2026-11-18" {
 		t.Errorf("Trevol-Version = %q", h.Get("Trevol-Version"))
 	}
 	if !regexp.MustCompile(`^trevol-go/` + regexp.QuoteMeta(Version) + ` \(go[\d.]+[^;]*; \+https://platform\.trevol\.si/docs\)$`).MatchString(h.Get("User-Agent")) {

@@ -26,7 +26,7 @@ func operaciones(t *testing.T) []string {
 	if err := json.Unmarshal(crudo, &d); err != nil {
 		t.Fatal(err)
 	}
-	if len(d.Fragmentos) != 109 {
+	if len(d.Fragmentos) != 149 {
 		t.Fatalf("hay %d operaciones", len(d.Fragmentos))
 	}
 	var ops []string
