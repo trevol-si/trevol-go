@@ -3,7 +3,7 @@
 El formato sigue [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/) y el versionado, [SemVer](https://semver.org/lang/es/): antes
 de la 1.0, un cambio incompatible sube el número menor.
 
-## [0.3.0] — sin publicar
+## [0.3.0] — 2026-11-19
 
 Regenerado con la llave de administración pública (la misma versión `2026-11-18` de la API; 159 operaciones y 70 tipos de evento).
 
