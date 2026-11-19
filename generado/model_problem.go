@@ -31,7 +31,7 @@ type Problem struct {
 	Document *Document `json:"document,omitempty"`
 	// En `external_id_in_use` y `duplicate_document`: el id (con el prefijo de su clase) del recurso que ya existe. En `numbering_request_in_progress`: la solicitud en curso (`nreq_…`). En `duplicate_customer` y `duplicate_product`: el `cus_…` o `prod_…` que ya existe. No viene en un `duplicate_customer` por `document_number` pedido con una llave sin `customers:read` (diría de quién es ese documento).
 	ExistingId *string `json:"existing_id,omitempty"`
-	// En `company_not_enabled` (`missing_legal_representative`, `missing_pin`, `missing_software`, `payroll_not_enabled`) y en `numbering_unavailable` (`missing_technical_key`, `no_contingency_numbering`, `no_resolution`, `prefix_in_use`, `resolution_exhausted`, `resolution_expired`, `resolution_not_yet_valid`): por qué. En `automatic_mode_unavailable` (`credentials_missing`, `mandate_required`: falta el mandato para integraciones que se acepta en la app, `disabled`) y en `permission_denied` de una ruta que solo existe en producción (`live_mode_required`).
+	// En `company_not_enabled` (`missing_legal_representative`, `missing_pin`, `missing_software`, `payroll_not_enabled`) y en `numbering_unavailable` (`missing_technical_key`, `no_contingency_numbering`, `no_resolution`, `prefix_in_use`, `resolution_exhausted`, `resolution_expired`, `resolution_not_yet_valid`): por qué. En `automatic_mode_unavailable` (`credentials_missing`, `mandate_required`: falta el mandato para integraciones que se acepta en la app, `disabled`) y en `permission_denied` de una ruta que solo existe en producción (`live_mode_required`). En `permission_denied` de una llave de administración: `environment_mismatch` (`Trevol-Environment` no es el ambiente de la llave), `live_mode_required` (el alta de empresas pide una llave de producción) y `scope_list` (una llave con alcance de lista no da de alta empresas; como esa llave no puede tener `companies:write`, lo que llega en la práctica es el 403 con `required_permission: companies:write`).
 	Reason *string `json:"reason,omitempty"`
 	// En `previous_event_pending`: el evento que la DIAN todavía no muestra.
 	Previous *string `json:"previous,omitempty"`
@@ -39,7 +39,11 @@ type Problem struct {
 	MinimumCop NullableInt32 `json:"minimum_cop,omitempty"`
 	// En `top_up_above_maximum`: la recarga máxima, en pesos.
 	MaximumCop NullableInt32 `json:"maximum_cop,omitempty"`
-	// En `rate_limited`: qué límite se pasó.
+	// En `insufficient_balance` de una operación cobrada: el saldo disponible de la cuenta, en pesos.
+	BalanceCop *int32 `json:"balance_cop,omitempty"`
+	// En `insufficient_balance` de una operación cobrada: lo que cuesta la operación, en pesos.
+	PriceCop *int32 `json:"price_cop,omitempty"`
+	// En `rate_limited`: qué límite se pasó. Con una llave de administración: `lecturas` (600 peticiones por minuto de la llave en `/v1/account`), `account_key` (el mismo contador, visto desde una ruta de empresa), `api_keys` (60 llaves de empresa creadas o revocadas por hora) y `account_queries` (60 consultas de documentos o eventos por minuto, sumando las llaves de la cuenta). En `company_limit_reached`: `hour` (20 altas por hora) o `day` (100 por día).
 	Limit *string `json:"limit,omitempty"`
 	// En `tacit_acceptance_not_due`: desde cuándo procede la aceptación tácita. `null` si la DIAN todavía no muestra el recibo del bien (032) de la compradora: consulta de nuevo en unos minutos con `GET /v1/invoices/{id}/tacit_acceptance`.
 	AvailableFrom NullableString `json:"available_from,omitempty"`
@@ -49,8 +53,10 @@ type Problem struct {
 	CurrentSoftware *ProblemCurrentSoftware `json:"current_software,omitempty"`
 	// En `duplicate_customer` y `duplicate_product`: si el que ya existe está activo (si no, reactívalo con PATCH). No viene en un `duplicate_customer` por `document_number` pedido con una llave sin `customers:read` (diría de quién es ese documento).
 	ExistingActive *bool `json:"existing_active,omitempty"`
-	// En `permission_denied`: el permiso de la llave que hace falta (buscar clientes por su documento necesita `customers:read`).
+	// En `permission_denied`: el permiso de la llave que hace falta (buscar clientes por su documento necesita `customers:read`). Con una llave de administración, el permiso que le falta a esa llave (`companies:read`, `companies:write`, `keys:write`, `documents:read`, `documents:write`, `customers:read`).
 	RequiredPermission *string `json:"required_permission,omitempty"`
+	// En `company_exists`: la empresa que ya está en la cuenta con ese NIT.
+	Company *AccountCompany `json:"company,omitempty"`
 	// En `report_too_large`: cuántos documentos tiene lo pedido.
 	Rows *int32 `json:"rows,omitempty"`
 	// En `report_too_large`: cuántos admite una exportación.
@@ -577,6 +583,70 @@ func (o *Problem) UnsetMaximumCop() {
 	o.MaximumCop.Unset()
 }
 
+// GetBalanceCop returns the BalanceCop field value if set, zero value otherwise.
+func (o *Problem) GetBalanceCop() int32 {
+	if o == nil || IsNil(o.BalanceCop) {
+		var ret int32
+		return ret
+	}
+	return *o.BalanceCop
+}
+
+// GetBalanceCopOk returns a tuple with the BalanceCop field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *Problem) GetBalanceCopOk() (*int32, bool) {
+	if o == nil || IsNil(o.BalanceCop) {
+		return nil, false
+	}
+	return o.BalanceCop, true
+}
+
+// HasBalanceCop returns a boolean if a field has been set.
+func (o *Problem) HasBalanceCop() bool {
+	if o != nil && !IsNil(o.BalanceCop) {
+		return true
+	}
+
+	return false
+}
+
+// SetBalanceCop gets a reference to the given int32 and assigns it to the BalanceCop field.
+func (o *Problem) SetBalanceCop(v int32) {
+	o.BalanceCop = &v
+}
+
+// GetPriceCop returns the PriceCop field value if set, zero value otherwise.
+func (o *Problem) GetPriceCop() int32 {
+	if o == nil || IsNil(o.PriceCop) {
+		var ret int32
+		return ret
+	}
+	return *o.PriceCop
+}
+
+// GetPriceCopOk returns a tuple with the PriceCop field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *Problem) GetPriceCopOk() (*int32, bool) {
+	if o == nil || IsNil(o.PriceCop) {
+		return nil, false
+	}
+	return o.PriceCop, true
+}
+
+// HasPriceCop returns a boolean if a field has been set.
+func (o *Problem) HasPriceCop() bool {
+	if o != nil && !IsNil(o.PriceCop) {
+		return true
+	}
+
+	return false
+}
+
+// SetPriceCop gets a reference to the given int32 and assigns it to the PriceCop field.
+func (o *Problem) SetPriceCop(v int32) {
+	o.PriceCop = &v
+}
+
 // GetLimit returns the Limit field value if set, zero value otherwise.
 func (o *Problem) GetLimit() string {
 	if o == nil || IsNil(o.Limit) {
@@ -779,6 +849,38 @@ func (o *Problem) SetRequiredPermission(v string) {
 	o.RequiredPermission = &v
 }
 
+// GetCompany returns the Company field value if set, zero value otherwise.
+func (o *Problem) GetCompany() AccountCompany {
+	if o == nil || IsNil(o.Company) {
+		var ret AccountCompany
+		return ret
+	}
+	return *o.Company
+}
+
+// GetCompanyOk returns a tuple with the Company field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *Problem) GetCompanyOk() (*AccountCompany, bool) {
+	if o == nil || IsNil(o.Company) {
+		return nil, false
+	}
+	return o.Company, true
+}
+
+// HasCompany returns a boolean if a field has been set.
+func (o *Problem) HasCompany() bool {
+	if o != nil && !IsNil(o.Company) {
+		return true
+	}
+
+	return false
+}
+
+// SetCompany gets a reference to the given AccountCompany and assigns it to the Company field.
+func (o *Problem) SetCompany(v AccountCompany) {
+	o.Company = &v
+}
+
 // GetRows returns the Rows field value if set, zero value otherwise.
 func (o *Problem) GetRows() int32 {
 	if o == nil || IsNil(o.Rows) {
@@ -898,6 +1000,12 @@ func (o Problem) ToMap() (map[string]interface{}, error) {
 	if o.MaximumCop.IsSet() {
 		toSerialize["maximum_cop"] = o.MaximumCop.Get()
 	}
+	if !IsNil(o.BalanceCop) {
+		toSerialize["balance_cop"] = o.BalanceCop
+	}
+	if !IsNil(o.PriceCop) {
+		toSerialize["price_cop"] = o.PriceCop
+	}
 	if !IsNil(o.Limit) {
 		toSerialize["limit"] = o.Limit
 	}
@@ -915,6 +1023,9 @@ func (o Problem) ToMap() (map[string]interface{}, error) {
 	}
 	if !IsNil(o.RequiredPermission) {
 		toSerialize["required_permission"] = o.RequiredPermission
+	}
+	if !IsNil(o.Company) {
+		toSerialize["company"] = o.Company
 	}
 	if !IsNil(o.Rows) {
 		toSerialize["rows"] = o.Rows
@@ -959,12 +1070,15 @@ func (o *Problem) UnmarshalJSON(data []byte) (err error) {
 		delete(additionalProperties, "previous")
 		delete(additionalProperties, "minimum_cop")
 		delete(additionalProperties, "maximum_cop")
+		delete(additionalProperties, "balance_cop")
+		delete(additionalProperties, "price_cop")
 		delete(additionalProperties, "limit")
 		delete(additionalProperties, "available_from")
 		delete(additionalProperties, "rules")
 		delete(additionalProperties, "current_software")
 		delete(additionalProperties, "existing_active")
 		delete(additionalProperties, "required_permission")
+		delete(additionalProperties, "company")
 		delete(additionalProperties, "rows")
 		delete(additionalProperties, "max_rows")
 		o.AdditionalProperties = additionalProperties

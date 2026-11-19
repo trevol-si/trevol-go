@@ -7,10 +7,11 @@ RADIAN ante la DIAN (Colombia). Documentación: <https://platform.trevol.si/docs
 > (`standard-webhooks/libraries`). Typed models and API clients generated from the OpenAPI spec (OpenAPI Generator, package `generado`), plus a
 > thin hand-written layer (package `trevol`): automatic `Idempotency-Key` (the same one on retries), retries with exponential backoff honouring
 > `Retry-After`, typed errors by problem+json `code` (`*trevol.Error`, use `errors.As`), environment inferred from the key prefix (`tvl_test_` =
-> DIAN test environment, `tvl_live_` = production), pinned `Trevol-Version`, Standard Webhooks signature verification, cursor pagination with
+> DIAN test environment, `tvl_live_` = production), account keys (`tva_test_`/`tva_live_`) with `WithCompany`/`ForCompany` sending
+`Trevol-Company` and `Trevol-Environment`, pinned `Trevol-Version`, Standard Webhooks signature verification, cursor pagination with
 > `iter.Seq2` and PDF/XML/ZIP downloads. Docs are in Spanish like the API.
 
-**Versión 0.2.0** — API `2026-11-18`. Licencia MIT.
+**Versión 0.3.0** (sin publicar) — API `2026-11-18`. Licencia MIT.
 
 ## Instalación
 
@@ -98,6 +99,60 @@ Los nombres de los métodos son los del `operationId` de la [especificación](ht
 importes y las fechas viajan como texto (`"32000.50"`, `"2026-10-31"`). El cuerpo más cómodo es decodificar JSON con `json.Unmarshal`
 en el modelo (`generado.InvoiceInput`), como en el ejemplo.
 
+## Llave de administración
+
+Si llevas varias empresas en una cuenta, una llave de administración (`tva_test_…` o `tva_live_…`) sirve para todas: con `c.AccountAPI`
+das de alta empresas, creas y revocas sus llaves y consultas lo emitido, lo recibido y los eventos RADIAN de todas. Para una ruta de una
+empresa (facturas, notas, clientes…) dile cuál con `trevol.WithCompany("com_…")` o `c.ForCompany("com_…")`, que comparte las conexiones:
+el SDK manda `Trevol-Company` y `Trevol-Environment` (el del prefijo de la llave). Sin empresa, esa llamada falla con `KindConfiguration`
+antes de salir a la red. Con una llave `tvl_` esas cabeceras no se mandan nunca, pasar una empresa es un error y `c.AccountAPI` falla con
+`KindConfiguration` sin salir a la red (esas operaciones solo admiten una llave de administración).
+
+```go
+package main
+
+import (
+	"context"
+	"fmt"
+	"log"
+	"os"
+
+	trevol "github.com/trevol-si/trevol-go"
+	"github.com/trevol-si/trevol-go/generado"
+)
+
+func main() {
+	ctx := context.Background()
+	c, err := trevol.NewClient(os.Getenv("TREVOL_API_KEY")) // tva_test_… → c.KeyType == trevol.KeyTypeAccount
+	if err != nil {
+		log.Fatal(err)
+	}
+	for e, err := range trevol.Paginate(ctx, func(cursor *string) (*generado.AccountCompanyList, error) {
+		r := c.AccountAPI.ListAccountCompanies(ctx).Status("enabled")
+		if cursor != nil {
+			r = r.StartingAfter(*cursor)
+		}
+		l, _, err := r.Execute()
+		return l, err
+	}) {
+		if err != nil {
+			log.Fatal(err)
+		}
+		empresa, err := c.ForCompany(e.GetId()) // la misma llave, Trevol-Company: com_…
+		if err != nil {
+			log.Fatal(err)
+		}
+		facturas, _, err := empresa.InvoicesAPI.ListInvoices(ctx).Limit(5).Execute()
+		if err != nil {
+			log.Fatal(err)
+		}
+		fmt.Println(e.GetName(), len(facturas.GetData()))
+	}
+}
+```
+
+`c.Company()` dice la empresa del cliente. Al imprimir un cliente (`fmt.Println(c)`) solo sale el prefijo de la llave.
+
 ## Lo que conviene saber
 
 ### Idempotencia: manda `external_id` y tu propia clave
@@ -136,7 +191,7 @@ la versión que usabas: `trevol.NewClient(llave, trevol.WithAPIVersion("2026-10-
 
 Todo lo que no es 2xx llega como `*trevol.Error` (se saca con `errors.As`, también a través del `*url.Error` con que `net/http` lo envuelve) con una
 `Kind` que sale del `code` del problem+json: `KindAuthentication`, `KindPermissionDenied`, `KindNotFound`, `KindInvalidRequest`, `KindIdempotency`,
-`KindValidation` (con `Errors`: `Field`, `Pointer`, `Message`), `KindConflict`, `KindPrecondition`, `KindDianRejected` (con `Problem["document"]` y
+`KindValidation` (con `Errors`: `Field`, `Pointer`, `Message`), `KindConflict` (también `company_exists`, con `Problem["company"]`), `KindPrecondition`, `KindDianRejected` (con `Problem["document"]` y
 `Problem["rules"]`), `KindBalance`, `KindRateLimit`, `KindDianUnavailable` y `KindInternalServer`. Un `code` que el SDK todavía no conoce llega
 como `KindUnknown` con ese `Code`: nunca rompe. Además: `KindConnection` (no hubo respuesta), `KindConfiguration` (mal uso, antes de llamar) y
 `KindWebhookVerification`. También sirve `errors.Is(err, &trevol.Error{Kind: trevol.KindNotFound})`.
@@ -186,6 +241,7 @@ trevol.NewClient(llave,
 	trevol.WithMaxRetryAfter(60*time.Second),
 	trevol.WithBaseURL("https://api.trevol.si/v1"),
 	trevol.WithEnvironment(trevol.EnvTest), // si la llave no coincide: *Error KindConfiguration antes de llamar
+	// trevol.WithCompany("com_…"),         // solo con una llave de administración (tva_…)
 	trevol.WithHTTPClient(miClienteHTTP),
 )
 ```
@@ -194,7 +250,7 @@ trevol.NewClient(llave,
 
 - `generado/` lo escribe [OpenAPI Generator](https://openapi-generator.tech) 7.26.0 (`go`) desde la especificación pública y **no se edita**
   (ver `GENERADO.md`).
-- Lo propio (`client.go`, `transport.go`, `error.go`, `paginate.go`, `webhook.go`) vive fuera y solo usa el punto de extensión del código
+- Lo propio (`client.go`, `key.go`, `transport.go`, `error.go`, `paginate.go`, `webhook.go`) vive fuera y solo usa el punto de extensión del código
   generado: un `http.RoundTripper` en `Configuration.HTTPClient`, que devuelve el `*trevol.Error`.
 - Las pruebas: `go test ./...` (unitarias sin red contra un servidor HTTP local, con los mismos casos de los demás SDK en `pruebas/datos/`);
   `TREVOL_PRISM_URL=http://127.0.0.1:4010 go test ./pruebas/prism ./pruebas/fragmentos` contra un servidor simulado

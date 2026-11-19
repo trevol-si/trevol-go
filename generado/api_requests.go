@@ -70,7 +70,7 @@ func (r ApiListRequestsRequest) Execute() (*RequestList, *http.Response, error) 
 /*
 ListRequests El registro de peticiones de la empresa y el ambiente de la llave (30 días)
 
-Cada petición que pasó la autenticación de una llave, aunque terminara en 403, 422 o 429. Sin cuerpos, consultas, IP ni llaves; `path` es la plantilla.
+Cada petición que pasó la autenticación de una llave, aunque terminara en 403, 422 o 429. Sin cuerpos, consultas, IP ni llaves; `path` es la plantilla. Lo que hizo una llave de administración en la empresa sale con el `key_…` de su identidad en la empresa (el de `GET /v1/company`); su propio registro, con la IP, está en `GET /v1/account/requests`.
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @return ApiListRequestsRequest

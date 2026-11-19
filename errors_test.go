@@ -53,8 +53,8 @@ func TestCadaCodeVaASuClaseATravesDeUnMetodoGenerado(t *testing.T) {
 			})
 		}
 	}
-	if total != 40 {
-		t.Errorf("hay %d codes, esperados 40", total)
+	if total != 43 {
+		t.Errorf("hay %d codes, esperados 43", total)
 	}
 }
 

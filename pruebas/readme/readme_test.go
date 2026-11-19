@@ -75,3 +75,11 @@ func TestLasOpcionesDelREADMECompilan(t *testing.T) {
 	}
 	compila(t, "package main\n\nimport (\n\t\"net/http\"\n\t\"time\"\n\n\ttrevol \"github.com/trevol-si/trevol-go\"\n)\n\nfunc main() {\n\tmiClienteHTTP := &http.Client{}\n\tllave := \"tvl_test_00\"\n\t_, _ = "+strings.TrimPrefix(b, "")+"\n\t_ = time.Second\n}\n")
 }
+
+func TestElEjemploDeLaLlaveDeAdministracionCompila(t *testing.T) {
+	b := bloques(t)["Llave de administración"]
+	if !strings.HasPrefix(b, "package main") || !strings.Contains(b, "ForCompany") {
+		t.Fatalf("el bloque de «Llave de administración» ya no es un programa completo con ForCompany:\n%s", b)
+	}
+	compila(t, b)
+}

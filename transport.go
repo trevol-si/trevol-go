@@ -2,6 +2,7 @@ package trevol
 
 import (
 	"context"
+	"fmt"
 	"io"
 	"math"
 	"net/http"
@@ -110,6 +111,18 @@ func cargarOperaciones() {
 	})
 }
 
+// llaveDeRuta clasifica una ruta que no está en la tabla (una que la API sumó después de este SDK): /account… es solo de administración,
+// /health no lleva llave y el resto es de una empresa.
+func llaveDeRuta(ruta string) string {
+	switch {
+	case ruta == "/account" || strings.HasPrefix(ruta, "/account/"):
+		return "administracion"
+	case ruta == "/health":
+		return "ninguna"
+	}
+	return "api_o_administracion"
+}
+
 // operacionDe busca la operación por método y ruta (sin el prefijo /v1). Las rutas fijas ganan a las plantillas
 // (GET /radian_events/tacit_acceptance frente a GET /radian_events/{id}).
 func operacionDe(metodo, ruta string) (generado.Operacion, bool) {
@@ -157,6 +170,9 @@ func generadoClasePorEstado(estado int) string {
 
 type opciones struct {
 	llave         string
+	clase         KeyType
+	entorno       Environment
+	empresa       string // com_… (solo con una llave de administración)
 	apiVersion    string
 	userAgent     string
 	maxReintentos int
@@ -175,6 +191,45 @@ type opciones struct {
 type transporte struct {
 	base http.RoundTripper
 	o    *opciones
+}
+
+// String describe el transporte sin la llave (por si alguien lo imprime desde la configuración del cliente generado).
+func (t *transporte) String() string {
+	return "trevol.transporte{key: " + llaveVisible(t.o.llave) + ", company: " + t.o.empresa + "}"
+}
+
+// Format hace que todo verbo de fmt (%v, %+v, %#v, %d…) muestre String y no recorra los campos.
+func (t *transporte) Format(f fmt.State, _ rune) { fmt.Fprint(f, t.String()) }
+
+func (o *opciones) String() string             { return "trevol.opciones{key: " + llaveVisible(o.llave) + "}" }
+func (o *opciones) Format(f fmt.State, _ rune) { fmt.Fprint(f, o.String()) }
+
+// cabecerasDeEmpresa pone (o quita) Trevol-Company y Trevol-Environment. Solo van con una llave de administración (tva_…) en una ruta de
+// empresa; con una tvl_ no van nunca (su empresa y su entorno salen de la llave), y en /account… y /health tampoco. Las pone siempre el
+// SDK: una cabecera con ese nombre que viniera de AddDefaultHeader se reemplaza o se quita. Con una tvl_, una operación de /v1/account
+// (que solo admite una tva_) también es KindConfiguration antes de la red.
+func (o *opciones) cabecerasDeEmpresa(cabeceras http.Header, llave, operationID string) *Error {
+	cabeceras.Del("Trevol-Company")
+	cabeceras.Del("Trevol-Environment")
+	que := "esta operación"
+	if operationID != "" {
+		que = operationID
+	}
+	if o.clase == KeyTypeAPI && llave == "administracion" {
+		// La API la rechazaría de seguro (401 invalid_api_key): no sale.
+		return nuevoError(KindConfiguration, "Las operaciones de AccountAPI piden una llave de administración (tva_test_… o tva_live_…); "+
+			"una llave tvl_ es de una sola empresa ("+que+" es de /v1/account).")
+	}
+	if o.clase != KeyTypeAccount || llave != "api_o_administracion" {
+		return nil
+	}
+	if o.empresa == "" {
+		return nuevoError(KindConfiguration, "Con una llave de administración, indica la empresa: trevol.WithCompany(\"com_…\") al crear el "+
+			"cliente o c.ForCompany(\"com_…\") ("+que+" es una operación de una empresa y lleva Trevol-Company).")
+	}
+	cabeceras.Set("Trevol-Company", o.empresa)
+	cabeceras.Set("Trevol-Environment", string(o.entorno))
+	return nil
 }
 
 func dormir(ctx context.Context, d time.Duration) error {
@@ -214,6 +269,10 @@ func (t *transporte) RoundTrip(req *http.Request) (*http.Response, error) {
 	if conocida {
 		clase = op.Reintento
 	}
+	llave := llaveDeRuta(ruta)
+	if conocida {
+		llave = op.Llave
+	}
 
 	// La Idempotency-Key: una por llamada, la misma en todos los reintentos.
 	clave := ""
@@ -221,9 +280,14 @@ func (t *transporte) RoundTrip(req *http.Request) (*http.Response, error) {
 	if cabeceras == nil {
 		cabeceras = http.Header{}
 	}
+	if errEmpresa := o.cabecerasDeEmpresa(cabeceras, llave, op.OperationID); errEmpresa != nil {
+		cerrarCuerpo(req)
+		return nil, errEmpresa // antes de la red: no sale ninguna petición
+	}
 	if conocida && op.Idempotente {
 		if dada := cabeceras.Get("Idempotency-Key"); dada != "" || len(cabeceras.Values("Idempotency-Key")) > 0 {
 			if !reClave.MatchString(dada) {
+				cerrarCuerpo(req)
 				return nil, nuevoError(KindConfiguration, "La idempotency key debe tener de 1 a 255 caracteres ASCII visibles (sin espacios).")
 			}
 			clave = dada
@@ -307,6 +371,13 @@ func (t *transporte) intentar(req *http.Request, cabeceras http.Header, intento 
 	}
 	return nil, fallo, Decide(intento, clase, o.maxReintentos, o.maxRetryAfter, o.random(),
 		Outcome{Status: resp.StatusCode, Code: fallo.Code, Retryable: retryable, RetryAfter: fallo.RetryAfter}), nil
+}
+
+// cerrarCuerpo cierra el cuerpo de una petición que no sale (el contrato de http.RoundTripper pide cerrarlo también en los errores).
+func cerrarCuerpo(req *http.Request) {
+	if req.Body != nil {
+		req.Body.Close()
+	}
 }
 
 func resumen(err error) string {

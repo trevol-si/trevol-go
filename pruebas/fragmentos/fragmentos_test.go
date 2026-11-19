@@ -26,7 +26,7 @@ func operaciones(t *testing.T) []string {
 	if err := json.Unmarshal(crudo, &d); err != nil {
 		t.Fatal(err)
 	}
-	if len(d.Fragmentos) != 149 {
+	if len(d.Fragmentos) != 159 {
 		t.Fatalf("hay %d operaciones", len(d.Fragmentos))
 	}
 	var ops []string
@@ -38,6 +38,34 @@ func operaciones(t *testing.T) []string {
 	}
 	sort.Strings(ops)
 	return ops
+}
+
+// Las operaciones de /v1/account piden una llave de administración: el SDK se niega a llamarlas con una tvl_ (KindConfiguration antes de
+// la red), así que su programa corre con una tva_ de prueba. Prism no distingue una de otra (las dos son Bearer).
+const llaveAdministracion = "tva_test_c4c4c4c4c4c4c4c4c4c4c4c4c4c4c4c4c4c4c4c4c4c4c4c4c4c4c4c4c4c4c4c4"
+
+func operacionesDeCuenta(t *testing.T) map[string]bool {
+	crudo, err := os.ReadFile(filepath.Join("..", "datos", "operaciones.json"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	var ops []struct {
+		OperationID string `json:"operationId"`
+		Llave       string `json:"llave"`
+	}
+	if err := json.Unmarshal(crudo, &ops); err != nil {
+		t.Fatal(err)
+	}
+	deCuenta := map[string]bool{}
+	for _, o := range ops {
+		if o.Llave == "administracion" {
+			deCuenta[o.OperationID] = true
+		}
+	}
+	if len(deCuenta) != 10 {
+		t.Fatalf("hay %d operaciones de /v1/account", len(deCuenta))
+	}
+	return deCuenta
 }
 
 func TestLaEstructura(t *testing.T) {
@@ -54,12 +82,13 @@ func TestLaEstructura(t *testing.T) {
 	}
 	sort.Strings(carpetas)
 	if strings.Join(carpetas, ",") != strings.Join(ops, ",") {
-		t.Fatal("los programas no son exactamente las 109 operaciones")
+		t.Fatal("los programas no son exactamente las operaciones de la especificación")
 	}
 }
 
 func TestLosFragmentosCompilanYCorrenContraPrism(t *testing.T) {
 	ops := operaciones(t)
+	deCuenta := operacionesDeCuenta(t)
 	salida := t.TempDir()
 	build := exec.Command("go", "build", "-o", salida, "./programas/...")
 	if out, err := build.CombinedOutput(); err != nil {
@@ -73,6 +102,9 @@ func TestLosFragmentosCompilanYCorrenContraPrism(t *testing.T) {
 		t.Run(op, func(t *testing.T) {
 			cmd := exec.Command(filepath.Join(salida, op))
 			cmd.Env = os.Environ()
+			if deCuenta[op] {
+				cmd.Env = append(cmd.Env, "TREVOL_API_KEY="+llaveAdministracion) // la última gana
+			}
 			if out, err := cmd.CombinedOutput(); err != nil {
 				t.Fatalf("%v\n%s", err, out)
 			}

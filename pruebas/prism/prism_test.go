@@ -287,3 +287,116 @@ func TestReintentaContraPrismConLaMismaClaveYAgotaConElErrorDel503(t *testing.T)
 		t.Fatalf("err = %v", err)
 	}
 }
+
+// ── La llave de administración ──
+
+const (
+	llaveCuenta = "tva_test_c4c4c4c4c4c4c4c4c4c4c4c4c4c4c4c4c4c4c4c4c4c4c4c4c4c4c4c4c4c4c4c4"
+	empresa     = "com_3f0c1a2b3f0c1a2b3f0c1a2b3f0c1a2b"
+)
+
+func clienteDeCuenta(t *testing.T, opts ...trevol.Option) *trevol.Client {
+	t.Helper()
+	url := os.Getenv("TREVOL_PRISM_URL")
+	if url == "" {
+		t.Skip("necesita Prism: sdks/herramientas/prism.sh -- bash -c 'cd sdks/go && go test ./pruebas/prism/'")
+	}
+	c, err := trevol.NewClient(llaveCuenta, append([]trevol.Option{trevol.WithBaseURL(url), trevol.WithMaxRetries(0)}, opts...)...)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if c.KeyType != trevol.KeyTypeAccount || c.Environment != trevol.EnvTest {
+		t.Fatalf("clase=%s entorno=%s", c.KeyType, c.Environment)
+	}
+	return c
+}
+
+func TestLaCuentaSusEmpresasYSusLlavesConUnaLlaveDeAdministracion(t *testing.T) {
+	c := clienteDeCuenta(t)
+	info, _, err := c.AccountAPI.RetrieveAccount(ctx).Execute()
+	violaciones(t, err)
+	if info.GetObject() != "account_key_info" {
+		t.Errorf("object = %q", info.GetObject())
+	}
+
+	var alta generado.AccountCompanyInput
+	ejemplo(t, "createAccountCompany", "", &alta)
+	nueva, _, err := c.AccountAPI.CreateAccountCompany(ctx).AccountCompanyInput(alta).IdempotencyKey("ALTA-900373427").Execute()
+	violaciones(t, err)
+	if nueva.GetObject() != "company" || nueva.GetId() == "" {
+		t.Errorf("empresa = %v", nueva)
+	}
+
+	n := 0
+	for e, err := range trevol.Paginate(ctx, func(cursor *string) (*generado.AccountCompanyList, error) {
+		r := c.AccountAPI.ListAccountCompanies(ctx).Limit(20).Status("enabled")
+		if cursor != nil {
+			r = r.StartingAfter(*cursor)
+		}
+		l, _, err := r.Execute()
+		return l, err
+	}) {
+		violaciones(t, err)
+		if e.GetId() == "" {
+			t.Error("sin id")
+		}
+		if n++; n == 3 {
+			break
+		}
+	}
+	if n == 0 {
+		t.Error("no hubo empresas")
+	}
+
+	_, _, err = c.AccountAPI.RetrieveAccountCompany(ctx, empresa).Execute()
+	violaciones(t, err)
+	var llave generado.AccountApiKeyInput
+	ejemplo(t, "createAccountCompanyApiKey", "", &llave)
+	creada, _, err := c.AccountAPI.CreateAccountCompanyApiKey(ctx, empresa).AccountApiKeyInput(llave).Execute()
+	violaciones(t, err)
+	if creada.GetObject() != "api_key" {
+		t.Errorf("llave = %v", creada.GetObject())
+	}
+	_, _, err = c.AccountAPI.ListAccountCompanyApiKeys(ctx, empresa).Status("active").Execute()
+	violaciones(t, err)
+	revocada, _, err := c.AccountAPI.RevokeAccountCompanyApiKey(ctx, empresa, "key_"+strings.Repeat("0", 32)).Execute()
+	violaciones(t, err)
+	if revocada.GetStatus() != "revoked" {
+		t.Errorf("status = %q", revocada.GetStatus())
+	}
+	_, _, err = c.AccountAPI.ListAccountDianDocuments(ctx).Direction("received").Company(empresa).Execute()
+	violaciones(t, err)
+	_, _, err = c.AccountAPI.ListAccountRadianEvents(ctx).Code("030").Execute()
+	violaciones(t, err)
+	_, _, err = c.AccountAPI.ListAccountRequests(ctx).Status(200).Execute()
+	violaciones(t, err)
+}
+
+func TestUnaRutaDeEmpresaConLlaveDeAdministracionYCompany(t *testing.T) {
+	c := clienteDeCuenta(t, trevol.WithCompany(empresa))
+	var entrada generado.InvoiceInput
+	ejemplo(t, "createInvoice", "", &entrada)
+	doc, _, err := c.InvoicesAPI.CreateInvoice(ctx).InvoiceInput(entrada).Execute()
+	violaciones(t, err)
+	if doc.GetObject() != "invoice" {
+		t.Errorf("object = %q", doc.GetObject())
+	}
+	otra, err := c.ForCompany("com_9e8d7c6b9e8d7c6b9e8d7c6b9e8d7c6b")
+	if err != nil {
+		t.Fatal(err)
+	}
+	co, _, err := otra.GeneralAPI.RetrieveCompany(ctx).Execute()
+	violaciones(t, err)
+	if co.GetObject() != "company" {
+		t.Errorf("company = %q", co.GetObject())
+	}
+}
+
+func TestSinCompanyUnaRutaDeEmpresaFallaAntesDeLlegarAPrism(t *testing.T) {
+	c := clienteDeCuenta(t)
+	_, _, err := c.GeneralAPI.RetrieveCompany(ctx).Execute()
+	var te *trevol.Error
+	if !errors.As(err, &te) || te.Kind != trevol.KindConfiguration || te.Status != 0 {
+		t.Fatalf("err = %v", err)
+	}
+}

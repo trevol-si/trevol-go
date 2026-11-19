@@ -33,7 +33,8 @@
      "remove_from_current_software": true
     }
    }
-  ]
+  ],
+  "llave": "api_o_administracion"
  },
  {
   "operationId": "cancelNumberingRequest",
@@ -55,7 +56,8 @@
     "tipo": "string"
    }
   ],
-  "ejemplos": []
+  "ejemplos": [],
+  "llave": "api_o_administracion"
  },
  {
   "operationId": "correctCreditNote",
@@ -111,7 +113,8 @@
      ]
     }
    }
-  ]
+  ],
+  "llave": "api_o_administracion"
  },
  {
   "operationId": "correctDebitNote",
@@ -160,7 +163,8 @@
      ]
     }
    }
-  ]
+  ],
+  "llave": "api_o_administracion"
  },
  {
   "operationId": "correctEquivalentDocument",
@@ -239,7 +243,8 @@
      ]
     }
    }
-  ]
+  ],
+  "llave": "api_o_administracion"
  },
  {
   "operationId": "correctEquivalentDocumentAdjustment",
@@ -294,7 +299,8 @@
      ]
     }
    }
-  ]
+  ],
+  "llave": "api_o_administracion"
  },
  {
   "operationId": "correctInvoice",
@@ -457,7 +463,8 @@
      }
     }
    }
-  ]
+  ],
+  "llave": "api_o_administracion"
  },
  {
   "operationId": "correctPayroll",
@@ -553,7 +560,8 @@
      }
     }
    }
-  ]
+  ],
+  "llave": "api_o_administracion"
  },
  {
   "operationId": "correctPayrollAdjustment",
@@ -667,7 +675,8 @@
      ]
     }
    }
-  ]
+  ],
+  "llave": "api_o_administracion"
  },
  {
   "operationId": "correctSupportDocument",
@@ -735,7 +744,8 @@
      ]
     }
    }
-  ]
+  ],
+  "llave": "api_o_administracion"
  },
  {
   "operationId": "correctSupportDocumentAdjustment",
@@ -784,7 +794,79 @@
      ]
     }
    }
-  ]
+  ],
+  "llave": "api_o_administracion"
+ },
+ {
+  "operationId": "createAccountCompany",
+  "metodo": "POST",
+  "ruta": "/account/companies",
+  "recurso": "Account",
+  "idempotente": true,
+  "reintento": "seguro",
+  "binario": null,
+  "lista": null,
+  "respuesta": "AccountCompany",
+  "cuerpo": "AccountCompanyInput",
+  "cuerpoRequerido": true,
+  "parametros": [
+   {
+    "nombre": "Idempotency-Key",
+    "en": "header",
+    "requerido": false,
+    "tipo": "string"
+   }
+  ],
+  "ejemplos": [
+   {
+    "nombre": "ejemplo",
+    "resumen": "Reservar FERRETERÍA EL ROBLE SAS",
+    "valor": {
+     "nit": "901234567",
+     "name": "FERRETERÍA EL ROBLE SAS",
+     "email": "facturacion@elroble.example"
+    }
+   }
+  ],
+  "llave": "administracion"
+ },
+ {
+  "operationId": "createAccountCompanyApiKey",
+  "metodo": "POST",
+  "ruta": "/account/companies/{id}/api_keys",
+  "recurso": "Account",
+  "idempotente": true,
+  "reintento": "solo_429",
+  "binario": null,
+  "lista": null,
+  "respuesta": "AccountApiKey",
+  "cuerpo": "AccountApiKeyInput",
+  "cuerpoRequerido": true,
+  "parametros": [
+   {
+    "nombre": "id",
+    "en": "path",
+    "requerido": true,
+    "tipo": "string"
+   },
+   {
+    "nombre": "Idempotency-Key",
+    "en": "header",
+    "requerido": false,
+    "tipo": "string"
+   }
+  ],
+  "ejemplos": [
+   {
+    "nombre": "ejemplo",
+    "resumen": "Una llave de escritura para el ERP",
+    "valor": {
+     "name": "ERP de la bodega",
+     "permissions": "write"
+    }
+   }
+  ],
+  "llave": "administracion"
  },
  {
   "operationId": "createBalanceTopUp",
@@ -832,7 +914,8 @@
      }
     }
    }
-  ]
+  ],
+  "llave": "api_o_administracion"
  },
  {
   "operationId": "createCreditNote",
@@ -882,7 +965,8 @@
      ]
     }
    }
-  ]
+  ],
+  "llave": "api_o_administracion"
  },
  {
   "operationId": "createCustomer",
@@ -930,7 +1014,8 @@
      }
     }
    }
-  ]
+  ],
+  "llave": "api_o_administracion"
  },
  {
   "operationId": "createDebitNote",
@@ -973,7 +1058,8 @@
      ]
     }
    }
-  ]
+  ],
+  "llave": "api_o_administracion"
  },
  {
   "operationId": "createDianSync",
@@ -1005,7 +1091,8 @@
      "direction": "all"
     }
    }
-  ]
+  ],
+  "llave": "api_o_administracion"
  },
  {
   "operationId": "createEquivalentDocument",
@@ -1078,7 +1165,8 @@
      ]
     }
    }
-  ]
+  ],
+  "llave": "api_o_administracion"
  },
  {
   "operationId": "createEquivalentDocumentAdjustment",
@@ -1127,7 +1215,8 @@
      ]
     }
    }
-  ]
+  ],
+  "llave": "api_o_administracion"
  },
  {
   "operationId": "createInvoice",
@@ -1284,7 +1373,8 @@
      }
     }
    }
-  ]
+  ],
+  "llave": "api_o_administracion"
  },
  {
   "operationId": "createInvoiceBatch",
@@ -1381,7 +1471,8 @@
      ]
     }
    }
-  ]
+  ],
+  "llave": "api_o_administracion"
  },
  {
   "operationId": "createNumberingRequest",
@@ -1425,7 +1516,8 @@
      "document": "invoice"
     }
    }
-  ]
+  ],
+  "llave": "api_o_administracion"
  },
  {
   "operationId": "createPaperNumberingRange",
@@ -1460,7 +1552,8 @@
      "valid_to": "2028-01-15"
     }
    }
-  ]
+  ],
+  "llave": "api_o_administracion"
  },
  {
   "operationId": "createPayroll",
@@ -1550,7 +1643,8 @@
      }
     }
    }
-  ]
+  ],
+  "llave": "api_o_administracion"
  },
  {
   "operationId": "createPayrollAdjustment",
@@ -1658,7 +1752,8 @@
      ]
     }
    }
-  ]
+  ],
+  "llave": "api_o_administracion"
  },
  {
   "operationId": "createProduct",
@@ -1698,7 +1793,8 @@
      ]
     }
    }
-  ]
+  ],
+  "llave": "api_o_administracion"
  },
  {
   "operationId": "createRadianEvent",
@@ -1784,7 +1880,8 @@
      }
     }
    }
-  ]
+  ],
+  "llave": "api_o_administracion"
  },
  {
   "operationId": "createReportRun",
@@ -1818,7 +1915,8 @@
      "direction": "all"
     }
    }
-  ]
+  ],
+  "llave": "api_o_administracion"
  },
  {
   "operationId": "createSupportDocument",
@@ -1880,7 +1978,8 @@
      ]
     }
    }
-  ]
+  ],
+  "llave": "api_o_administracion"
  },
  {
   "operationId": "createSupportDocumentAdjustment",
@@ -1923,7 +2022,8 @@
      ]
     }
    }
-  ]
+  ],
+  "llave": "api_o_administracion"
  },
  {
   "operationId": "createWebhookEndpoint",
@@ -1952,7 +2052,8 @@
      ]
     }
    }
-  ]
+  ],
+  "llave": "api_o_administracion"
  },
  {
   "operationId": "deactivatePaperNumberingRange",
@@ -1974,7 +2075,8 @@
     "tipo": "string"
    }
   ],
-  "ejemplos": []
+  "ejemplos": [],
+  "llave": "api_o_administracion"
  },
  {
   "operationId": "deleteWebhookEndpoint",
@@ -1996,7 +2098,8 @@
     "tipo": "string"
    }
   ],
-  "ejemplos": []
+  "ejemplos": [],
+  "llave": "api_o_administracion"
  },
  {
   "operationId": "downloadCreditNoteDianResponse",
@@ -2018,7 +2121,8 @@
     "tipo": "string"
    }
   ],
-  "ejemplos": []
+  "ejemplos": [],
+  "llave": "api_o_administracion"
  },
  {
   "operationId": "downloadCreditNotePdf",
@@ -2040,7 +2144,8 @@
     "tipo": "string"
    }
   ],
-  "ejemplos": []
+  "ejemplos": [],
+  "llave": "api_o_administracion"
  },
  {
   "operationId": "downloadCreditNoteXml",
@@ -2062,7 +2167,8 @@
     "tipo": "string"
    }
   ],
-  "ejemplos": []
+  "ejemplos": [],
+  "llave": "api_o_administracion"
  },
  {
   "operationId": "downloadCreditNoteZip",
@@ -2084,7 +2190,8 @@
     "tipo": "string"
    }
   ],
-  "ejemplos": []
+  "ejemplos": [],
+  "llave": "api_o_administracion"
  },
  {
   "operationId": "downloadDebitNoteDianResponse",
@@ -2106,7 +2213,8 @@
     "tipo": "string"
    }
   ],
-  "ejemplos": []
+  "ejemplos": [],
+  "llave": "api_o_administracion"
  },
  {
   "operationId": "downloadDebitNotePdf",
@@ -2128,7 +2236,8 @@
     "tipo": "string"
    }
   ],
-  "ejemplos": []
+  "ejemplos": [],
+  "llave": "api_o_administracion"
  },
  {
   "operationId": "downloadDebitNoteXml",
@@ -2150,7 +2259,8 @@
     "tipo": "string"
    }
   ],
-  "ejemplos": []
+  "ejemplos": [],
+  "llave": "api_o_administracion"
  },
  {
   "operationId": "downloadDebitNoteZip",
@@ -2172,7 +2282,8 @@
     "tipo": "string"
    }
   ],
-  "ejemplos": []
+  "ejemplos": [],
+  "llave": "api_o_administracion"
  },
  {
   "operationId": "downloadDianDocumentXml",
@@ -2194,7 +2305,8 @@
     "tipo": "string"
    }
   ],
-  "ejemplos": []
+  "ejemplos": [],
+  "llave": "api_o_administracion"
  },
  {
   "operationId": "downloadEquivalentDocumentAdjustmentDianResponse",
@@ -2216,7 +2328,8 @@
     "tipo": "string"
    }
   ],
-  "ejemplos": []
+  "ejemplos": [],
+  "llave": "api_o_administracion"
  },
  {
   "operationId": "downloadEquivalentDocumentAdjustmentPdf",
@@ -2238,7 +2351,8 @@
     "tipo": "string"
    }
   ],
-  "ejemplos": []
+  "ejemplos": [],
+  "llave": "api_o_administracion"
  },
  {
   "operationId": "downloadEquivalentDocumentAdjustmentXml",
@@ -2260,7 +2374,8 @@
     "tipo": "string"
    }
   ],
-  "ejemplos": []
+  "ejemplos": [],
+  "llave": "api_o_administracion"
  },
  {
   "operationId": "downloadEquivalentDocumentAdjustmentZip",
@@ -2282,7 +2397,8 @@
     "tipo": "string"
    }
   ],
-  "ejemplos": []
+  "ejemplos": [],
+  "llave": "api_o_administracion"
  },
  {
   "operationId": "downloadEquivalentDocumentDianResponse",
@@ -2304,7 +2420,8 @@
     "tipo": "string"
    }
   ],
-  "ejemplos": []
+  "ejemplos": [],
+  "llave": "api_o_administracion"
  },
  {
   "operationId": "downloadEquivalentDocumentPdf",
@@ -2326,7 +2443,8 @@
     "tipo": "string"
    }
   ],
-  "ejemplos": []
+  "ejemplos": [],
+  "llave": "api_o_administracion"
  },
  {
   "operationId": "downloadEquivalentDocumentXml",
@@ -2348,7 +2466,8 @@
     "tipo": "string"
    }
   ],
-  "ejemplos": []
+  "ejemplos": [],
+  "llave": "api_o_administracion"
  },
  {
   "operationId": "downloadEquivalentDocumentZip",
@@ -2370,7 +2489,8 @@
     "tipo": "string"
    }
   ],
-  "ejemplos": []
+  "ejemplos": [],
+  "llave": "api_o_administracion"
  },
  {
   "operationId": "downloadInvoiceDianResponse",
@@ -2392,7 +2512,8 @@
     "tipo": "string"
    }
   ],
-  "ejemplos": []
+  "ejemplos": [],
+  "llave": "api_o_administracion"
  },
  {
   "operationId": "downloadInvoicePdf",
@@ -2414,7 +2535,8 @@
     "tipo": "string"
    }
   ],
-  "ejemplos": []
+  "ejemplos": [],
+  "llave": "api_o_administracion"
  },
  {
   "operationId": "downloadInvoiceXml",
@@ -2436,7 +2558,8 @@
     "tipo": "string"
    }
   ],
-  "ejemplos": []
+  "ejemplos": [],
+  "llave": "api_o_administracion"
  },
  {
   "operationId": "downloadInvoiceZip",
@@ -2458,7 +2581,8 @@
     "tipo": "string"
    }
   ],
-  "ejemplos": []
+  "ejemplos": [],
+  "llave": "api_o_administracion"
  },
  {
   "operationId": "downloadPayrollAdjustmentDianResponse",
@@ -2480,7 +2604,8 @@
     "tipo": "string"
    }
   ],
-  "ejemplos": []
+  "ejemplos": [],
+  "llave": "api_o_administracion"
  },
  {
   "operationId": "downloadPayrollAdjustmentXml",
@@ -2502,7 +2627,8 @@
     "tipo": "string"
    }
   ],
-  "ejemplos": []
+  "ejemplos": [],
+  "llave": "api_o_administracion"
  },
  {
   "operationId": "downloadPayrollAdjustmentZip",
@@ -2524,7 +2650,8 @@
     "tipo": "string"
    }
   ],
-  "ejemplos": []
+  "ejemplos": [],
+  "llave": "api_o_administracion"
  },
  {
   "operationId": "downloadPayrollDianResponse",
@@ -2546,7 +2673,8 @@
     "tipo": "string"
    }
   ],
-  "ejemplos": []
+  "ejemplos": [],
+  "llave": "api_o_administracion"
  },
  {
   "operationId": "downloadPayrollXml",
@@ -2568,7 +2696,8 @@
     "tipo": "string"
    }
   ],
-  "ejemplos": []
+  "ejemplos": [],
+  "llave": "api_o_administracion"
  },
  {
   "operationId": "downloadPayrollZip",
@@ -2590,7 +2719,8 @@
     "tipo": "string"
    }
   ],
-  "ejemplos": []
+  "ejemplos": [],
+  "llave": "api_o_administracion"
  },
  {
   "operationId": "downloadRadianEventXml",
@@ -2612,7 +2742,8 @@
     "tipo": "string"
    }
   ],
-  "ejemplos": []
+  "ejemplos": [],
+  "llave": "api_o_administracion"
  },
  {
   "operationId": "downloadSupportDocumentAdjustmentDianResponse",
@@ -2634,7 +2765,8 @@
     "tipo": "string"
    }
   ],
-  "ejemplos": []
+  "ejemplos": [],
+  "llave": "api_o_administracion"
  },
  {
   "operationId": "downloadSupportDocumentAdjustmentXml",
@@ -2656,7 +2788,8 @@
     "tipo": "string"
    }
   ],
-  "ejemplos": []
+  "ejemplos": [],
+  "llave": "api_o_administracion"
  },
  {
   "operationId": "downloadSupportDocumentDianResponse",
@@ -2678,7 +2811,8 @@
     "tipo": "string"
    }
   ],
-  "ejemplos": []
+  "ejemplos": [],
+  "llave": "api_o_administracion"
  },
  {
   "operationId": "downloadSupportDocumentXml",
@@ -2700,7 +2834,8 @@
     "tipo": "string"
    }
   ],
-  "ejemplos": []
+  "ejemplos": [],
+  "llave": "api_o_administracion"
  },
  {
   "operationId": "exportDocuments",
@@ -2746,7 +2881,8 @@
     "tipo": "string"
    }
   ],
-  "ejemplos": []
+  "ejemplos": [],
+  "llave": "api_o_administracion"
  },
  {
   "operationId": "getDianDocument",
@@ -2768,7 +2904,8 @@
     "tipo": "string"
    }
   ],
-  "ejemplos": []
+  "ejemplos": [],
+  "llave": "api_o_administracion"
  },
  {
   "operationId": "getDianSync",
@@ -2790,7 +2927,8 @@
     "tipo": "string"
    }
   ],
-  "ejemplos": []
+  "ejemplos": [],
+  "llave": "api_o_administracion"
  },
  {
   "operationId": "getHealth",
@@ -2805,7 +2943,8 @@
   "cuerpo": null,
   "cuerpoRequerido": false,
   "parametros": [],
-  "ejemplos": []
+  "ejemplos": [],
+  "llave": "ninguna"
  },
  {
   "operationId": "getRadianStatus",
@@ -2827,7 +2966,255 @@
     "tipo": "string"
    }
   ],
-  "ejemplos": []
+  "ejemplos": [],
+  "llave": "api_o_administracion"
+ },
+ {
+  "operationId": "listAccountCompanies",
+  "metodo": "GET",
+  "ruta": "/account/companies",
+  "recurso": "Account",
+  "idempotente": false,
+  "reintento": "seguro",
+  "binario": null,
+  "lista": "AccountCompanyList",
+  "respuesta": "AccountCompanyList",
+  "cuerpo": null,
+  "cuerpoRequerido": false,
+  "parametros": [
+   {
+    "nombre": "limit",
+    "en": "query",
+    "requerido": false,
+    "tipo": "integer"
+   },
+   {
+    "nombre": "starting_after",
+    "en": "query",
+    "requerido": false,
+    "tipo": "string"
+   },
+   {
+    "nombre": "status",
+    "en": "query",
+    "requerido": false,
+    "tipo": "string"
+   },
+   {
+    "nombre": "nit",
+    "en": "query",
+    "requerido": false,
+    "tipo": "string"
+   }
+  ],
+  "ejemplos": [],
+  "llave": "administracion"
+ },
+ {
+  "operationId": "listAccountCompanyApiKeys",
+  "metodo": "GET",
+  "ruta": "/account/companies/{id}/api_keys",
+  "recurso": "Account",
+  "idempotente": false,
+  "reintento": "seguro",
+  "binario": null,
+  "lista": "AccountApiKeyList",
+  "respuesta": "AccountApiKeyList",
+  "cuerpo": null,
+  "cuerpoRequerido": false,
+  "parametros": [
+   {
+    "nombre": "id",
+    "en": "path",
+    "requerido": true,
+    "tipo": "string"
+   },
+   {
+    "nombre": "limit",
+    "en": "query",
+    "requerido": false,
+    "tipo": "integer"
+   },
+   {
+    "nombre": "starting_after",
+    "en": "query",
+    "requerido": false,
+    "tipo": "string"
+   },
+   {
+    "nombre": "status",
+    "en": "query",
+    "requerido": false,
+    "tipo": "string"
+   }
+  ],
+  "ejemplos": [],
+  "llave": "administracion"
+ },
+ {
+  "operationId": "listAccountDianDocuments",
+  "metodo": "GET",
+  "ruta": "/account/dian_documents",
+  "recurso": "Account",
+  "idempotente": false,
+  "reintento": "seguro",
+  "binario": null,
+  "lista": "AccountDianDocumentList",
+  "respuesta": "AccountDianDocumentList",
+  "cuerpo": null,
+  "cuerpoRequerido": false,
+  "parametros": [
+   {
+    "nombre": "limit",
+    "en": "query",
+    "requerido": false,
+    "tipo": "integer"
+   },
+   {
+    "nombre": "starting_after",
+    "en": "query",
+    "requerido": false,
+    "tipo": "string"
+   },
+   {
+    "nombre": "company",
+    "en": "query",
+    "requerido": false,
+    "tipo": "string"
+   },
+   {
+    "nombre": "direction",
+    "en": "query",
+    "requerido": false,
+    "tipo": "string"
+   },
+   {
+    "nombre": "type",
+    "en": "query",
+    "requerido": false,
+    "tipo": "string"
+   },
+   {
+    "nombre": "issued_from",
+    "en": "query",
+    "requerido": false,
+    "tipo": "string"
+   },
+   {
+    "nombre": "issued_to",
+    "en": "query",
+    "requerido": false,
+    "tipo": "string"
+   }
+  ],
+  "ejemplos": [],
+  "llave": "administracion"
+ },
+ {
+  "operationId": "listAccountRadianEvents",
+  "metodo": "GET",
+  "ruta": "/account/radian_events",
+  "recurso": "Account",
+  "idempotente": false,
+  "reintento": "seguro",
+  "binario": null,
+  "lista": "AccountRadianEventList",
+  "respuesta": "AccountRadianEventList",
+  "cuerpo": null,
+  "cuerpoRequerido": false,
+  "parametros": [
+   {
+    "nombre": "limit",
+    "en": "query",
+    "requerido": false,
+    "tipo": "integer"
+   },
+   {
+    "nombre": "starting_after",
+    "en": "query",
+    "requerido": false,
+    "tipo": "string"
+   },
+   {
+    "nombre": "company",
+    "en": "query",
+    "requerido": false,
+    "tipo": "string"
+   },
+   {
+    "nombre": "code",
+    "en": "query",
+    "requerido": false,
+    "tipo": "string"
+   },
+   {
+    "nombre": "status",
+    "en": "query",
+    "requerido": false,
+    "tipo": "string"
+   },
+   {
+    "nombre": "created_from",
+    "en": "query",
+    "requerido": false,
+    "tipo": "string"
+   },
+   {
+    "nombre": "created_to",
+    "en": "query",
+    "requerido": false,
+    "tipo": "string"
+   }
+  ],
+  "ejemplos": [],
+  "llave": "administracion"
+ },
+ {
+  "operationId": "listAccountRequests",
+  "metodo": "GET",
+  "ruta": "/account/requests",
+  "recurso": "Account",
+  "idempotente": false,
+  "reintento": "seguro",
+  "binario": null,
+  "lista": "AccountRequestLogList",
+  "respuesta": "AccountRequestLogList",
+  "cuerpo": null,
+  "cuerpoRequerido": false,
+  "parametros": [
+   {
+    "nombre": "limit",
+    "en": "query",
+    "requerido": false,
+    "tipo": "integer"
+   },
+   {
+    "nombre": "starting_after",
+    "en": "query",
+    "requerido": false,
+    "tipo": "string"
+   },
+   {
+    "nombre": "status",
+    "en": "query",
+    "requerido": false,
+    "tipo": "integer"
+   },
+   {
+    "nombre": "created_from",
+    "en": "query",
+    "requerido": false,
+    "tipo": "string"
+   },
+   {
+    "nombre": "created_to",
+    "en": "query",
+    "requerido": false,
+    "tipo": "string"
+   }
+  ],
+  "ejemplos": [],
+  "llave": "administracion"
  },
  {
   "operationId": "listBalanceTransactions",
@@ -2861,7 +3248,8 @@
     "tipo": "string"
    }
   ],
-  "ejemplos": []
+  "ejemplos": [],
+  "llave": "api_o_administracion"
  },
  {
   "operationId": "listCreditNotes",
@@ -2913,7 +3301,8 @@
     "tipo": "string"
    }
   ],
-  "ejemplos": []
+  "ejemplos": [],
+  "llave": "api_o_administracion"
  },
  {
   "operationId": "listCustomers",
@@ -2965,7 +3354,8 @@
     "tipo": "string"
    }
   ],
-  "ejemplos": []
+  "ejemplos": [],
+  "llave": "api_o_administracion"
  },
  {
   "operationId": "listDebitNotes",
@@ -3017,7 +3407,8 @@
     "tipo": "string"
    }
   ],
-  "ejemplos": []
+  "ejemplos": [],
+  "llave": "api_o_administracion"
  },
  {
   "operationId": "listDianDocuments",
@@ -3069,7 +3460,8 @@
     "tipo": "string"
    }
   ],
-  "ejemplos": []
+  "ejemplos": [],
+  "llave": "api_o_administracion"
  },
  {
   "operationId": "listDianSyncs",
@@ -3103,7 +3495,8 @@
     "tipo": "string"
    }
   ],
-  "ejemplos": []
+  "ejemplos": [],
+  "llave": "api_o_administracion"
  },
  {
   "operationId": "listEquivalentDocumentAdjustments",
@@ -3155,7 +3548,8 @@
     "tipo": "string"
    }
   ],
-  "ejemplos": []
+  "ejemplos": [],
+  "llave": "api_o_administracion"
  },
  {
   "operationId": "listEquivalentDocuments",
@@ -3213,7 +3607,8 @@
     "tipo": "string"
    }
   ],
-  "ejemplos": []
+  "ejemplos": [],
+  "llave": "api_o_administracion"
  },
  {
   "operationId": "listEvents",
@@ -3259,7 +3654,8 @@
     "tipo": "string"
    }
   ],
-  "ejemplos": []
+  "ejemplos": [],
+  "llave": "api_o_administracion"
  },
  {
   "operationId": "listInvoiceBatches",
@@ -3305,7 +3701,8 @@
     "tipo": "string"
    }
   ],
-  "ejemplos": []
+  "ejemplos": [],
+  "llave": "api_o_administracion"
  },
  {
   "operationId": "listInvoices",
@@ -3357,7 +3754,8 @@
     "tipo": "string"
    }
   ],
-  "ejemplos": []
+  "ejemplos": [],
+  "llave": "api_o_administracion"
  },
  {
   "operationId": "listNumberingRanges",
@@ -3403,7 +3801,8 @@
     "tipo": "boolean"
    }
   ],
-  "ejemplos": []
+  "ejemplos": [],
+  "llave": "api_o_administracion"
  },
  {
   "operationId": "listNumberingRequests",
@@ -3437,7 +3836,8 @@
     "tipo": "string"
    }
   ],
-  "ejemplos": []
+  "ejemplos": [],
+  "llave": "api_o_administracion"
  },
  {
   "operationId": "listPaperNumberingRanges",
@@ -3452,7 +3852,8 @@
   "cuerpo": null,
   "cuerpoRequerido": false,
   "parametros": [],
-  "ejemplos": []
+  "ejemplos": [],
+  "llave": "api_o_administracion"
  },
  {
   "operationId": "listPayrollAdjustments",
@@ -3522,7 +3923,8 @@
     "tipo": "string"
    }
   ],
-  "ejemplos": []
+  "ejemplos": [],
+  "llave": "api_o_administracion"
  },
  {
   "operationId": "listPayrolls",
@@ -3592,7 +3994,8 @@
     "tipo": "string"
    }
   ],
-  "ejemplos": []
+  "ejemplos": [],
+  "llave": "api_o_administracion"
  },
  {
   "operationId": "listProducts",
@@ -3644,7 +4047,8 @@
     "tipo": "string"
    }
   ],
-  "ejemplos": []
+  "ejemplos": [],
+  "llave": "api_o_administracion"
  },
  {
   "operationId": "listRadianEvents",
@@ -3708,7 +4112,8 @@
     "tipo": "string"
    }
   ],
-  "ejemplos": []
+  "ejemplos": [],
+  "llave": "api_o_administracion"
  },
  {
   "operationId": "listReportRuns",
@@ -3742,7 +4147,8 @@
     "tipo": "string"
    }
   ],
-  "ejemplos": []
+  "ejemplos": [],
+  "llave": "api_o_administracion"
  },
  {
   "operationId": "listRequests",
@@ -3794,7 +4200,8 @@
     "tipo": "string"
    }
   ],
-  "ejemplos": []
+  "ejemplos": [],
+  "llave": "api_o_administracion"
  },
  {
   "operationId": "listSupportDocumentAdjustments",
@@ -3846,7 +4253,8 @@
     "tipo": "string"
    }
   ],
-  "ejemplos": []
+  "ejemplos": [],
+  "llave": "api_o_administracion"
  },
  {
   "operationId": "listSupportDocuments",
@@ -3898,7 +4306,8 @@
     "tipo": "string"
    }
   ],
-  "ejemplos": []
+  "ejemplos": [],
+  "llave": "api_o_administracion"
  },
  {
   "operationId": "listWebhookEndpointDeliveries",
@@ -3938,7 +4347,8 @@
     "tipo": "string"
    }
   ],
-  "ejemplos": []
+  "ejemplos": [],
+  "llave": "api_o_administracion"
  },
  {
   "operationId": "listWebhookEndpoints",
@@ -3953,7 +4363,8 @@
   "cuerpo": null,
   "cuerpoRequerido": false,
   "parametros": [],
-  "ejemplos": []
+  "ejemplos": [],
+  "llave": "api_o_administracion"
  },
  {
   "operationId": "markNumberingRequestSubmitted",
@@ -3975,7 +4386,8 @@
     "tipo": "string"
    }
   ],
-  "ejemplos": []
+  "ejemplos": [],
+  "llave": "api_o_administracion"
  },
  {
   "operationId": "previewCreditNote",
@@ -4018,7 +4430,8 @@
      ]
     }
    }
-  ]
+  ],
+  "llave": "api_o_administracion"
  },
  {
   "operationId": "previewDebitNote",
@@ -4054,7 +4467,8 @@
      ]
     }
    }
-  ]
+  ],
+  "llave": "api_o_administracion"
  },
  {
   "operationId": "previewEquivalentDocument",
@@ -4120,7 +4534,8 @@
      ]
     }
    }
-  ]
+  ],
+  "llave": "api_o_administracion"
  },
  {
   "operationId": "previewEquivalentDocumentAdjustment",
@@ -4162,7 +4577,8 @@
      ]
     }
    }
-  ]
+  ],
+  "llave": "api_o_administracion"
  },
  {
   "operationId": "previewInvoice",
@@ -4312,7 +4728,8 @@
      }
     }
    }
-  ]
+  ],
+  "llave": "api_o_administracion"
  },
  {
   "operationId": "previewPayroll",
@@ -4395,7 +4812,8 @@
      }
     }
    }
-  ]
+  ],
+  "llave": "api_o_administracion"
  },
  {
   "operationId": "previewPayrollAdjustment",
@@ -4496,7 +4914,8 @@
      ]
     }
    }
-  ]
+  ],
+  "llave": "api_o_administracion"
  },
  {
   "operationId": "previewSupportDocument",
@@ -4551,7 +4970,8 @@
      ]
     }
    }
-  ]
+  ],
+  "llave": "api_o_administracion"
  },
  {
   "operationId": "previewSupportDocumentAdjustment",
@@ -4587,7 +5007,8 @@
      ]
     }
    }
-  ]
+  ],
+  "llave": "api_o_administracion"
  },
  {
   "operationId": "refreshNumberingRanges",
@@ -4602,7 +5023,8 @@
   "cuerpo": null,
   "cuerpoRequerido": false,
   "parametros": [],
-  "ejemplos": []
+  "ejemplos": [],
+  "llave": "api_o_administracion"
  },
  {
   "operationId": "resendEvent",
@@ -4632,7 +5054,47 @@
      "endpoint_id": "we_3f0c1a2b3f0c1a2b3f0c1a2b3f0c1a2b"
     }
    }
-  ]
+  ],
+  "llave": "api_o_administracion"
+ },
+ {
+  "operationId": "retrieveAccount",
+  "metodo": "GET",
+  "ruta": "/account",
+  "recurso": "Account",
+  "idempotente": false,
+  "reintento": "seguro",
+  "binario": null,
+  "lista": null,
+  "respuesta": "AccountKeyInfo",
+  "cuerpo": null,
+  "cuerpoRequerido": false,
+  "parametros": [],
+  "ejemplos": [],
+  "llave": "administracion"
+ },
+ {
+  "operationId": "retrieveAccountCompany",
+  "metodo": "GET",
+  "ruta": "/account/companies/{id}",
+  "recurso": "Account",
+  "idempotente": false,
+  "reintento": "seguro",
+  "binario": null,
+  "lista": null,
+  "respuesta": "AccountCompany",
+  "cuerpo": null,
+  "cuerpoRequerido": false,
+  "parametros": [
+   {
+    "nombre": "id",
+    "en": "path",
+    "requerido": true,
+    "tipo": "string"
+   }
+  ],
+  "ejemplos": [],
+  "llave": "administracion"
  },
  {
   "operationId": "retrieveBalance",
@@ -4647,7 +5109,8 @@
   "cuerpo": null,
   "cuerpoRequerido": false,
   "parametros": [],
-  "ejemplos": []
+  "ejemplos": [],
+  "llave": "api_o_administracion"
  },
  {
   "operationId": "retrieveCompany",
@@ -4662,7 +5125,8 @@
   "cuerpo": null,
   "cuerpoRequerido": false,
   "parametros": [],
-  "ejemplos": []
+  "ejemplos": [],
+  "llave": "api_o_administracion"
  },
  {
   "operationId": "retrieveCreditNote",
@@ -4684,7 +5148,8 @@
     "tipo": "string"
    }
   ],
-  "ejemplos": []
+  "ejemplos": [],
+  "llave": "api_o_administracion"
  },
  {
   "operationId": "retrieveCustomer",
@@ -4706,7 +5171,8 @@
     "tipo": "string"
    }
   ],
-  "ejemplos": []
+  "ejemplos": [],
+  "llave": "api_o_administracion"
  },
  {
   "operationId": "retrieveDebitNote",
@@ -4728,7 +5194,8 @@
     "tipo": "string"
    }
   ],
-  "ejemplos": []
+  "ejemplos": [],
+  "llave": "api_o_administracion"
  },
  {
   "operationId": "retrieveDianAcquirer",
@@ -4756,7 +5223,8 @@
     "tipo": "string"
    }
   ],
-  "ejemplos": []
+  "ejemplos": [],
+  "llave": "api_o_administracion"
  },
  {
   "operationId": "retrieveEquivalentDocument",
@@ -4778,7 +5246,8 @@
     "tipo": "string"
    }
   ],
-  "ejemplos": []
+  "ejemplos": [],
+  "llave": "api_o_administracion"
  },
  {
   "operationId": "retrieveEquivalentDocumentAdjustment",
@@ -4800,7 +5269,8 @@
     "tipo": "string"
    }
   ],
-  "ejemplos": []
+  "ejemplos": [],
+  "llave": "api_o_administracion"
  },
  {
   "operationId": "retrieveEvent",
@@ -4822,7 +5292,8 @@
     "tipo": "string"
    }
   ],
-  "ejemplos": []
+  "ejemplos": [],
+  "llave": "api_o_administracion"
  },
  {
   "operationId": "retrieveInvoice",
@@ -4844,7 +5315,8 @@
     "tipo": "string"
    }
   ],
-  "ejemplos": []
+  "ejemplos": [],
+  "llave": "api_o_administracion"
  },
  {
   "operationId": "retrieveInvoiceBatch",
@@ -4866,7 +5338,8 @@
     "tipo": "string"
    }
   ],
-  "ejemplos": []
+  "ejemplos": [],
+  "llave": "api_o_administracion"
  },
  {
   "operationId": "retrieveInvoiceTacitAcceptance",
@@ -4888,7 +5361,8 @@
     "tipo": "string"
    }
   ],
-  "ejemplos": []
+  "ejemplos": [],
+  "llave": "api_o_administracion"
  },
  {
   "operationId": "retrieveNumberingAssociation",
@@ -4910,7 +5384,8 @@
     "tipo": "string"
    }
   ],
-  "ejemplos": []
+  "ejemplos": [],
+  "llave": "api_o_administracion"
  },
  {
   "operationId": "retrieveNumberingRange",
@@ -4932,7 +5407,8 @@
     "tipo": "string"
    }
   ],
-  "ejemplos": []
+  "ejemplos": [],
+  "llave": "api_o_administracion"
  },
  {
   "operationId": "retrieveNumberingRequest",
@@ -4954,7 +5430,8 @@
     "tipo": "string"
    }
   ],
-  "ejemplos": []
+  "ejemplos": [],
+  "llave": "api_o_administracion"
  },
  {
   "operationId": "retrievePaperNumberingRange",
@@ -4976,7 +5453,8 @@
     "tipo": "string"
    }
   ],
-  "ejemplos": []
+  "ejemplos": [],
+  "llave": "api_o_administracion"
  },
  {
   "operationId": "retrievePayroll",
@@ -4998,7 +5476,8 @@
     "tipo": "string"
    }
   ],
-  "ejemplos": []
+  "ejemplos": [],
+  "llave": "api_o_administracion"
  },
  {
   "operationId": "retrievePayrollAdjustment",
@@ -5020,7 +5499,8 @@
     "tipo": "string"
    }
   ],
-  "ejemplos": []
+  "ejemplos": [],
+  "llave": "api_o_administracion"
  },
  {
   "operationId": "retrieveProduct",
@@ -5042,7 +5522,8 @@
     "tipo": "string"
    }
   ],
-  "ejemplos": []
+  "ejemplos": [],
+  "llave": "api_o_administracion"
  },
  {
   "operationId": "retrieveRadianEvent",
@@ -5064,7 +5545,8 @@
     "tipo": "string"
    }
   ],
-  "ejemplos": []
+  "ejemplos": [],
+  "llave": "api_o_administracion"
  },
  {
   "operationId": "retrieveReportRun",
@@ -5086,7 +5568,8 @@
     "tipo": "string"
    }
   ],
-  "ejemplos": []
+  "ejemplos": [],
+  "llave": "api_o_administracion"
  },
  {
   "operationId": "retrieveReportRunFile",
@@ -5108,7 +5591,8 @@
     "tipo": "string"
    }
   ],
-  "ejemplos": []
+  "ejemplos": [],
+  "llave": "api_o_administracion"
  },
  {
   "operationId": "retrieveSupportDocument",
@@ -5130,7 +5614,8 @@
     "tipo": "string"
    }
   ],
-  "ejemplos": []
+  "ejemplos": [],
+  "llave": "api_o_administracion"
  },
  {
   "operationId": "retrieveSupportDocumentAdjustment",
@@ -5152,7 +5637,8 @@
     "tipo": "string"
    }
   ],
-  "ejemplos": []
+  "ejemplos": [],
+  "llave": "api_o_administracion"
  },
  {
   "operationId": "retrieveTacitAcceptanceByCufe",
@@ -5174,7 +5660,8 @@
     "tipo": "string"
    }
   ],
-  "ejemplos": []
+  "ejemplos": [],
+  "llave": "api_o_administracion"
  },
  {
   "operationId": "retrieveTaxSummary",
@@ -5208,7 +5695,8 @@
     "tipo": "string"
    }
   ],
-  "ejemplos": []
+  "ejemplos": [],
+  "llave": "api_o_administracion"
  },
  {
   "operationId": "retrieveWebhookEndpoint",
@@ -5230,7 +5718,8 @@
     "tipo": "string"
    }
   ],
-  "ejemplos": []
+  "ejemplos": [],
+  "llave": "api_o_administracion"
  },
  {
   "operationId": "retryNumberingRequestAutomatic",
@@ -5252,7 +5741,37 @@
     "tipo": "string"
    }
   ],
-  "ejemplos": []
+  "ejemplos": [],
+  "llave": "api_o_administracion"
+ },
+ {
+  "operationId": "revokeAccountCompanyApiKey",
+  "metodo": "DELETE",
+  "ruta": "/account/companies/{id}/api_keys/{key_id}",
+  "recurso": "Account",
+  "idempotente": false,
+  "reintento": "solo_429",
+  "binario": null,
+  "lista": null,
+  "respuesta": "AccountApiKeyRevocation",
+  "cuerpo": null,
+  "cuerpoRequerido": false,
+  "parametros": [
+   {
+    "nombre": "id",
+    "en": "path",
+    "requerido": true,
+    "tipo": "string"
+   },
+   {
+    "nombre": "key_id",
+    "en": "path",
+    "requerido": true,
+    "tipo": "string"
+   }
+  ],
+  "ejemplos": [],
+  "llave": "administracion"
  },
  {
   "operationId": "rotateWebhookEndpointSecret",
@@ -5282,7 +5801,8 @@
      "grace_period_hours": 24
     }
    }
-  ]
+  ],
+  "llave": "api_o_administracion"
  },
  {
   "operationId": "sendCreditNote",
@@ -5304,7 +5824,8 @@
     "tipo": "string"
    }
   ],
-  "ejemplos": []
+  "ejemplos": [],
+  "llave": "api_o_administracion"
  },
  {
   "operationId": "sendDebitNote",
@@ -5326,7 +5847,8 @@
     "tipo": "string"
    }
   ],
-  "ejemplos": []
+  "ejemplos": [],
+  "llave": "api_o_administracion"
  },
  {
   "operationId": "sendEquivalentDocument",
@@ -5348,7 +5870,8 @@
     "tipo": "string"
    }
   ],
-  "ejemplos": []
+  "ejemplos": [],
+  "llave": "api_o_administracion"
  },
  {
   "operationId": "sendEquivalentDocumentAdjustment",
@@ -5370,7 +5893,8 @@
     "tipo": "string"
    }
   ],
-  "ejemplos": []
+  "ejemplos": [],
+  "llave": "api_o_administracion"
  },
  {
   "operationId": "sendInvoice",
@@ -5392,7 +5916,8 @@
     "tipo": "string"
    }
   ],
-  "ejemplos": []
+  "ejemplos": [],
+  "llave": "api_o_administracion"
  },
  {
   "operationId": "sendPayroll",
@@ -5414,7 +5939,8 @@
     "tipo": "string"
    }
   ],
-  "ejemplos": []
+  "ejemplos": [],
+  "llave": "api_o_administracion"
  },
  {
   "operationId": "sendPayrollAdjustment",
@@ -5436,7 +5962,8 @@
     "tipo": "string"
    }
   ],
-  "ejemplos": []
+  "ejemplos": [],
+  "llave": "api_o_administracion"
  },
  {
   "operationId": "sendRadianEvent",
@@ -5458,7 +5985,8 @@
     "tipo": "string"
    }
   ],
-  "ejemplos": []
+  "ejemplos": [],
+  "llave": "api_o_administracion"
  },
  {
   "operationId": "sendSupportDocument",
@@ -5480,7 +6008,8 @@
     "tipo": "string"
    }
   ],
-  "ejemplos": []
+  "ejemplos": [],
+  "llave": "api_o_administracion"
  },
  {
   "operationId": "sendSupportDocumentAdjustment",
@@ -5502,7 +6031,8 @@
     "tipo": "string"
    }
   ],
-  "ejemplos": []
+  "ejemplos": [],
+  "llave": "api_o_administracion"
  },
  {
   "operationId": "testWebhookEndpoint",
@@ -5524,7 +6054,8 @@
     "tipo": "string"
    }
   ],
-  "ejemplos": []
+  "ejemplos": [],
+  "llave": "api_o_administracion"
  },
  {
   "operationId": "updateCustomer",
@@ -5564,7 +6095,8 @@
      "active": false
     }
    }
-  ]
+  ],
+  "llave": "api_o_administracion"
  },
  {
   "operationId": "updatePaperNumberingRange",
@@ -5594,7 +6126,8 @@
      "valid_to": "2028-06-30"
     }
    }
-  ]
+  ],
+  "llave": "api_o_administracion"
  },
  {
   "operationId": "updateProduct",
@@ -5631,7 +6164,8 @@
      "active": false
     }
    }
-  ]
+  ],
+  "llave": "api_o_administracion"
  },
  {
   "operationId": "updateWebhookEndpoint",
@@ -5662,6 +6196,7 @@
      "status": "paused"
     }
    }
-  ]
+  ],
+  "llave": "api_o_administracion"
  }
 ]

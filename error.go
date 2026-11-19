@@ -29,7 +29,8 @@ const (
 	// KindValidation: validation_error (422). `Errors` dice qué campo (`Pointer`) y por qué.
 	KindValidation Kind = "ValidationError"
 	// KindConflict: external_id_in_use, invalid_state, duplicate_document, request_in_progress, previous_event_pending,
-	// file_unavailable, webhook_limit_reached.
+	// file_unavailable, webhook_limit_reached, company_exists (`Problem["company"]` es la empresa que ya está en la cuenta),
+	// key_limit_reached y los demás de la tabla de errores.
 	KindConflict Kind = "ConflictError"
 	// KindPrecondition: company_not_enabled, numbering_unavailable, certificate_problem, tacit_acceptance_not_due.
 	KindPrecondition Kind = "PreconditionError"
@@ -37,7 +38,8 @@ const (
 	KindDianRejected Kind = "DianRejectedError"
 	// KindBalance: insufficient_balance, top_up_below_minimum, top_up_above_maximum, top_ups_unavailable.
 	KindBalance Kind = "BalanceError"
-	// KindRateLimit: rate_limited.
+	// KindRateLimit: rate_limited y company_limit_reached (tope de altas de empresas por cuenta: `RetryAfter` puede ser de horas, y el SDK
+	// no espera tanto: devuelve el error).
 	KindRateLimit Kind = "RateLimitError"
 	// KindDianUnavailable: dian_unavailable.
 	KindDianUnavailable Kind = "DianUnavailableError"
@@ -45,7 +47,8 @@ const (
 	KindInternalServer Kind = "InternalServerError"
 	// KindConnection: no hubo respuesta (red, DNS, TLS, tiempo agotado). Lleva la IdempotencyKey para reintentar sin duplicar.
 	KindConnection Kind = "APIConnectionError"
-	// KindConfiguration: mal uso del SDK, antes de llamar (llave mal formada, entorno que no coincide). Nunca incluye la llave.
+	// KindConfiguration: mal uso del SDK, antes de llamar (llave mal formada, entorno que no coincide, company que no aplica o falta con
+	// una llave de administración). Nunca incluye la llave.
 	KindConfiguration Kind = "ConfigurationError"
 	// KindWebhookVerification: la firma, la fecha o las cabeceras de un webhook no son válidas.
 	KindWebhookVerification Kind = "WebhookVerificationError"
