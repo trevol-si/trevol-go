@@ -10,7 +10,7 @@ RADIAN ante la DIAN (Colombia). Documentación: <https://platform.trevol.si/docs
 > DIAN test environment, `tvl_live_` = production), pinned `Trevol-Version`, Standard Webhooks signature verification, cursor pagination with
 > `iter.Seq2` and PDF/XML/ZIP downloads. Docs are in Spanish like the API.
 
-**Versión 0.1.0** — API `2026-10-22`. Licencia MIT.
+**Versión 0.2.0** — API `2026-11-18`. Licencia MIT.
 
 ## Instalación
 
@@ -127,9 +127,10 @@ Hasta 2 reintentos (3 intentos) con espera creciente (0,5 s, 1 s, 2 s… con top
 
 ### La versión de la API
 
-El SDK fija `Trevol-Version: 2026-10-22` en cada petición. **Ojo:** una llave creada con la versión `2026-10-21` que empiece a usar este SDK
-pasa a `2026-10-22` (el encabezado manda): recibe `202 processing` donde antes recibía `503`. Si todavía no quieres ese cambio:
-`trevol.NewClient(llave, trevol.WithAPIVersion("2026-10-21"))`. Más en <https://platform.trevol.si/docs/versiones>.
+El SDK fija `Trevol-Version: 2026-11-18` en cada petición. **Ojo:** una llave de una versión anterior que empiece a usar este SDK
+pasa a `2026-11-18` (el encabezado manda): un `422 validation_error` trae todos los problemas de los datos juntos en `errors`, no solo el
+primero, y si la llave estaba en `2026-10-21`, recibe `202 processing` donde antes recibía `503`. Si todavía no quieres ese cambio, fija
+la versión que usabas: `trevol.NewClient(llave, trevol.WithAPIVersion("2026-10-22"))`. Más en <https://platform.trevol.si/docs/versiones>.
 
 ### Errores tipados
 
@@ -179,7 +180,7 @@ Para un proxy, TLS o métricas, pasa tu `*http.Client` con `trevol.WithHTTPClien
 
 ```go
 trevol.NewClient(llave,
-	trevol.WithAPIVersion("2026-10-22"),    // Trevol-Version en cada petición
+	trevol.WithAPIVersion("2026-11-18"),    // Trevol-Version en cada petición
 	trevol.WithMaxRetries(2),               // 0 los apaga
 	trevol.WithTimeout(65*time.Second),     // por intento
 	trevol.WithMaxRetryAfter(60*time.Second),

@@ -3,7 +3,7 @@
 El formato sigue [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/) y el versionado, [SemVer](https://semver.org/lang/es/): antes
 de la 1.0, un cambio incompatible sube el número menor.
 
-## [Sin publicar]
+## [0.2.0] — 2026-11-18
 
 Regenerado con la API de noviembre de 2026 (versión `2026-11-18`, la de los errores juntos; 149 operaciones y 70 tipos de evento).
 
@@ -18,7 +18,7 @@ Regenerado con la API de noviembre de 2026 (versión `2026-11-18`, la de los err
 - `Acquirer` trae `personal_data` (`redacted` si la llave no tiene `customers:read`: `email` viene en null). El PDF, el XML y el
   ZIP de lo emitido y el archivo de un reporte asíncrono con datos personales responden 403 `permission_denied` sin ese permiso.
 
-## [0.1.0] — sin publicar
+## [0.1.0] — 2026-11-01
 
 Primera versión (API `2026-10-22`).
 

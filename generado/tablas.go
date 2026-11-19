@@ -4,7 +4,7 @@ package generado
 
 import "encoding/json"
 
-const Version = "0.1.0"
+const Version = "0.2.0"
 const APIVersion = "2026-11-18"
 
 // Operacion describe una operación de la API. Reintento: "seguro" (GET, preview, PATCH y todo POST/PUT con Idempotency-Key) o "solo_429".
