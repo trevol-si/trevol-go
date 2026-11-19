@@ -2959,7 +2959,7 @@
   "/dian_syncs": {
    "post": {
     "summary": "Sincronizar con la DIAN",
-    "description": "Ordena una sincronización con la DIAN, como «Sincronizar con la DIAN» en la app: el listado del portal de la DIAN (lo EMITIDO y, con `direction: all`, también lo RECIBIDO), sus XML, las resoluciones de numeración, los clientes y los productos. Trae lo de producción: solo con una llave `tvl_live_` de escritura (una de prueba recibe 403 `permission_denied` con `reason: live_mode_required`). Exige `Idempotency-Key`: repetir con la misma clave devuelve la MISMA sincronización. Responde 202 con el objeto `dian_sync`, `Location` y `Retry-After`; la sincronización toma minutos (las de años de facturas, más): el resultado llega por webhook (`dian_sync.completed` o `dian_sync.failed`) y con `GET /v1/dian_syncs/{id}`. `from` y `to` (AAAA-MM-DD): a lo sumo los últimos 3 meses (sin `from`, 3 meses; sin `to`, hoy); lo que ya se trajo no se borra. 409 `company_busy` (reintentable, con `existing_id` si es otra sincronización) si la empresa ya tiene una en curso u otro trámite con la DIAN; 422 `company_not_enabled` o `certificate_problem` si la empresa no puede entrar al portal; 429 `rate_limited` (`limit: dian_syncs`) con topes técnicos contra bucles: más de 60 por empresa en 24 horas, más de 60 por cuenta de Trevol en una hora, 5 de la cuenta en curso a la vez o si Trevol está atendiendo muchas a la vez (el `Retry-After` dice cuándo). **Se cobra del saldo** (solo en producción) el precio de `operation_prices` en `GET /v1/balance` (0 = gratis): se aparta al crearla, se cobra si termina bien y se devuelve si falla. Sin saldo: 402 `insufficient_balance` (con `balance_cop` y `price_cop`) y no se crea nada; la misma `Idempotency-Key` sirve después de recargar.",
+    "description": "Ordena una sincronización con la DIAN, como «Sincronizar con la DIAN» en la app: el listado del portal de la DIAN (lo EMITIDO y, con `direction: all`, también lo RECIBIDO), sus XML, las resoluciones de numeración, los clientes y los productos. Trae lo de producción: solo con una llave `tvl_live_` de escritura (una de prueba recibe 403 `permission_denied` con `reason: live_mode_required`). Exige `Idempotency-Key`: repetir con la misma clave devuelve la MISMA sincronización. Responde 202 con el objeto `dian_sync`, `Location` y `Retry-After`; la sincronización toma minutos (las de años de facturas, más): el resultado llega por webhook (`dian_sync.completed` o `dian_sync.failed`) y con `GET /v1/dian_syncs/{id}`. `from` y `to` (AAAA-MM-DD): a lo sumo los últimos 3 meses (sin `from`, 3 meses; sin `to`, hoy); lo que ya se trajo no se borra. 409 `company_busy` (reintentable, con `existing_id` si es otra sincronización) si la empresa ya tiene una en curso u otro trámite con la DIAN; 422 `company_not_enabled` o `certificate_problem` si la empresa no puede entrar al portal; 429 `rate_limited` (`limit: dian_syncs`) con topes técnicos contra bucles: más de 60 por empresa en 24 horas, más de 60 por cuenta de Trevol en una hora, 2 de la cuenta en curso a la vez o si Trevol está atendiendo muchas a la vez (el `Retry-After` dice cuándo). **Se cobra del saldo** (solo en producción) el precio de `operation_prices` en `GET /v1/balance` (0 = gratis): se aparta al crearla, se cobra si termina bien y se devuelve si falla. Sin saldo: 402 `insufficient_balance` (con `balance_cop` y `price_cop`) y no se crea nada; la misma `Idempotency-Key` sirve después de recargar.",
     "parameters": [
      {
       "name": "Idempotency-Key",
@@ -25365,7 +25365,7 @@
    },
    "post": {
     "summary": "Crear una llave de empresa",
-    "description": "Crea una llave `tvl_` de la empresa en el ambiente de tu llave de administración (`tvl_test_…` con una `tva_test_…`, `tvl_live_…` con una `tva_live_…`) y responde 201 con su `token` UNA vez: guárdalo, Trevol solo guarda su hash. `Idempotency-Key` obligatoria: repetirla devuelve la misma llave con `token: null` e `Idempotent-Replayed: true`. La empresa tiene que estar habilitada (si no, 422 `company_not_enabled`) y tener menos de 10 llaves activas, contando los dos ambientes (si no, 409 `key_limit_reached`). Por ahora, una llave de escritura de producción se crea en la app (403). `customers_read` solo si tu llave de administración tiene `customers:read` (si no, 403 con `required_permission`). Al titular de la cuenta le llega un correo. Pide `keys:write`: trata a esa llave como una que emite. Crear y revocar suman 60 por hora por llave (429 con `limit: api_keys`). Si revocas la llave de administración, caen con ella las llaves que creó.",
+    "description": "Crea una llave `tvl_` de la empresa en el ambiente de tu llave de administración (`tvl_test_…` con una `tva_test_…`, `tvl_live_…` con una `tva_live_…`) y responde 201 con su `token` UNA vez: guárdalo, Trevol solo guarda su hash. `Idempotency-Key` obligatoria: repetirla devuelve la misma llave con `token: null` e `Idempotent-Replayed: true`. La empresa tiene que estar habilitada (si no, 422 `company_not_enabled`) y tener menos de 10 llaves activas, contando los dos ambientes (si no, 409 `key_limit_reached`). `customers_read` solo si tu llave de administración tiene `customers:read` (si no, 403 con `required_permission`). Al titular de la cuenta le llega un correo. Pide `keys:write`: trata a esa llave como una que emite. Crear y revocar suman 60 por hora por llave (429 con `limit: api_keys`). Si revocas la llave de administración, caen con ella las llaves que creó.",
     "tags": [
      "Llave de administración"
     ],
@@ -25558,7 +25558,7 @@
           }
          },
          "escritura_live": {
-          "summary": "Una llave de escritura de producción",
+          "summary": "Una llave de escritura de producción, si Trevol la tiene apagada",
           "value": {
            "type": "https://platform.trevol.si/docs/errores#permission_denied",
            "title": "Sin permiso para esto",
@@ -42018,7 +42018,7 @@
         "report.failed"
        ]
       },
-      "description": "Eventos del catálogo (60 tipos, hasta 100 en la lista), o [\"*\"] para todos (no se mezcla). Solo existen en producción (llaves live): `balance.low`, `numbering.low`, `numbering.expiring`, `dian_sync.completed`, `dian_sync.failed`, `numbering_range.exhausted`. `webhook.test` no se suscribe."
+      "description": "Eventos del catálogo (69 tipos, hasta 100 en la lista), o [\"*\"] para todos (no se mezcla). Solo existen en producción (llaves live): `balance.low`, `numbering.low`, `numbering.expiring`, `dian_sync.completed`, `dian_sync.failed`, `numbering_range.exhausted`. `webhook.test` no se suscribe."
      },
      "catalog_version": {
       "type": "integer",
@@ -42202,7 +42202,7 @@
         "report.failed"
        ]
       },
-      "description": "Eventos del catálogo (60 tipos, hasta 100 en la lista), o [\"*\"] para todos (no se mezcla). Solo existen en producción (llaves live): `balance.low`, `numbering.low`, `numbering.expiring`, `dian_sync.completed`, `dian_sync.failed`, `numbering_range.exhausted`. `webhook.test` no se suscribe."
+      "description": "Eventos del catálogo (69 tipos, hasta 100 en la lista), o [\"*\"] para todos (no se mezcla). Solo existen en producción (llaves live): `balance.low`, `numbering.low`, `numbering.expiring`, `dian_sync.completed`, `dian_sync.failed`, `numbering_range.exhausted`. `webhook.test` no se suscribe."
      }
     }
    },
@@ -42304,7 +42304,7 @@
         "report.failed"
        ]
       },
-      "description": "Eventos del catálogo (60 tipos, hasta 100 en la lista), o [\"*\"] para todos (no se mezcla). Solo existen en producción (llaves live): `balance.low`, `numbering.low`, `numbering.expiring`, `dian_sync.completed`, `dian_sync.failed`, `numbering_range.exhausted`. `webhook.test` no se suscribe."
+      "description": "Eventos del catálogo (69 tipos, hasta 100 en la lista), o [\"*\"] para todos (no se mezcla). Solo existen en producción (llaves live): `balance.low`, `numbering.low`, `numbering.expiring`, `dian_sync.completed`, `dian_sync.failed`, `numbering_range.exhausted`. `webhook.test` no se suscribe."
      },
      "status": {
       "type": "string",
@@ -42428,7 +42428,7 @@
      },
      "api_version": {
       "type": "string",
-      "description": "La versión vigente más nueva de la API; el resumen del documento no cambia con la versión de la llave."
+      "description": "La versión del formato de los eventos (hoy `2026-10-22`), la misma para todas las llaves: el resumen del documento no cambia con la versión de la llave."
      },
      "data": {
       "oneOf": [
@@ -47687,7 +47687,7 @@
        "read",
        "write"
       ],
-      "description": "`read`: solo lee; `write`: emite y lee. Una de escritura de producción, por ahora, se crea en la app."
+      "description": "`read`: solo lee; `write`: emite y lee."
      },
      "allowed_ips": {
       "type": "array",

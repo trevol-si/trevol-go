@@ -26,7 +26,7 @@ type Event struct {
 	// UTC.
 	Timestamp *time.Time `json:"timestamp,omitempty"`
 	Environment *string `json:"environment,omitempty"`
-	// La versión vigente más nueva de la API; el resumen del documento no cambia con la versión de la llave.
+	// La versión del formato de los eventos (hoy `2026-10-22`), la misma para todas las llaves: el resumen del documento no cambia con la versión de la llave.
 	ApiVersion *string `json:"api_version,omitempty"`
 	// Los datos del evento, según su `type` (ver el esquema de cada tipo).
 	Data map[string]interface{} `json:"data,omitempty"`
