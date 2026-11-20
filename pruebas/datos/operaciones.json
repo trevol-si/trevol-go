@@ -265,61 +265,6 @@
       }
      ]
     }
-   },
-   {
-    "nombre": "pos_precio_incluido",
-    "resumen": "Tiquete POS con los precios de la caja (impuestos incluidos)",
-    "valor": {
-     "external_id": "TIQ-2",
-     "customer": {
-      "final_consumer": true
-     },
-     "pos": {
-      "register": {
-       "plate": "CJ-01",
-       "location": "Local 1, Jamundí",
-       "cashier": "PEREZ ANA",
-       "type": "Caja principal"
-      }
-     },
-     "payment": {
-      "form": "cash",
-      "methods": [
-       {
-        "code": "10"
-       }
-      ]
-     },
-     "items": [
-      {
-       "description": "Gaseosa 400 ml",
-       "code": "GAS-1",
-       "unit": "94",
-       "quantity": "2",
-       "unit_price": "3570",
-       "unit_price_includes_tax": true,
-       "taxes": [
-        {
-         "code": "01",
-         "rate": "19"
-        }
-       ]
-      },
-      {
-       "description": "Almuerzo",
-       "unit": "94",
-       "quantity": "1",
-       "unit_price": "19440",
-       "unit_price_includes_tax": true,
-       "taxes": [
-        {
-         "code": "04",
-         "rate": "8"
-        }
-       ]
-      }
-     ]
-    }
    }
   ],
   "llave": "api_o_administracion"
@@ -539,57 +484,6 @@
      "payment": {
       "form": "cash"
      }
-    }
-   },
-   {
-    "nombre": "precio_incluido",
-    "resumen": "Venta de mostrador con precios con IVA incluido",
-    "valor": {
-     "external_id": "TIENDA-2026-004512",
-     "customer": {
-      "final_consumer": true
-     },
-     "payment": {
-      "form": "cash",
-      "methods": [
-       {
-        "code": "10"
-       }
-      ]
-     },
-     "items": [
-      {
-       "code": "CAM-M",
-       "description": "Camiseta talla M",
-       "quantity": "3",
-       "unit_price": "5000",
-       "unit_price_includes_tax": true,
-       "taxes": [
-        {
-         "code": "01",
-         "rate": "19"
-        }
-       ]
-      },
-      {
-       "code": "BOL-1",
-       "description": "Bolsa con logo",
-       "unit": "NIU",
-       "quantity": "1",
-       "unit_price": "250",
-       "unit_price_includes_tax": true,
-       "taxes": [
-        {
-         "code": "01",
-         "rate": "19"
-        },
-        {
-         "code": "22",
-         "unit_amount": "66"
-        }
-       ]
-      }
-     ]
     }
    }
   ],
@@ -1293,61 +1187,6 @@
       }
      ]
     }
-   },
-   {
-    "nombre": "pos_precio_incluido",
-    "resumen": "Tiquete POS con los precios de la caja (impuestos incluidos)",
-    "valor": {
-     "external_id": "TIQ-2",
-     "customer": {
-      "final_consumer": true
-     },
-     "pos": {
-      "register": {
-       "plate": "CJ-01",
-       "location": "Local 1, Jamundí",
-       "cashier": "PEREZ ANA",
-       "type": "Caja principal"
-      }
-     },
-     "payment": {
-      "form": "cash",
-      "methods": [
-       {
-        "code": "10"
-       }
-      ]
-     },
-     "items": [
-      {
-       "description": "Gaseosa 400 ml",
-       "code": "GAS-1",
-       "unit": "94",
-       "quantity": "2",
-       "unit_price": "3570",
-       "unit_price_includes_tax": true,
-       "taxes": [
-        {
-         "code": "01",
-         "rate": "19"
-        }
-       ]
-      },
-      {
-       "description": "Almuerzo",
-       "unit": "94",
-       "quantity": "1",
-       "unit_price": "19440",
-       "unit_price_includes_tax": true,
-       "taxes": [
-        {
-         "code": "04",
-         "rate": "8"
-        }
-       ]
-      }
-     ]
-    }
    }
   ],
   "llave": "api_o_administracion"
@@ -1555,57 +1394,6 @@
      "payment": {
       "form": "cash"
      }
-    }
-   },
-   {
-    "nombre": "precio_incluido",
-    "resumen": "Venta de mostrador con precios con IVA incluido",
-    "valor": {
-     "external_id": "TIENDA-2026-004512",
-     "customer": {
-      "final_consumer": true
-     },
-     "payment": {
-      "form": "cash",
-      "methods": [
-       {
-        "code": "10"
-       }
-      ]
-     },
-     "items": [
-      {
-       "code": "CAM-M",
-       "description": "Camiseta talla M",
-       "quantity": "3",
-       "unit_price": "5000",
-       "unit_price_includes_tax": true,
-       "taxes": [
-        {
-         "code": "01",
-         "rate": "19"
-        }
-       ]
-      },
-      {
-       "code": "BOL-1",
-       "description": "Bolsa con logo",
-       "unit": "NIU",
-       "quantity": "1",
-       "unit_price": "250",
-       "unit_price_includes_tax": true,
-       "taxes": [
-        {
-         "code": "01",
-         "rate": "19"
-        },
-        {
-         "code": "22",
-         "unit_amount": "66"
-        }
-       ]
-      }
-     ]
     }
    }
   ],
@@ -5098,61 +4886,6 @@
       }
      ]
     }
-   },
-   {
-    "nombre": "pos_precio_incluido",
-    "resumen": "Tiquete POS con los precios de la caja (impuestos incluidos)",
-    "valor": {
-     "external_id": "TIQ-2",
-     "customer": {
-      "final_consumer": true
-     },
-     "pos": {
-      "register": {
-       "plate": "CJ-01",
-       "location": "Local 1, Jamundí",
-       "cashier": "PEREZ ANA",
-       "type": "Caja principal"
-      }
-     },
-     "payment": {
-      "form": "cash",
-      "methods": [
-       {
-        "code": "10"
-       }
-      ]
-     },
-     "items": [
-      {
-       "description": "Gaseosa 400 ml",
-       "code": "GAS-1",
-       "unit": "94",
-       "quantity": "2",
-       "unit_price": "3570",
-       "unit_price_includes_tax": true,
-       "taxes": [
-        {
-         "code": "01",
-         "rate": "19"
-        }
-       ]
-      },
-      {
-       "description": "Almuerzo",
-       "unit": "94",
-       "quantity": "1",
-       "unit_price": "19440",
-       "unit_price_includes_tax": true,
-       "taxes": [
-        {
-         "code": "04",
-         "rate": "8"
-        }
-       ]
-      }
-     ]
-    }
    }
   ],
   "llave": "api_o_administracion"
@@ -5346,57 +5079,6 @@
      "payment": {
       "form": "cash"
      }
-    }
-   },
-   {
-    "nombre": "precio_incluido",
-    "resumen": "Venta de mostrador con precios con IVA incluido",
-    "valor": {
-     "external_id": "TIENDA-2026-004512",
-     "customer": {
-      "final_consumer": true
-     },
-     "payment": {
-      "form": "cash",
-      "methods": [
-       {
-        "code": "10"
-       }
-      ]
-     },
-     "items": [
-      {
-       "code": "CAM-M",
-       "description": "Camiseta talla M",
-       "quantity": "3",
-       "unit_price": "5000",
-       "unit_price_includes_tax": true,
-       "taxes": [
-        {
-         "code": "01",
-         "rate": "19"
-        }
-       ]
-      },
-      {
-       "code": "BOL-1",
-       "description": "Bolsa con logo",
-       "unit": "NIU",
-       "quantity": "1",
-       "unit_price": "250",
-       "unit_price_includes_tax": true,
-       "taxes": [
-        {
-         "code": "01",
-         "rate": "19"
-        },
-        {
-         "code": "22",
-         "unit_amount": "66"
-        }
-       ]
-      }
-     ]
     }
    }
   ],

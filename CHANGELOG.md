@@ -20,7 +20,6 @@ aditivo: el código que ya funciona no cambia.
   devuelve en `numbering`.
 - `pdf_design_id` al crear o corregir facturas, notas y documentos equivalentes POS; esos documentos traen `pdf_design_id` y
   `pdf_design`.
-- Las líneas de los documentos aceptan `unit_price_includes_tax`.
 - `simulated` en los documentos, el lote, la empresa y los eventos de la empresa simulada.
 - Webhooks: `follow_latest_catalog` en los endpoints.
 - Errores tipados para los códigos nuevos: `logo_invalid` y `pdf_design_invalid` → `KindValidation`; `pdf_design_limit_reached`,

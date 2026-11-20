@@ -25,10 +25,6 @@ type DocumentTotalsItem struct {
 	LineExtension *string `json:"line_extension,omitempty"`
 	Charge *string `json:"charge,omitempty"`
 	CommercialValue *string `json:"commercial_value,omitempty"`
-	// Solo en las líneas con unit_price_includes_tax: el precio unitario sin impuestos que Trevol derivó (hasta 6 decimales), en la moneda de totals.
-	NetUnitPrice *string `json:"net_unit_price,omitempty"`
-	// Solo en las líneas con unit_price_includes_tax: line_extension más los impuestos de la línea, en la moneda de totals.
-	Total *string `json:"total,omitempty"`
 	AdditionalProperties map[string]interface{}
 }
 
@@ -211,70 +207,6 @@ func (o *DocumentTotalsItem) SetCommercialValue(v string) {
 	o.CommercialValue = &v
 }
 
-// GetNetUnitPrice returns the NetUnitPrice field value if set, zero value otherwise.
-func (o *DocumentTotalsItem) GetNetUnitPrice() string {
-	if o == nil || IsNil(o.NetUnitPrice) {
-		var ret string
-		return ret
-	}
-	return *o.NetUnitPrice
-}
-
-// GetNetUnitPriceOk returns a tuple with the NetUnitPrice field value if set, nil otherwise
-// and a boolean to check if the value has been set.
-func (o *DocumentTotalsItem) GetNetUnitPriceOk() (*string, bool) {
-	if o == nil || IsNil(o.NetUnitPrice) {
-		return nil, false
-	}
-	return o.NetUnitPrice, true
-}
-
-// HasNetUnitPrice returns a boolean if a field has been set.
-func (o *DocumentTotalsItem) HasNetUnitPrice() bool {
-	if o != nil && !IsNil(o.NetUnitPrice) {
-		return true
-	}
-
-	return false
-}
-
-// SetNetUnitPrice gets a reference to the given string and assigns it to the NetUnitPrice field.
-func (o *DocumentTotalsItem) SetNetUnitPrice(v string) {
-	o.NetUnitPrice = &v
-}
-
-// GetTotal returns the Total field value if set, zero value otherwise.
-func (o *DocumentTotalsItem) GetTotal() string {
-	if o == nil || IsNil(o.Total) {
-		var ret string
-		return ret
-	}
-	return *o.Total
-}
-
-// GetTotalOk returns a tuple with the Total field value if set, nil otherwise
-// and a boolean to check if the value has been set.
-func (o *DocumentTotalsItem) GetTotalOk() (*string, bool) {
-	if o == nil || IsNil(o.Total) {
-		return nil, false
-	}
-	return o.Total, true
-}
-
-// HasTotal returns a boolean if a field has been set.
-func (o *DocumentTotalsItem) HasTotal() bool {
-	if o != nil && !IsNil(o.Total) {
-		return true
-	}
-
-	return false
-}
-
-// SetTotal gets a reference to the given string and assigns it to the Total field.
-func (o *DocumentTotalsItem) SetTotal(v string) {
-	o.Total = &v
-}
-
 func (o DocumentTotalsItem) MarshalJSON() ([]byte, error) {
 	toSerialize,err := o.ToMap()
 	if err != nil {
@@ -299,12 +231,6 @@ func (o DocumentTotalsItem) ToMap() (map[string]interface{}, error) {
 	}
 	if !IsNil(o.CommercialValue) {
 		toSerialize["commercial_value"] = o.CommercialValue
-	}
-	if !IsNil(o.NetUnitPrice) {
-		toSerialize["net_unit_price"] = o.NetUnitPrice
-	}
-	if !IsNil(o.Total) {
-		toSerialize["total"] = o.Total
 	}
 
 	for key, value := range o.AdditionalProperties {
@@ -333,8 +259,6 @@ func (o *DocumentTotalsItem) UnmarshalJSON(data []byte) (err error) {
 		delete(additionalProperties, "line_extension")
 		delete(additionalProperties, "charge")
 		delete(additionalProperties, "commercial_value")
-		delete(additionalProperties, "net_unit_price")
-		delete(additionalProperties, "total")
 		o.AdditionalProperties = additionalProperties
 	}
 

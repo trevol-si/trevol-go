@@ -4723,56 +4723,6 @@
            "form": "cash"
           }
          }
-        },
-        "precio_incluido": {
-         "summary": "Venta de mostrador con precios con IVA incluido",
-         "value": {
-          "external_id": "TIENDA-2026-004512",
-          "customer": {
-           "final_consumer": true
-          },
-          "payment": {
-           "form": "cash",
-           "methods": [
-            {
-             "code": "10"
-            }
-           ]
-          },
-          "items": [
-           {
-            "code": "CAM-M",
-            "description": "Camiseta talla M",
-            "quantity": "3",
-            "unit_price": "5000",
-            "unit_price_includes_tax": true,
-            "taxes": [
-             {
-              "code": "01",
-              "rate": "19"
-             }
-            ]
-           },
-           {
-            "code": "BOL-1",
-            "description": "Bolsa con logo",
-            "unit": "NIU",
-            "quantity": "1",
-            "unit_price": "250",
-            "unit_price_includes_tax": true,
-            "taxes": [
-             {
-              "code": "01",
-              "rate": "19"
-             },
-             {
-              "code": "22",
-              "unit_amount": "66"
-             }
-            ]
-           }
-          ]
-         }
         }
        }
       }
@@ -5377,56 +5327,6 @@
            "form": "cash"
           }
          }
-        },
-        "precio_incluido": {
-         "summary": "Venta de mostrador con precios con IVA incluido",
-         "value": {
-          "external_id": "TIENDA-2026-004512",
-          "customer": {
-           "final_consumer": true
-          },
-          "payment": {
-           "form": "cash",
-           "methods": [
-            {
-             "code": "10"
-            }
-           ]
-          },
-          "items": [
-           {
-            "code": "CAM-M",
-            "description": "Camiseta talla M",
-            "quantity": "3",
-            "unit_price": "5000",
-            "unit_price_includes_tax": true,
-            "taxes": [
-             {
-              "code": "01",
-              "rate": "19"
-             }
-            ]
-           },
-           {
-            "code": "BOL-1",
-            "description": "Bolsa con logo",
-            "unit": "NIU",
-            "quantity": "1",
-            "unit_price": "250",
-            "unit_price_includes_tax": true,
-            "taxes": [
-             {
-              "code": "01",
-              "rate": "19"
-             },
-             {
-              "code": "22",
-              "unit_amount": "66"
-             }
-            ]
-           }
-          ]
-         }
         }
        }
       }
@@ -5440,106 +5340,7 @@
         "schema": {
          "$ref": "#/components/schemas/Preview"
         },
-        "examples": {
-         "precio_incluido": {
-          "summary": "Precios con IVA incluido: el precio sin impuestos y el total de cada línea",
-          "value": {
-           "object": "preview",
-           "document": "invoice",
-           "environment": "test",
-           "customer": {
-            "final_consumer": true
-           },
-           "payment": {
-            "form": "cash",
-            "methods": [
-             {
-              "code": "10"
-             }
-            ]
-           },
-           "items": [
-            {
-             "code": "CAM-M",
-             "description": "Camiseta talla M",
-             "quantity": "3",
-             "unit_price": "5000",
-             "unit_price_includes_tax": true,
-             "taxes": [
-              {
-               "code": "01",
-               "rate": "19"
-              }
-             ]
-            },
-            {
-             "code": "BOL-1",
-             "description": "Bolsa con logo",
-             "unit": "NIU",
-             "quantity": "1",
-             "unit_price": "250",
-             "unit_price_includes_tax": true,
-             "taxes": [
-              {
-               "code": "01",
-               "rate": "19"
-              },
-              {
-               "code": "22",
-               "unit_amount": "66"
-              }
-             ]
-            }
-           ],
-           "totals": {
-            "subtotal": "12759.66",
-            "discounts": "0.00",
-            "line_extension": "12759.66",
-            "tax_exclusive": "12759.66",
-            "taxes": [
-             {
-              "code": "01",
-              "name": "IVA",
-              "rate": "19.00",
-              "base": "12759.66",
-              "amount": "2424.34"
-             },
-             {
-              "code": "22",
-              "name": "INC Bolsas",
-              "unit": "NIU",
-              "quantity": "1",
-              "unit_amount": "66",
-              "amount": "66.00"
-             }
-            ],
-            "allowances": "0.00",
-            "charges": "0.00",
-            "rounding": "0.00",
-            "total": "15250.00",
-            "withholdings": [],
-            "prepayments": "0.00",
-            "net_payable": null,
-            "items": [
-             {
-              "gross": "12605.04",
-              "discount": "0.00",
-              "line_extension": "12605.04",
-              "net_unit_price": "4201.68",
-              "total": "15000.00"
-             },
-             {
-              "gross": "154.62",
-              "discount": "0.00",
-              "line_extension": "154.62",
-              "net_unit_price": "154.62",
-              "total": "250.00"
-             }
-            ]
-           }
-          }
-         }
-        }
+        "examples": {}
        }
       },
       "headers": {
@@ -5881,56 +5682,6 @@
           "payment": {
            "form": "cash"
           }
-         }
-        },
-        "precio_incluido": {
-         "summary": "Venta de mostrador con precios con IVA incluido",
-         "value": {
-          "external_id": "TIENDA-2026-004512",
-          "customer": {
-           "final_consumer": true
-          },
-          "payment": {
-           "form": "cash",
-           "methods": [
-            {
-             "code": "10"
-            }
-           ]
-          },
-          "items": [
-           {
-            "code": "CAM-M",
-            "description": "Camiseta talla M",
-            "quantity": "3",
-            "unit_price": "5000",
-            "unit_price_includes_tax": true,
-            "taxes": [
-             {
-              "code": "01",
-              "rate": "19"
-             }
-            ]
-           },
-           {
-            "code": "BOL-1",
-            "description": "Bolsa con logo",
-            "unit": "NIU",
-            "quantity": "1",
-            "unit_price": "250",
-            "unit_price_includes_tax": true,
-            "taxes": [
-             {
-              "code": "01",
-              "rate": "19"
-             },
-             {
-              "code": "22",
-              "unit_amount": "66"
-             }
-            ]
-           }
-          ]
          }
         }
        }
@@ -14209,60 +13960,6 @@
            }
           ]
          }
-        },
-        "pos_precio_incluido": {
-         "summary": "Tiquete POS con los precios de la caja (impuestos incluidos)",
-         "value": {
-          "external_id": "TIQ-2",
-          "customer": {
-           "final_consumer": true
-          },
-          "pos": {
-           "register": {
-            "plate": "CJ-01",
-            "location": "Local 1, Jamundí",
-            "cashier": "PEREZ ANA",
-            "type": "Caja principal"
-           }
-          },
-          "payment": {
-           "form": "cash",
-           "methods": [
-            {
-             "code": "10"
-            }
-           ]
-          },
-          "items": [
-           {
-            "description": "Gaseosa 400 ml",
-            "code": "GAS-1",
-            "unit": "94",
-            "quantity": "2",
-            "unit_price": "3570",
-            "unit_price_includes_tax": true,
-            "taxes": [
-             {
-              "code": "01",
-              "rate": "19"
-             }
-            ]
-           },
-           {
-            "description": "Almuerzo",
-            "unit": "94",
-            "quantity": "1",
-            "unit_price": "19440",
-            "unit_price_includes_tax": true,
-            "taxes": [
-             {
-              "code": "04",
-              "rate": "8"
-             }
-            ]
-           }
-          ]
-         }
         }
        }
       }
@@ -15001,60 +14698,6 @@
            }
           ]
          }
-        },
-        "pos_precio_incluido": {
-         "summary": "Tiquete POS con los precios de la caja (impuestos incluidos)",
-         "value": {
-          "external_id": "TIQ-2",
-          "customer": {
-           "final_consumer": true
-          },
-          "pos": {
-           "register": {
-            "plate": "CJ-01",
-            "location": "Local 1, Jamundí",
-            "cashier": "PEREZ ANA",
-            "type": "Caja principal"
-           }
-          },
-          "payment": {
-           "form": "cash",
-           "methods": [
-            {
-             "code": "10"
-            }
-           ]
-          },
-          "items": [
-           {
-            "description": "Gaseosa 400 ml",
-            "code": "GAS-1",
-            "unit": "94",
-            "quantity": "2",
-            "unit_price": "3570",
-            "unit_price_includes_tax": true,
-            "taxes": [
-             {
-              "code": "01",
-              "rate": "19"
-             }
-            ]
-           },
-           {
-            "description": "Almuerzo",
-            "unit": "94",
-            "quantity": "1",
-            "unit_price": "19440",
-            "unit_price_includes_tax": true,
-            "taxes": [
-             {
-              "code": "04",
-              "rate": "8"
-             }
-            ]
-           }
-          ]
-         }
         }
        }
       }
@@ -15519,60 +15162,6 @@
             "unit": "94",
             "quantity": "1",
             "unit_price": "18000"
-           }
-          ]
-         }
-        },
-        "pos_precio_incluido": {
-         "summary": "Tiquete POS con los precios de la caja (impuestos incluidos)",
-         "value": {
-          "external_id": "TIQ-2",
-          "customer": {
-           "final_consumer": true
-          },
-          "pos": {
-           "register": {
-            "plate": "CJ-01",
-            "location": "Local 1, Jamundí",
-            "cashier": "PEREZ ANA",
-            "type": "Caja principal"
-           }
-          },
-          "payment": {
-           "form": "cash",
-           "methods": [
-            {
-             "code": "10"
-            }
-           ]
-          },
-          "items": [
-           {
-            "description": "Gaseosa 400 ml",
-            "code": "GAS-1",
-            "unit": "94",
-            "quantity": "2",
-            "unit_price": "3570",
-            "unit_price_includes_tax": true,
-            "taxes": [
-             {
-              "code": "01",
-              "rate": "19"
-             }
-            ]
-           },
-           {
-            "description": "Almuerzo",
-            "unit": "94",
-            "quantity": "1",
-            "unit_price": "19440",
-            "unit_price_includes_tax": true,
-            "taxes": [
-             {
-              "code": "04",
-              "rate": "8"
-             }
-            ]
            }
           ]
          }
@@ -46279,11 +45868,7 @@
         "type": "number"
        }
       ],
-      "description": "Precio unitario SIN impuestos (con unit_price_includes_tax, con ellos)."
-     },
-     "unit_price_includes_tax": {
-      "type": "boolean",
-      "description": "true: unit_price trae los impuestos de la línea; Trevol calcula el precio sin ellos."
+      "description": "Precio unitario SIN impuestos."
      },
      "taxes": {
       "type": "array",
@@ -47141,11 +46726,7 @@
         "type": "number"
        }
       ],
-      "description": "Precio unitario SIN impuestos (con unit_price_includes_tax, con ellos)."
-     },
-     "unit_price_includes_tax": {
-      "type": "boolean",
-      "description": "true: unit_price trae los impuestos de la línea; Trevol calcula el precio sin ellos."
+      "description": "Precio unitario SIN impuestos."
      },
      "taxes": {
       "type": "array",
@@ -47231,11 +46812,7 @@
         "type": "number"
        }
       ],
-      "description": "Precio unitario SIN impuestos (con unit_price_includes_tax, con ellos)."
-     },
-     "unit_price_includes_tax": {
-      "type": "boolean",
-      "description": "true: unit_price trae los impuestos de la línea; Trevol calcula el precio sin ellos."
+      "description": "Precio unitario SIN impuestos."
      },
      "taxes": {
       "type": "array",
@@ -47345,11 +46922,7 @@
         "type": "number"
        }
       ],
-      "description": "Precio unitario SIN impuestos (con unit_price_includes_tax, con ellos)."
-     },
-     "unit_price_includes_tax": {
-      "type": "boolean",
-      "description": "true: unit_price trae los impuestos de la línea; Trevol calcula el precio sin ellos."
+      "description": "Precio unitario SIN impuestos."
      },
      "taxes": {
       "type": "array",
@@ -47460,11 +47033,7 @@
         "type": "number"
        }
       ],
-      "description": "Precio unitario SIN impuestos (con unit_price_includes_tax, con ellos)."
-     },
-     "unit_price_includes_tax": {
-      "type": "boolean",
-      "description": "true: unit_price trae los impuestos de la línea; Trevol calcula el precio sin ellos."
+      "description": "Precio unitario SIN impuestos."
      },
      "taxes": {
       "type": "array",
@@ -52125,16 +51694,6 @@
           "commercial_value": {
            "type": "string",
            "pattern": "^-?\\d+\\.\\d{2}$"
-          },
-          "net_unit_price": {
-           "type": "string",
-           "pattern": "^\\d+\\.\\d{2,6}$",
-           "description": "Solo en las líneas con unit_price_includes_tax: el precio unitario sin impuestos que Trevol derivó (hasta 6 decimales), en la moneda de totals."
-          },
-          "total": {
-           "type": "string",
-           "pattern": "^-?\\d+\\.\\d{2}$",
-           "description": "Solo en las líneas con unit_price_includes_tax: line_extension más los impuestos de la línea, en la moneda de totals."
           }
          }
         }
@@ -52635,16 +52194,6 @@
           "commercial_value": {
            "type": "string",
            "pattern": "^-?\\d+\\.\\d{2}$"
-          },
-          "net_unit_price": {
-           "type": "string",
-           "pattern": "^\\d+\\.\\d{2,6}$",
-           "description": "Solo en las líneas con unit_price_includes_tax: el precio unitario sin impuestos que Trevol derivó (hasta 6 decimales), en la moneda de totals."
-          },
-          "total": {
-           "type": "string",
-           "pattern": "^-?\\d+\\.\\d{2}$",
-           "description": "Solo en las líneas con unit_price_includes_tax: line_extension más los impuestos de la línea, en la moneda de totals."
           }
          }
         }
@@ -53042,16 +52591,6 @@
           "commercial_value": {
            "type": "string",
            "pattern": "^-?\\d+\\.\\d{2}$"
-          },
-          "net_unit_price": {
-           "type": "string",
-           "pattern": "^\\d+\\.\\d{2,6}$",
-           "description": "Solo en las líneas con unit_price_includes_tax: el precio unitario sin impuestos que Trevol derivó (hasta 6 decimales), en la moneda de totals."
-          },
-          "total": {
-           "type": "string",
-           "pattern": "^-?\\d+\\.\\d{2}$",
-           "description": "Solo en las líneas con unit_price_includes_tax: line_extension más los impuestos de la línea, en la moneda de totals."
           }
          }
         }
@@ -53464,16 +53003,6 @@
           "commercial_value": {
            "type": "string",
            "pattern": "^-?\\d+\\.\\d{2}$"
-          },
-          "net_unit_price": {
-           "type": "string",
-           "pattern": "^\\d+\\.\\d{2,6}$",
-           "description": "Solo en las líneas con unit_price_includes_tax: el precio unitario sin impuestos que Trevol derivó (hasta 6 decimales), en la moneda de totals."
-          },
-          "total": {
-           "type": "string",
-           "pattern": "^-?\\d+\\.\\d{2}$",
-           "description": "Solo en las líneas con unit_price_includes_tax: line_extension más los impuestos de la línea, en la moneda de totals."
           }
          }
         }
@@ -53970,16 +53499,6 @@
           "commercial_value": {
            "type": "string",
            "pattern": "^-?\\d+\\.\\d{2}$"
-          },
-          "net_unit_price": {
-           "type": "string",
-           "pattern": "^\\d+\\.\\d{2,6}$",
-           "description": "Solo en las líneas con unit_price_includes_tax: el precio unitario sin impuestos que Trevol derivó (hasta 6 decimales), en la moneda de totals."
-          },
-          "total": {
-           "type": "string",
-           "pattern": "^-?\\d+\\.\\d{2}$",
-           "description": "Solo en las líneas con unit_price_includes_tax: line_extension más los impuestos de la línea, en la moneda de totals."
           }
          }
         }
@@ -57826,7 +57345,7 @@
        "unreadable",
        "unsupported_format"
       ],
-      "description": "En `company_not_enabled` (`missing_legal_representative`, `missing_pin`, `missing_software`, `payroll_not_enabled`), en `numbering_unavailable` (`missing_technical_key`, `no_contingency_numbering`, `no_resolution`, `prefix_in_use`, `resolution_exhausted`, `resolution_expired`, `resolution_not_yet_valid`) y en `invalid_state` al reenviar el correo (`delivery_incomplete`, `delivery_pending`, `email_suppressed`, `no_recipient`, `not_accepted`): por qué. En `automatic_mode_unavailable` (`credentials_missing`, `mandate_required`: falta el mandato para integraciones que se acepta en la app, `disabled`) y en `permission_denied` de una ruta que solo existe en producción (`live_mode_required`). En `permission_denied` de una llave de administración: `environment_mismatch` (`Trevol-Environment` no es el ambiente de la llave), `live_mode_required` (el alta de empresas pide una llave de producción) y `scope_list` (una llave con alcance de lista no da de alta empresas; como esa llave no puede tener `companies:write`, lo que llega en la práctica es el 403 con `required_permission: companies:write`). En `logo_invalid` (`animated`, `empty`, `svg_not_supported`, `too_large`, `too_many_pixels`, `too_small`, `unreadable`, `unsupported_format`) y en `permission_denied` del diseño del PDF (`pdf_design_writes_disabled`: el titular no permitió en la app que la API lo cambie). En `permission_denied` de una llave de la empresa simulada: `simulated_not_supported` (eso no existe en el entorno simulado: el adquiriente en la DIAN, RADIAN, el saldo y las recargas, el XML de un documento de la DIAN, el documento equivalente y la nómina; o el entorno simulado está apagado)."
+      "description": "En `company_not_enabled` (`missing_legal_representative`, `missing_pin`, `missing_software`, `payroll_not_enabled`), en `numbering_unavailable` (`missing_technical_key`, `no_contingency_numbering`, `no_resolution`, `prefix_in_use`, `resolution_exhausted`, `resolution_expired`, `resolution_not_yet_valid`) y en `invalid_state` al reenviar el correo (`delivery_incomplete`, `delivery_pending`, `email_suppressed`, `no_recipient`, `not_accepted`): por qué. En `automatic_mode_unavailable` (`credentials_missing`, `mandate_required`: falta el mandato para integraciones que se acepta en la app, `disabled`) y en `permission_denied` de una ruta que solo existe en producción (`live_mode_required`). En `permission_denied` de una llave de administración: `environment_mismatch` (`Trevol-Environment` no es el ambiente de la llave), `live_mode_required` (el alta de empresas pide una llave de producción) y `scope_list` (una llave con alcance de lista no da de alta empresas; como esa llave no puede tener `companies:write`, lo que llega en la práctica es el 403 con `required_permission: companies:write`). En `logo_invalid` (`animated`, `empty`, `svg_not_supported`, `too_large`, `too_many_pixels`, `too_small`, `unreadable`, `unsupported_format`) y en `permission_denied` del diseño del PDF (`pdf_design_writes_disabled`: el titular no permitió en la app que la API lo cambie). En `permission_denied` de una llave de la empresa simulada: `simulated_not_supported` (eso no existe en el entorno simulado: el adquiriente en la DIAN, RADIAN, el saldo y las recargas, el XML de un documento de la DIAN, el reenvío del correo, el documento equivalente y la nómina; o el entorno simulado está apagado)."
      },
      "previous": {
       "type": "string",
@@ -57856,7 +57375,7 @@
      },
      "limit": {
       "type": "string",
-      "description": "En `rate_limited`: qué límite se pasó (`email_resend`: los reenvíos del correo de un documento o de la empresa en el día). Con una llave de administración: `lecturas` (600 peticiones por minuto de la llave en `/v1/account`), `account_key` (el mismo contador, visto desde una ruta de empresa), `api_keys` (60 llaves de empresa creadas o revocadas por hora) y `account_queries` (60 consultas de documentos o eventos por minuto, sumando las llaves de la cuenta). En `company_limit_reached`: `hour` (20 altas por hora) o `day` (100 por día). `simulated`: un tope del entorno simulado (los envíos por hora de todas las cuentas, o demasiados documentos o webhooks por procesar en tu empresa simulada o en todo el entorno)."
+      "description": "En `rate_limited`: qué límite se pasó (`email_resend`: los reenvíos del correo de un documento o de la empresa en el día; `pdf_design`: los cambios de diseño del PDF o del logo seguidos, que no son la ventana de las cabeceras RateLimit). Con una llave de administración: `lecturas` (600 peticiones por minuto de la llave en `/v1/account`), `account_key` (el mismo contador, visto desde una ruta de empresa), `api_keys` (60 llaves de empresa creadas o revocadas por hora) y `account_queries` (60 consultas de documentos o eventos por minuto, sumando las llaves de la cuenta). En `company_limit_reached`: `hour` (20 altas por hora) o `day` (100 por día). `simulated`: un tope del entorno simulado (las peticiones por minuto de tu empresa simulada, sumando sus llaves; las de todas las cuentas en unos segundos o los envíos por hora; o demasiados documentos o webhooks por procesar en tu empresa simulada o en todo el entorno)."
      },
      "available_from": {
       "type": [
@@ -59874,11 +59393,7 @@
         "type": "number"
        }
       ],
-      "description": "Precio unitario SIN impuestos (con unit_price_includes_tax, con ellos)."
-     },
-     "unit_price_includes_tax": {
-      "type": "boolean",
-      "description": "true: unit_price trae los impuestos de la línea; Trevol calcula el precio sin ellos."
+      "description": "Precio unitario SIN impuestos."
      },
      "taxes": {
       "type": "array",
@@ -60021,11 +59536,7 @@
         "type": "number"
        }
       ],
-      "description": "Precio unitario SIN impuestos (con unit_price_includes_tax, con ellos)."
-     },
-     "unit_price_includes_tax": {
-      "type": "boolean",
-      "description": "true: unit_price trae los impuestos de la línea; Trevol calcula el precio sin ellos."
+      "description": "Precio unitario SIN impuestos."
      },
      "taxes": {
       "type": "array",
@@ -60136,11 +59647,7 @@
         "type": "number"
        }
       ],
-      "description": "Precio unitario SIN impuestos (con unit_price_includes_tax, con ellos)."
-     },
-     "unit_price_includes_tax": {
-      "type": "boolean",
-      "description": "true: unit_price trae los impuestos de la línea; Trevol calcula el precio sin ellos."
+      "description": "Precio unitario SIN impuestos."
      },
      "taxes": {
       "type": "array",
