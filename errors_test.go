@@ -53,8 +53,8 @@ func TestCadaCodeVaASuClaseATravesDeUnMetodoGenerado(t *testing.T) {
 			})
 		}
 	}
-	if total != 43 {
-		t.Errorf("hay %d codes, esperados 43", total)
+	if total != 49 { // 43 + los 6 del diseño del PDF (0.4.0)
+		t.Errorf("hay %d codes, esperados 49", total)
 	}
 }
 

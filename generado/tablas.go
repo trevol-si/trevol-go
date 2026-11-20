@@ -4,7 +4,7 @@ package generado
 
 import "encoding/json"
 
-const Version = "0.3.1"
+const Version = "0.4.0"
 const APIVersion = "2026-11-18"
 
 // Operacion describe una operación de la API. Reintento: "seguro" (GET, preview, PATCH y todo POST/PUT con Idempotency-Key que no devuelva un secreto una sola vez) o "solo_429".
@@ -15,13 +15,14 @@ type Operacion struct {
 	Recurso     string
 	Idempotente bool
 	Reintento   string
-	// Binario es "pdf", "xml", "zip", "csv" (los reportes: CSV o Excel) o "" si la respuesta es JSON.
+	// Binario es "pdf", "xml", "zip", "csv" (los reportes: CSV o Excel), "png" (el logo de la empresa) o "" si la respuesta es JSON.
 	Binario string
 	// Llave es "api_o_administracion" (tvl_, o tva_ con Trevol-Company y Trevol-Environment), "administracion" (solo tva_) o "ninguna".
 	Llave string
 }
 
 var Operaciones = []Operacion{
+	{"archivePdfDesign", "POST", "/pdf_designs/{id}/archive", "PdfDesigns", false, "solo_429", "", "api_o_administracion"},
 	{"associateNumberingRange", "POST", "/numbering_ranges/{id}/associate", "NumberingRanges", true, "seguro", "", "api_o_administracion"},
 	{"cancelNumberingRequest", "POST", "/numbering_requests/{id}/cancel", "NumberingRequests", false, "solo_429", "", "api_o_administracion"},
 	{"correctCreditNote", "PUT", "/credit_notes/{id}", "CreditNotes", true, "seguro", "", "api_o_administracion"},
@@ -48,6 +49,7 @@ var Operaciones = []Operacion{
 	{"createPaperNumberingRange", "POST", "/paper_numbering_ranges", "PaperNumberingRanges", true, "seguro", "", "api_o_administracion"},
 	{"createPayroll", "POST", "/payrolls", "Payrolls", true, "seguro", "", "api_o_administracion"},
 	{"createPayrollAdjustment", "POST", "/payroll_adjustments", "PayrollAdjustments", true, "seguro", "", "api_o_administracion"},
+	{"createPdfDesign", "POST", "/pdf_designs", "PdfDesigns", true, "seguro", "", "api_o_administracion"},
 	{"createProduct", "POST", "/products", "Products", true, "seguro", "", "api_o_administracion"},
 	{"createRadianEvent", "POST", "/radian_events", "RadianEvents", true, "seguro", "", "api_o_administracion"},
 	{"createReportRun", "POST", "/report_runs", "ReportRuns", true, "seguro", "", "api_o_administracion"},
@@ -55,6 +57,7 @@ var Operaciones = []Operacion{
 	{"createSupportDocumentAdjustment", "POST", "/support_document_adjustments", "SupportDocumentAdjustments", true, "seguro", "", "api_o_administracion"},
 	{"createWebhookEndpoint", "POST", "/webhook_endpoints", "WebhookEndpoints", false, "solo_429", "", "api_o_administracion"},
 	{"deactivatePaperNumberingRange", "POST", "/paper_numbering_ranges/{id}/deactivate", "PaperNumberingRanges", false, "solo_429", "", "api_o_administracion"},
+	{"deleteCompanyLogo", "DELETE", "/company/logo", "CompanySettings", false, "solo_429", "", "api_o_administracion"},
 	{"deleteWebhookEndpoint", "DELETE", "/webhook_endpoints/{id}", "WebhookEndpoints", false, "solo_429", "", "api_o_administracion"},
 	{"downloadCreditNoteDianResponse", "GET", "/credit_notes/{id}/dian_response", "CreditNotes", false, "seguro", "xml", "api_o_administracion"},
 	{"downloadCreditNotePdf", "GET", "/credit_notes/{id}/pdf", "CreditNotes", false, "seguro", "pdf", "api_o_administracion"},
@@ -99,6 +102,8 @@ var Operaciones = []Operacion{
 	{"listAccountRadianEvents", "GET", "/account/radian_events", "Account", false, "seguro", "", "administracion"},
 	{"listAccountRequests", "GET", "/account/requests", "Account", false, "seguro", "", "administracion"},
 	{"listBalanceTransactions", "GET", "/balance/transactions", "Balance", false, "seguro", "", "api_o_administracion"},
+	{"listCatalogEntries", "GET", "/catalogs/{name}", "Catalogs", false, "seguro", "", "api_o_administracion"},
+	{"listCatalogs", "GET", "/catalogs", "Catalogs", false, "seguro", "", "api_o_administracion"},
 	{"listCreditNotes", "GET", "/credit_notes", "CreditNotes", false, "seguro", "", "api_o_administracion"},
 	{"listCustomers", "GET", "/customers", "Customers", false, "seguro", "", "api_o_administracion"},
 	{"listDebitNotes", "GET", "/debit_notes", "DebitNotes", false, "seguro", "", "api_o_administracion"},
@@ -114,6 +119,8 @@ var Operaciones = []Operacion{
 	{"listPaperNumberingRanges", "GET", "/paper_numbering_ranges", "PaperNumberingRanges", false, "seguro", "", "api_o_administracion"},
 	{"listPayrollAdjustments", "GET", "/payroll_adjustments", "PayrollAdjustments", false, "seguro", "", "api_o_administracion"},
 	{"listPayrolls", "GET", "/payrolls", "Payrolls", false, "seguro", "", "api_o_administracion"},
+	{"listPdfDesigns", "GET", "/pdf_designs", "PdfDesigns", false, "seguro", "", "api_o_administracion"},
+	{"listPdfTemplates", "GET", "/pdf_templates", "PdfTemplates", false, "seguro", "", "api_o_administracion"},
 	{"listProducts", "GET", "/products", "Products", false, "seguro", "", "api_o_administracion"},
 	{"listRadianEvents", "GET", "/radian_events", "RadianEvents", false, "seguro", "", "api_o_administracion"},
 	{"listReportRuns", "GET", "/report_runs", "ReportRuns", false, "seguro", "", "api_o_administracion"},
@@ -138,6 +145,8 @@ var Operaciones = []Operacion{
 	{"retrieveAccountCompany", "GET", "/account/companies/{id}", "Account", false, "seguro", "", "administracion"},
 	{"retrieveBalance", "GET", "/balance", "Balance", false, "seguro", "", "api_o_administracion"},
 	{"retrieveCompany", "GET", "/company", "General", false, "seguro", "", "api_o_administracion"},
+	{"retrieveCompanyLogo", "GET", "/company/logo", "CompanySettings", false, "seguro", "", "api_o_administracion"},
+	{"retrieveCompanyLogoFile", "GET", "/company/logo/file", "CompanySettings", false, "seguro", "png", "api_o_administracion"},
 	{"retrieveCreditNote", "GET", "/credit_notes/{id}", "CreditNotes", false, "seguro", "", "api_o_administracion"},
 	{"retrieveCustomer", "GET", "/customers/{id}", "Customers", false, "seguro", "", "api_o_administracion"},
 	{"retrieveDebitNote", "GET", "/debit_notes/{id}", "DebitNotes", false, "seguro", "", "api_o_administracion"},
@@ -154,6 +163,8 @@ var Operaciones = []Operacion{
 	{"retrievePaperNumberingRange", "GET", "/paper_numbering_ranges/{id}", "PaperNumberingRanges", false, "seguro", "", "api_o_administracion"},
 	{"retrievePayroll", "GET", "/payrolls/{id}", "Payrolls", false, "seguro", "", "api_o_administracion"},
 	{"retrievePayrollAdjustment", "GET", "/payroll_adjustments/{id}", "PayrollAdjustments", false, "seguro", "", "api_o_administracion"},
+	{"retrievePdfDesign", "GET", "/pdf_designs/{id}", "PdfDesigns", false, "seguro", "", "api_o_administracion"},
+	{"retrievePdfSettings", "GET", "/company/pdf_settings", "CompanySettings", false, "seguro", "", "api_o_administracion"},
 	{"retrieveProduct", "GET", "/products/{id}", "Products", false, "seguro", "", "api_o_administracion"},
 	{"retrieveRadianEvent", "GET", "/radian_events/{id}", "RadianEvents", false, "seguro", "", "api_o_administracion"},
 	{"retrieveReportRun", "GET", "/report_runs/{id}", "ReportRuns", false, "seguro", "", "api_o_administracion"},
@@ -167,24 +178,32 @@ var Operaciones = []Operacion{
 	{"revokeAccountCompanyApiKey", "DELETE", "/account/companies/{id}/api_keys/{key_id}", "Account", false, "solo_429", "", "administracion"},
 	{"rotateWebhookEndpointSecret", "POST", "/webhook_endpoints/{id}/rotate_secret", "WebhookEndpoints", false, "solo_429", "", "api_o_administracion"},
 	{"sendCreditNote", "POST", "/credit_notes/{id}/send", "CreditNotes", false, "solo_429", "", "api_o_administracion"},
+	{"sendCreditNoteEmail", "POST", "/credit_notes/{id}/email", "CreditNotes", true, "seguro", "", "api_o_administracion"},
 	{"sendDebitNote", "POST", "/debit_notes/{id}/send", "DebitNotes", false, "solo_429", "", "api_o_administracion"},
+	{"sendDebitNoteEmail", "POST", "/debit_notes/{id}/email", "DebitNotes", true, "seguro", "", "api_o_administracion"},
 	{"sendEquivalentDocument", "POST", "/equivalent_documents/{id}/send", "EquivalentDocuments", false, "solo_429", "", "api_o_administracion"},
 	{"sendEquivalentDocumentAdjustment", "POST", "/equivalent_document_adjustments/{id}/send", "EquivalentDocumentAdjustments", false, "solo_429", "", "api_o_administracion"},
+	{"sendEquivalentDocumentAdjustmentEmail", "POST", "/equivalent_document_adjustments/{id}/email", "EquivalentDocumentAdjustments", true, "seguro", "", "api_o_administracion"},
+	{"sendEquivalentDocumentEmail", "POST", "/equivalent_documents/{id}/email", "EquivalentDocuments", true, "seguro", "", "api_o_administracion"},
 	{"sendInvoice", "POST", "/invoices/{id}/send", "Invoices", false, "solo_429", "", "api_o_administracion"},
+	{"sendInvoiceEmail", "POST", "/invoices/{id}/email", "Invoices", true, "seguro", "", "api_o_administracion"},
 	{"sendPayroll", "POST", "/payrolls/{id}/send", "Payrolls", false, "solo_429", "", "api_o_administracion"},
 	{"sendPayrollAdjustment", "POST", "/payroll_adjustments/{id}/send", "PayrollAdjustments", false, "solo_429", "", "api_o_administracion"},
 	{"sendRadianEvent", "POST", "/radian_events/{id}/send", "RadianEvents", false, "solo_429", "", "api_o_administracion"},
 	{"sendSupportDocument", "POST", "/support_documents/{id}/send", "SupportDocuments", false, "solo_429", "", "api_o_administracion"},
 	{"sendSupportDocumentAdjustment", "POST", "/support_document_adjustments/{id}/send", "SupportDocumentAdjustments", false, "solo_429", "", "api_o_administracion"},
 	{"testWebhookEndpoint", "POST", "/webhook_endpoints/{id}/test", "WebhookEndpoints", false, "solo_429", "", "api_o_administracion"},
+	{"updateCompanyLogo", "PUT", "/company/logo", "CompanySettings", false, "solo_429", "", "api_o_administracion"},
 	{"updateCustomer", "PATCH", "/customers/{id}", "Customers", false, "seguro", "", "api_o_administracion"},
 	{"updatePaperNumberingRange", "PATCH", "/paper_numbering_ranges/{id}", "PaperNumberingRanges", false, "seguro", "", "api_o_administracion"},
+	{"updatePdfDesign", "PATCH", "/pdf_designs/{id}", "PdfDesigns", false, "seguro", "", "api_o_administracion"},
+	{"updatePdfSettings", "PATCH", "/company/pdf_settings", "CompanySettings", false, "seguro", "", "api_o_administracion"},
 	{"updateProduct", "PATCH", "/products/{id}", "Products", false, "seguro", "", "api_o_administracion"},
 	{"updateWebhookEndpoint", "PATCH", "/webhook_endpoints/{id}", "WebhookEndpoints", false, "seguro", "", "api_o_administracion"},
 }
 
 // Etiquetas es el nombre de cada etiqueta del SDK (un campo del cliente por etiqueta: InvoicesAPI, CreditNotesAPI…).
-var Etiquetas = []string{"Account", "Balance", "CreditNotes", "Customers", "DebitNotes", "DianDocuments", "DianSyncs", "EquivalentDocumentAdjustments", "EquivalentDocuments", "Events", "General", "InvoiceBatches", "Invoices", "NumberingAssociations", "NumberingRanges", "NumberingRequests", "PaperNumberingRanges", "PayrollAdjustments", "Payrolls", "Products", "RadianEvents", "RadianStatus", "ReportRuns", "Reports", "Requests", "SupportDocumentAdjustments", "SupportDocuments", "WebhookEndpoints"}
+var Etiquetas = []string{"Account", "Balance", "Catalogs", "CompanySettings", "CreditNotes", "Customers", "DebitNotes", "DianDocuments", "DianSyncs", "EquivalentDocumentAdjustments", "EquivalentDocuments", "Events", "General", "InvoiceBatches", "Invoices", "NumberingAssociations", "NumberingRanges", "NumberingRequests", "PaperNumberingRanges", "PayrollAdjustments", "Payrolls", "PdfDesigns", "PdfTemplates", "Products", "RadianEvents", "RadianStatus", "ReportRuns", "Reports", "Requests", "SupportDocumentAdjustments", "SupportDocuments", "WebhookEndpoints"}
 
 // ClasePorCode: code de problem+json -> clase de error.
 var ClasePorCode = map[string]string{
@@ -199,6 +218,8 @@ var ClasePorCode = map[string]string{
 	"idempotency_key_required": "InvalidRequestError",
 	"idempotency_key_reused": "IdempotencyError",
 	"validation_error": "ValidationError",
+	"logo_invalid": "ValidationError",
+	"pdf_design_invalid": "ValidationError",
 	"external_id_in_use": "ConflictError",
 	"invalid_state": "ConflictError",
 	"duplicate_document": "ConflictError",
@@ -215,6 +236,10 @@ var ClasePorCode = map[string]string{
 	"paper_numbering_limit_reached": "ConflictError",
 	"company_exists": "ConflictError",
 	"key_limit_reached": "ConflictError",
+	"pdf_design_limit_reached": "ConflictError",
+	"pdf_design_in_use": "ConflictError",
+	"pdf_design_outdated": "ConflictError",
+	"pdf_design_archived": "ConflictError",
 	"company_not_enabled": "PreconditionError",
 	"numbering_unavailable": "PreconditionError",
 	"certificate_problem": "PreconditionError",

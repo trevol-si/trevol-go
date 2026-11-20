@@ -53,6 +53,10 @@ type APIClient struct {
 
 	BalanceAPI *BalanceAPIService
 
+	CatalogsAPI *CatalogsAPIService
+
+	CompanySettingsAPI *CompanySettingsAPIService
+
 	CreditNotesAPI *CreditNotesAPIService
 
 	CustomersAPI *CustomersAPIService
@@ -86,6 +90,10 @@ type APIClient struct {
 	PayrollAdjustmentsAPI *PayrollAdjustmentsAPIService
 
 	PayrollsAPI *PayrollsAPIService
+
+	PdfDesignsAPI *PdfDesignsAPIService
+
+	PdfTemplatesAPI *PdfTemplatesAPIService
 
 	ProductsAPI *ProductsAPIService
 
@@ -124,6 +132,8 @@ func NewAPIClient(cfg *Configuration) *APIClient {
 	// API Services
 	c.AccountAPI = (*AccountAPIService)(&c.common)
 	c.BalanceAPI = (*BalanceAPIService)(&c.common)
+	c.CatalogsAPI = (*CatalogsAPIService)(&c.common)
+	c.CompanySettingsAPI = (*CompanySettingsAPIService)(&c.common)
 	c.CreditNotesAPI = (*CreditNotesAPIService)(&c.common)
 	c.CustomersAPI = (*CustomersAPIService)(&c.common)
 	c.DebitNotesAPI = (*DebitNotesAPIService)(&c.common)
@@ -141,6 +151,8 @@ func NewAPIClient(cfg *Configuration) *APIClient {
 	c.PaperNumberingRangesAPI = (*PaperNumberingRangesAPIService)(&c.common)
 	c.PayrollAdjustmentsAPI = (*PayrollAdjustmentsAPIService)(&c.common)
 	c.PayrollsAPI = (*PayrollsAPIService)(&c.common)
+	c.PdfDesignsAPI = (*PdfDesignsAPIService)(&c.common)
+	c.PdfTemplatesAPI = (*PdfTemplatesAPIService)(&c.common)
 	c.ProductsAPI = (*ProductsAPIService)(&c.common)
 	c.RadianEventsAPI = (*RadianEventsAPIService)(&c.common)
 	c.RadianStatusAPI = (*RadianStatusAPIService)(&c.common)

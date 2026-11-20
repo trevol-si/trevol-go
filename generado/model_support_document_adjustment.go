@@ -24,6 +24,8 @@ type SupportDocumentAdjustment struct {
 	Id *string `json:"id,omitempty"`
 	Object *string `json:"object,omitempty"`
 	Environment *string `json:"environment,omitempty"`
+	// Solo en el entorno SIMULADO (la empresa simulada de la cuenta): el objeto se validó, se calculó y se firmó como siempre, pero nunca llegó a la DIAN ni tiene validez. Un objeto real no lleva esta propiedad.
+	Simulated *bool `json:"simulated,omitempty"`
 	// `processing` solo en la versión 2026-10-22: la DIAN no confirmó y Trevol sigue resolviendo el documento (el resultado llega por GET y por webhook; no crees otro documento para la misma venta). En 2026-10-21 ese documento se ve como `error`.
 	Status *string `json:"status,omitempty"`
 	Number NullableString `json:"number,omitempty"`
@@ -168,6 +170,38 @@ func (o *SupportDocumentAdjustment) HasEnvironment() bool {
 // SetEnvironment gets a reference to the given string and assigns it to the Environment field.
 func (o *SupportDocumentAdjustment) SetEnvironment(v string) {
 	o.Environment = &v
+}
+
+// GetSimulated returns the Simulated field value if set, zero value otherwise.
+func (o *SupportDocumentAdjustment) GetSimulated() bool {
+	if o == nil || IsNil(o.Simulated) {
+		var ret bool
+		return ret
+	}
+	return *o.Simulated
+}
+
+// GetSimulatedOk returns a tuple with the Simulated field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *SupportDocumentAdjustment) GetSimulatedOk() (*bool, bool) {
+	if o == nil || IsNil(o.Simulated) {
+		return nil, false
+	}
+	return o.Simulated, true
+}
+
+// HasSimulated returns a boolean if a field has been set.
+func (o *SupportDocumentAdjustment) HasSimulated() bool {
+	if o != nil && !IsNil(o.Simulated) {
+		return true
+	}
+
+	return false
+}
+
+// SetSimulated gets a reference to the given bool and assigns it to the Simulated field.
+func (o *SupportDocumentAdjustment) SetSimulated(v bool) {
+	o.Simulated = &v
 }
 
 // GetStatus returns the Status field value if set, zero value otherwise.
@@ -1005,6 +1039,9 @@ func (o SupportDocumentAdjustment) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.Environment) {
 		toSerialize["environment"] = o.Environment
 	}
+	if !IsNil(o.Simulated) {
+		toSerialize["simulated"] = o.Simulated
+	}
 	if !IsNil(o.Status) {
 		toSerialize["status"] = o.Status
 	}
@@ -1099,6 +1136,7 @@ func (o *SupportDocumentAdjustment) UnmarshalJSON(data []byte) (err error) {
 		delete(additionalProperties, "id")
 		delete(additionalProperties, "object")
 		delete(additionalProperties, "environment")
+		delete(additionalProperties, "simulated")
 		delete(additionalProperties, "status")
 		delete(additionalProperties, "number")
 		delete(additionalProperties, "prefix")

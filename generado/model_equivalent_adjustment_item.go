@@ -28,8 +28,10 @@ type EquivalentAdjustmentItem struct {
 	Unit *string `json:"unit,omitempty"`
 	// Número o texto decimal con punto («150000.50»).
 	Quantity *string `json:"quantity,omitempty"`
-	// Precio unitario SIN impuestos.
+	// Precio unitario SIN impuestos (con unit_price_includes_tax, con ellos).
 	UnitPrice *string `json:"unit_price,omitempty"`
+	// true: unit_price trae los impuestos de la línea; Trevol calcula el precio sin ellos.
+	UnitPriceIncludesTax *bool `json:"unit_price_includes_tax,omitempty"`
 	// Impuestos de la línea: {code, rate} porcentual, {code: \"01\", excluded: true} o nominal {code, unit_amount, unit?, quantity?}.
 	Taxes []ItemTax `json:"taxes,omitempty"`
 	Discounts []ItemAllowance `json:"discounts,omitempty"`
@@ -253,6 +255,38 @@ func (o *EquivalentAdjustmentItem) HasUnitPrice() bool {
 // SetUnitPrice gets a reference to the given string and assigns it to the UnitPrice field.
 func (o *EquivalentAdjustmentItem) SetUnitPrice(v string) {
 	o.UnitPrice = &v
+}
+
+// GetUnitPriceIncludesTax returns the UnitPriceIncludesTax field value if set, zero value otherwise.
+func (o *EquivalentAdjustmentItem) GetUnitPriceIncludesTax() bool {
+	if o == nil || IsNil(o.UnitPriceIncludesTax) {
+		var ret bool
+		return ret
+	}
+	return *o.UnitPriceIncludesTax
+}
+
+// GetUnitPriceIncludesTaxOk returns a tuple with the UnitPriceIncludesTax field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *EquivalentAdjustmentItem) GetUnitPriceIncludesTaxOk() (*bool, bool) {
+	if o == nil || IsNil(o.UnitPriceIncludesTax) {
+		return nil, false
+	}
+	return o.UnitPriceIncludesTax, true
+}
+
+// HasUnitPriceIncludesTax returns a boolean if a field has been set.
+func (o *EquivalentAdjustmentItem) HasUnitPriceIncludesTax() bool {
+	if o != nil && !IsNil(o.UnitPriceIncludesTax) {
+		return true
+	}
+
+	return false
+}
+
+// SetUnitPriceIncludesTax gets a reference to the given bool and assigns it to the UnitPriceIncludesTax field.
+func (o *EquivalentAdjustmentItem) SetUnitPriceIncludesTax(v bool) {
+	o.UnitPriceIncludesTax = &v
 }
 
 // GetTaxes returns the Taxes field value if set, zero value otherwise.
@@ -571,6 +605,9 @@ func (o EquivalentAdjustmentItem) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.UnitPrice) {
 		toSerialize["unit_price"] = o.UnitPrice
 	}
+	if !IsNil(o.UnitPriceIncludesTax) {
+		toSerialize["unit_price_includes_tax"] = o.UnitPriceIncludesTax
+	}
 	if !IsNil(o.Taxes) {
 		toSerialize["taxes"] = o.Taxes
 	}
@@ -626,6 +663,7 @@ func (o *EquivalentAdjustmentItem) UnmarshalJSON(data []byte) (err error) {
 		delete(additionalProperties, "unit")
 		delete(additionalProperties, "quantity")
 		delete(additionalProperties, "unit_price")
+		delete(additionalProperties, "unit_price_includes_tax")
 		delete(additionalProperties, "taxes")
 		delete(additionalProperties, "discounts")
 		delete(additionalProperties, "charges")

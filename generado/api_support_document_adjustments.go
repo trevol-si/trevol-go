@@ -596,6 +596,8 @@ type ApiListSupportDocumentAdjustmentsRequest struct {
 	externalId *string
 	createdFrom *string
 	createdTo *string
+	number *string
+	prefix *string
 }
 
 func (r ApiListSupportDocumentAdjustmentsRequest) Limit(limit int32) ApiListSupportDocumentAdjustmentsRequest {
@@ -625,6 +627,18 @@ func (r ApiListSupportDocumentAdjustmentsRequest) CreatedFrom(createdFrom string
 
 func (r ApiListSupportDocumentAdjustmentsRequest) CreatedTo(createdTo string) ApiListSupportDocumentAdjustmentsRequest {
 	r.createdTo = &createdTo
+	return r
+}
+
+// El número completo exacto, como sale en &#x60;number&#x60; (p. ej. &#x60;SETP990000123&#x60;; sin prefijo, solo el consecutivo), sin ceros a la izquierda, espacios ni guiones. Puede traer más de un documento.
+func (r ApiListSupportDocumentAdjustmentsRequest) Number(number string) ApiListSupportDocumentAdjustmentsRequest {
+	r.number = &number
+	return r
+}
+
+// El prefijo exacto, como sale en &#x60;prefix&#x60;. Solo, lista una numeración; con &#x60;number&#x60;, quita la ambigüedad.
+func (r ApiListSupportDocumentAdjustmentsRequest) Prefix(prefix string) ApiListSupportDocumentAdjustmentsRequest {
+	r.prefix = &prefix
 	return r
 }
 
@@ -685,6 +699,12 @@ func (a *SupportDocumentAdjustmentsAPIService) ListSupportDocumentAdjustmentsExe
 	}
 	if r.createdTo != nil {
 		parameterAddToHeaderOrQuery(localVarQueryParams, "created_to", r.createdTo, "form", "")
+	}
+	if r.number != nil {
+		parameterAddToHeaderOrQuery(localVarQueryParams, "number", r.number, "form", "")
+	}
+	if r.prefix != nil {
+		parameterAddToHeaderOrQuery(localVarQueryParams, "prefix", r.prefix, "form", "")
 	}
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{}

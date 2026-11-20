@@ -7,7 +7,7 @@ reintentos, errores, paginación, webhooks) vive fuera de esa carpeta.
 |---|---|
 | Generador | OpenAPI Generator 7.26.0 (`go`) |
 | Especificación | `especificacion/openapi.sdk.json` (variante 3.0.3 de `docs/api/openapi.json`, versión de la API 2026-11-18) |
-| sha256 de la especificación | `31080dd8159e606612ee52ea72fa4794aa178cc0d40fe48a36c00246f107ea5a` |
+| sha256 de la especificación | `d70f47ecc522d9ee1b8d7290a708f59303f7544c884b3ea3c9adb28717cbf78d` |
 | Configuración | `openapi-generator.yaml` |
 
 Regenerar (desde el monorepo de Trevol): `sdks/generar.sh go`. Comprobar que lo del repositorio es lo que sale de la

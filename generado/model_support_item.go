@@ -27,8 +27,10 @@ type SupportItem struct {
 	Unit *string `json:"unit,omitempty"`
 	// Número o texto decimal con punto («150000.50»).
 	Quantity string `json:"quantity"`
-	// Precio unitario SIN impuestos.
+	// Precio unitario SIN impuestos (con unit_price_includes_tax, con ellos).
 	UnitPrice string `json:"unit_price"`
+	// true: unit_price trae los impuestos de la línea; Trevol calcula el precio sin ellos.
+	UnitPriceIncludesTax *bool `json:"unit_price_includes_tax,omitempty"`
 	// Solo IVA: {code: \"01\", rate: 0 | 5 | 19} o {code: \"01\", excluded: true}.
 	Taxes []SupportItemTax `json:"taxes,omitempty"`
 	// Descuentos de la línea, sin código; la razón va de 10 a 5000 caracteres (DSBE04).
@@ -198,6 +200,38 @@ func (o *SupportItem) GetUnitPriceOk() (*string, bool) {
 // SetUnitPrice sets field value
 func (o *SupportItem) SetUnitPrice(v string) {
 	o.UnitPrice = v
+}
+
+// GetUnitPriceIncludesTax returns the UnitPriceIncludesTax field value if set, zero value otherwise.
+func (o *SupportItem) GetUnitPriceIncludesTax() bool {
+	if o == nil || IsNil(o.UnitPriceIncludesTax) {
+		var ret bool
+		return ret
+	}
+	return *o.UnitPriceIncludesTax
+}
+
+// GetUnitPriceIncludesTaxOk returns a tuple with the UnitPriceIncludesTax field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *SupportItem) GetUnitPriceIncludesTaxOk() (*bool, bool) {
+	if o == nil || IsNil(o.UnitPriceIncludesTax) {
+		return nil, false
+	}
+	return o.UnitPriceIncludesTax, true
+}
+
+// HasUnitPriceIncludesTax returns a boolean if a field has been set.
+func (o *SupportItem) HasUnitPriceIncludesTax() bool {
+	if o != nil && !IsNil(o.UnitPriceIncludesTax) {
+		return true
+	}
+
+	return false
+}
+
+// SetUnitPriceIncludesTax gets a reference to the given bool and assigns it to the UnitPriceIncludesTax field.
+func (o *SupportItem) SetUnitPriceIncludesTax(v bool) {
+	o.UnitPriceIncludesTax = &v
 }
 
 // GetTaxes returns the Taxes field value if set, zero value otherwise.
@@ -411,6 +445,9 @@ func (o SupportItem) ToMap() (map[string]interface{}, error) {
 	}
 	toSerialize["quantity"] = o.Quantity
 	toSerialize["unit_price"] = o.UnitPrice
+	if !IsNil(o.UnitPriceIncludesTax) {
+		toSerialize["unit_price_includes_tax"] = o.UnitPriceIncludesTax
+	}
 	if !IsNil(o.Taxes) {
 		toSerialize["taxes"] = o.Taxes
 	}
@@ -479,6 +516,7 @@ func (o *SupportItem) UnmarshalJSON(data []byte) (err error) {
 		delete(additionalProperties, "unit")
 		delete(additionalProperties, "quantity")
 		delete(additionalProperties, "unit_price")
+		delete(additionalProperties, "unit_price_includes_tax")
 		delete(additionalProperties, "taxes")
 		delete(additionalProperties, "discounts")
 		delete(additionalProperties, "charges")

@@ -55,6 +55,10 @@ type EquivalentDocumentAdjustment struct {
 	Concept *string `json:"concept,omitempty"`
 	Description *string `json:"description,omitempty"`
 	EquivalentDocument *EquivalentDocumentReference `json:"equivalent_document,omitempty"`
+	// El que pidió el documento, o null.
+	PdfDesignId NullableString `json:"pdf_design_id,omitempty"`
+	// El diseño fijado al emitir; null mientras está pendiente.
+	PdfDesign NullablePdfDesignApplied `json:"pdf_design,omitempty"`
 	AdditionalProperties map[string]interface{}
 }
 
@@ -1086,6 +1090,90 @@ func (o *EquivalentDocumentAdjustment) SetEquivalentDocument(v EquivalentDocumen
 	o.EquivalentDocument = &v
 }
 
+// GetPdfDesignId returns the PdfDesignId field value if set, zero value otherwise (both if not set or set to explicit null).
+func (o *EquivalentDocumentAdjustment) GetPdfDesignId() string {
+	if o == nil || IsNil(o.PdfDesignId.Get()) {
+		var ret string
+		return ret
+	}
+	return *o.PdfDesignId.Get()
+}
+
+// GetPdfDesignIdOk returns a tuple with the PdfDesignId field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+// NOTE: If the value is an explicit nil, `nil, true` will be returned
+func (o *EquivalentDocumentAdjustment) GetPdfDesignIdOk() (*string, bool) {
+	if o == nil {
+		return nil, false
+	}
+	return o.PdfDesignId.Get(), o.PdfDesignId.IsSet()
+}
+
+// HasPdfDesignId returns a boolean if a field has been set.
+func (o *EquivalentDocumentAdjustment) HasPdfDesignId() bool {
+	if o != nil && o.PdfDesignId.IsSet() {
+		return true
+	}
+
+	return false
+}
+
+// SetPdfDesignId gets a reference to the given NullableString and assigns it to the PdfDesignId field.
+func (o *EquivalentDocumentAdjustment) SetPdfDesignId(v string) {
+	o.PdfDesignId.Set(&v)
+}
+// SetPdfDesignIdNil sets the value for PdfDesignId to be an explicit nil
+func (o *EquivalentDocumentAdjustment) SetPdfDesignIdNil() {
+	o.PdfDesignId.Set(nil)
+}
+
+// UnsetPdfDesignId ensures that no value is present for PdfDesignId, not even an explicit nil
+func (o *EquivalentDocumentAdjustment) UnsetPdfDesignId() {
+	o.PdfDesignId.Unset()
+}
+
+// GetPdfDesign returns the PdfDesign field value if set, zero value otherwise (both if not set or set to explicit null).
+func (o *EquivalentDocumentAdjustment) GetPdfDesign() PdfDesignApplied {
+	if o == nil || IsNil(o.PdfDesign.Get()) {
+		var ret PdfDesignApplied
+		return ret
+	}
+	return *o.PdfDesign.Get()
+}
+
+// GetPdfDesignOk returns a tuple with the PdfDesign field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+// NOTE: If the value is an explicit nil, `nil, true` will be returned
+func (o *EquivalentDocumentAdjustment) GetPdfDesignOk() (*PdfDesignApplied, bool) {
+	if o == nil {
+		return nil, false
+	}
+	return o.PdfDesign.Get(), o.PdfDesign.IsSet()
+}
+
+// HasPdfDesign returns a boolean if a field has been set.
+func (o *EquivalentDocumentAdjustment) HasPdfDesign() bool {
+	if o != nil && o.PdfDesign.IsSet() {
+		return true
+	}
+
+	return false
+}
+
+// SetPdfDesign gets a reference to the given NullablePdfDesignApplied and assigns it to the PdfDesign field.
+func (o *EquivalentDocumentAdjustment) SetPdfDesign(v PdfDesignApplied) {
+	o.PdfDesign.Set(&v)
+}
+// SetPdfDesignNil sets the value for PdfDesign to be an explicit nil
+func (o *EquivalentDocumentAdjustment) SetPdfDesignNil() {
+	o.PdfDesign.Set(nil)
+}
+
+// UnsetPdfDesign ensures that no value is present for PdfDesign, not even an explicit nil
+func (o *EquivalentDocumentAdjustment) UnsetPdfDesign() {
+	o.PdfDesign.Unset()
+}
+
 func (o EquivalentDocumentAdjustment) MarshalJSON() ([]byte, error) {
 	toSerialize,err := o.ToMap()
 	if err != nil {
@@ -1183,6 +1271,12 @@ func (o EquivalentDocumentAdjustment) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.EquivalentDocument) {
 		toSerialize["equivalent_document"] = o.EquivalentDocument
 	}
+	if o.PdfDesignId.IsSet() {
+		toSerialize["pdf_design_id"] = o.PdfDesignId.Get()
+	}
+	if o.PdfDesign.IsSet() {
+		toSerialize["pdf_design"] = o.PdfDesign.Get()
+	}
 
 	for key, value := range o.AdditionalProperties {
 		toSerialize[key] = value
@@ -1234,6 +1328,8 @@ func (o *EquivalentDocumentAdjustment) UnmarshalJSON(data []byte) (err error) {
 		delete(additionalProperties, "concept")
 		delete(additionalProperties, "description")
 		delete(additionalProperties, "equivalent_document")
+		delete(additionalProperties, "pdf_design_id")
+		delete(additionalProperties, "pdf_design")
 		o.AdditionalProperties = additionalProperties
 	}
 

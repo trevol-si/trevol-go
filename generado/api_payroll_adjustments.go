@@ -146,6 +146,17 @@ func (a *PayrollAdjustmentsAPIService) CorrectPayrollAdjustmentExecute(r ApiCorr
 					newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
+		if localVarHTTPResponse.StatusCode == 403 {
+			var v Problem
+			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.error = err.Error()
+				return localVarReturnValue, localVarHTTPResponse, newErr
+			}
+					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+					newErr.model = v
+			return localVarReturnValue, localVarHTTPResponse, newErr
+		}
 			var v Problem
 			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
 			if err != nil {
@@ -331,6 +342,17 @@ func (a *PayrollAdjustmentsAPIService) CreatePayrollAdjustmentExecute(r ApiCreat
 					newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
+		if localVarHTTPResponse.StatusCode == 403 {
+			var v Problem
+			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.error = err.Error()
+				return localVarReturnValue, localVarHTTPResponse, newErr
+			}
+					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+					newErr.model = v
+			return localVarReturnValue, localVarHTTPResponse, newErr
+		}
 			var v Problem
 			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
 			if err != nil {
@@ -441,6 +463,17 @@ func (a *PayrollAdjustmentsAPIService) DownloadPayrollAdjustmentDianResponseExec
 		newErr := &GenericOpenAPIError{
 			body:  localVarBody,
 			error: localVarHTTPResponse.Status,
+		}
+		if localVarHTTPResponse.StatusCode == 403 {
+			var v Problem
+			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.error = err.Error()
+				return localVarReturnValue, localVarHTTPResponse, newErr
+			}
+					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+					newErr.model = v
+			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 			var v Problem
 			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
@@ -553,6 +586,17 @@ func (a *PayrollAdjustmentsAPIService) DownloadPayrollAdjustmentXmlExecute(r Api
 			body:  localVarBody,
 			error: localVarHTTPResponse.Status,
 		}
+		if localVarHTTPResponse.StatusCode == 403 {
+			var v Problem
+			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.error = err.Error()
+				return localVarReturnValue, localVarHTTPResponse, newErr
+			}
+					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+					newErr.model = v
+			return localVarReturnValue, localVarHTTPResponse, newErr
+		}
 			var v Problem
 			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
 			if err != nil {
@@ -664,6 +708,17 @@ func (a *PayrollAdjustmentsAPIService) DownloadPayrollAdjustmentZipExecute(r Api
 			body:  localVarBody,
 			error: localVarHTTPResponse.Status,
 		}
+		if localVarHTTPResponse.StatusCode == 403 {
+			var v Problem
+			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.error = err.Error()
+				return localVarReturnValue, localVarHTTPResponse, newErr
+			}
+					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+					newErr.model = v
+			return localVarReturnValue, localVarHTTPResponse, newErr
+		}
 			var v Problem
 			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
 			if err != nil {
@@ -699,6 +754,8 @@ type ApiListPayrollAdjustmentsRequest struct {
 	employeeCode *string
 	periodEndFrom *string
 	periodEndTo *string
+	number *string
+	prefix *string
 }
 
 func (r ApiListPayrollAdjustmentsRequest) Limit(limit int32) ApiListPayrollAdjustmentsRequest {
@@ -743,6 +800,18 @@ func (r ApiListPayrollAdjustmentsRequest) PeriodEndFrom(periodEndFrom string) Ap
 
 func (r ApiListPayrollAdjustmentsRequest) PeriodEndTo(periodEndTo string) ApiListPayrollAdjustmentsRequest {
 	r.periodEndTo = &periodEndTo
+	return r
+}
+
+// El número completo exacto, como sale en &#x60;number&#x60; (p. ej. &#x60;SETP990000123&#x60;; sin prefijo, solo el consecutivo), sin ceros a la izquierda, espacios ni guiones. Puede traer más de un documento.
+func (r ApiListPayrollAdjustmentsRequest) Number(number string) ApiListPayrollAdjustmentsRequest {
+	r.number = &number
+	return r
+}
+
+// El prefijo exacto, como sale en &#x60;prefix&#x60;. Solo, lista una numeración; con &#x60;number&#x60;, quita la ambigüedad.
+func (r ApiListPayrollAdjustmentsRequest) Prefix(prefix string) ApiListPayrollAdjustmentsRequest {
+	r.prefix = &prefix
 	return r
 }
 
@@ -813,6 +882,12 @@ func (a *PayrollAdjustmentsAPIService) ListPayrollAdjustmentsExecute(r ApiListPa
 	if r.periodEndTo != nil {
 		parameterAddToHeaderOrQuery(localVarQueryParams, "period_end_to", r.periodEndTo, "form", "")
 	}
+	if r.number != nil {
+		parameterAddToHeaderOrQuery(localVarQueryParams, "number", r.number, "form", "")
+	}
+	if r.prefix != nil {
+		parameterAddToHeaderOrQuery(localVarQueryParams, "prefix", r.prefix, "form", "")
+	}
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{}
 
@@ -851,6 +926,17 @@ func (a *PayrollAdjustmentsAPIService) ListPayrollAdjustmentsExecute(r ApiListPa
 		newErr := &GenericOpenAPIError{
 			body:  localVarBody,
 			error: localVarHTTPResponse.Status,
+		}
+		if localVarHTTPResponse.StatusCode == 403 {
+			var v Problem
+			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.error = err.Error()
+				return localVarReturnValue, localVarHTTPResponse, newErr
+			}
+					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+					newErr.model = v
+			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 			var v Problem
 			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
@@ -970,6 +1056,17 @@ func (a *PayrollAdjustmentsAPIService) PreviewPayrollAdjustmentExecute(r ApiPrev
 			body:  localVarBody,
 			error: localVarHTTPResponse.Status,
 		}
+		if localVarHTTPResponse.StatusCode == 403 {
+			var v Problem
+			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.error = err.Error()
+				return localVarReturnValue, localVarHTTPResponse, newErr
+			}
+					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+					newErr.model = v
+			return localVarReturnValue, localVarHTTPResponse, newErr
+		}
 			var v Problem
 			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
 			if err != nil {
@@ -1080,6 +1177,17 @@ func (a *PayrollAdjustmentsAPIService) RetrievePayrollAdjustmentExecute(r ApiRet
 		newErr := &GenericOpenAPIError{
 			body:  localVarBody,
 			error: localVarHTTPResponse.Status,
+		}
+		if localVarHTTPResponse.StatusCode == 403 {
+			var v Problem
+			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.error = err.Error()
+				return localVarReturnValue, localVarHTTPResponse, newErr
+			}
+					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+					newErr.model = v
+			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 			var v Problem
 			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
@@ -1195,6 +1303,17 @@ func (a *PayrollAdjustmentsAPIService) SendPayrollAdjustmentExecute(r ApiSendPay
 			error: localVarHTTPResponse.Status,
 		}
 		if localVarHTTPResponse.StatusCode == 409 {
+			var v Problem
+			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.error = err.Error()
+				return localVarReturnValue, localVarHTTPResponse, newErr
+			}
+					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+					newErr.model = v
+			return localVarReturnValue, localVarHTTPResponse, newErr
+		}
+		if localVarHTTPResponse.StatusCode == 403 {
 			var v Problem
 			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
 			if err != nil {

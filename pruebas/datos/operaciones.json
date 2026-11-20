@@ -1,5 +1,28 @@
 [
  {
+  "operationId": "archivePdfDesign",
+  "metodo": "POST",
+  "ruta": "/pdf_designs/{id}/archive",
+  "recurso": "PdfDesigns",
+  "idempotente": false,
+  "reintento": "solo_429",
+  "binario": null,
+  "lista": null,
+  "respuesta": "PdfDesign",
+  "cuerpo": null,
+  "cuerpoRequerido": false,
+  "parametros": [
+   {
+    "nombre": "id",
+    "en": "path",
+    "requerido": true,
+    "tipo": "string"
+   }
+  ],
+  "ejemplos": [],
+  "llave": "api_o_administracion"
+ },
+ {
   "operationId": "associateNumberingRange",
   "metodo": "POST",
   "ruta": "/numbering_ranges/{id}/associate",
@@ -242,6 +265,61 @@
       }
      ]
     }
+   },
+   {
+    "nombre": "pos_precio_incluido",
+    "resumen": "Tiquete POS con los precios de la caja (impuestos incluidos)",
+    "valor": {
+     "external_id": "TIQ-2",
+     "customer": {
+      "final_consumer": true
+     },
+     "pos": {
+      "register": {
+       "plate": "CJ-01",
+       "location": "Local 1, Jamundí",
+       "cashier": "PEREZ ANA",
+       "type": "Caja principal"
+      }
+     },
+     "payment": {
+      "form": "cash",
+      "methods": [
+       {
+        "code": "10"
+       }
+      ]
+     },
+     "items": [
+      {
+       "description": "Gaseosa 400 ml",
+       "code": "GAS-1",
+       "unit": "94",
+       "quantity": "2",
+       "unit_price": "3570",
+       "unit_price_includes_tax": true,
+       "taxes": [
+        {
+         "code": "01",
+         "rate": "19"
+        }
+       ]
+      },
+      {
+       "description": "Almuerzo",
+       "unit": "94",
+       "quantity": "1",
+       "unit_price": "19440",
+       "unit_price_includes_tax": true,
+       "taxes": [
+        {
+         "code": "04",
+         "rate": "8"
+        }
+       ]
+      }
+     ]
+    }
    }
   ],
   "llave": "api_o_administracion"
@@ -461,6 +539,57 @@
      "payment": {
       "form": "cash"
      }
+    }
+   },
+   {
+    "nombre": "precio_incluido",
+    "resumen": "Venta de mostrador con precios con IVA incluido",
+    "valor": {
+     "external_id": "TIENDA-2026-004512",
+     "customer": {
+      "final_consumer": true
+     },
+     "payment": {
+      "form": "cash",
+      "methods": [
+       {
+        "code": "10"
+       }
+      ]
+     },
+     "items": [
+      {
+       "code": "CAM-M",
+       "description": "Camiseta talla M",
+       "quantity": "3",
+       "unit_price": "5000",
+       "unit_price_includes_tax": true,
+       "taxes": [
+        {
+         "code": "01",
+         "rate": "19"
+        }
+       ]
+      },
+      {
+       "code": "BOL-1",
+       "description": "Bolsa con logo",
+       "unit": "NIU",
+       "quantity": "1",
+       "unit_price": "250",
+       "unit_price_includes_tax": true,
+       "taxes": [
+        {
+         "code": "01",
+         "rate": "19"
+        },
+        {
+         "code": "22",
+         "unit_amount": "66"
+        }
+       ]
+      }
+     ]
     }
    }
   ],
@@ -1164,6 +1293,61 @@
       }
      ]
     }
+   },
+   {
+    "nombre": "pos_precio_incluido",
+    "resumen": "Tiquete POS con los precios de la caja (impuestos incluidos)",
+    "valor": {
+     "external_id": "TIQ-2",
+     "customer": {
+      "final_consumer": true
+     },
+     "pos": {
+      "register": {
+       "plate": "CJ-01",
+       "location": "Local 1, Jamundí",
+       "cashier": "PEREZ ANA",
+       "type": "Caja principal"
+      }
+     },
+     "payment": {
+      "form": "cash",
+      "methods": [
+       {
+        "code": "10"
+       }
+      ]
+     },
+     "items": [
+      {
+       "description": "Gaseosa 400 ml",
+       "code": "GAS-1",
+       "unit": "94",
+       "quantity": "2",
+       "unit_price": "3570",
+       "unit_price_includes_tax": true,
+       "taxes": [
+        {
+         "code": "01",
+         "rate": "19"
+        }
+       ]
+      },
+      {
+       "description": "Almuerzo",
+       "unit": "94",
+       "quantity": "1",
+       "unit_price": "19440",
+       "unit_price_includes_tax": true,
+       "taxes": [
+        {
+         "code": "04",
+         "rate": "8"
+        }
+       ]
+      }
+     ]
+    }
    }
   ],
   "llave": "api_o_administracion"
@@ -1371,6 +1555,57 @@
      "payment": {
       "form": "cash"
      }
+    }
+   },
+   {
+    "nombre": "precio_incluido",
+    "resumen": "Venta de mostrador con precios con IVA incluido",
+    "valor": {
+     "external_id": "TIENDA-2026-004512",
+     "customer": {
+      "final_consumer": true
+     },
+     "payment": {
+      "form": "cash",
+      "methods": [
+       {
+        "code": "10"
+       }
+      ]
+     },
+     "items": [
+      {
+       "code": "CAM-M",
+       "description": "Camiseta talla M",
+       "quantity": "3",
+       "unit_price": "5000",
+       "unit_price_includes_tax": true,
+       "taxes": [
+        {
+         "code": "01",
+         "rate": "19"
+        }
+       ]
+      },
+      {
+       "code": "BOL-1",
+       "description": "Bolsa con logo",
+       "unit": "NIU",
+       "quantity": "1",
+       "unit_price": "250",
+       "unit_price_includes_tax": true,
+       "taxes": [
+        {
+         "code": "01",
+         "rate": "19"
+        },
+        {
+         "code": "22",
+         "unit_amount": "66"
+        }
+       ]
+      }
+     ]
     }
    }
   ],
@@ -1756,6 +1991,50 @@
   "llave": "api_o_administracion"
  },
  {
+  "operationId": "createPdfDesign",
+  "metodo": "POST",
+  "ruta": "/pdf_designs",
+  "recurso": "PdfDesigns",
+  "idempotente": true,
+  "reintento": "seguro",
+  "binario": null,
+  "lista": null,
+  "respuesta": "PdfDesign",
+  "cuerpo": "PdfDesignInput",
+  "cuerpoRequerido": true,
+  "parametros": [
+   {
+    "nombre": "Idempotency-Key",
+    "en": "header",
+    "requerido": false,
+    "tipo": "string"
+   }
+  ],
+  "ejemplos": [
+   {
+    "nombre": "moderno",
+    "resumen": "Moderno con el color y el logo de la empresa",
+    "valor": {
+     "template": "modern",
+     "name": "Moderno verde",
+     "accent_color": "#118305",
+     "font": "inter",
+     "logo": "company",
+     "set_as_default": true
+    }
+   },
+   {
+    "nombre": "tirilla",
+    "resumen": "Tirilla de 57 mm",
+    "valor": {
+     "template": "pos_57mm",
+     "name": "Tirilla caja"
+    }
+   }
+  ],
+  "llave": "api_o_administracion"
+ },
+ {
   "operationId": "createProduct",
   "metodo": "POST",
   "ruta": "/products",
@@ -2040,7 +2319,7 @@
   "parametros": [],
   "ejemplos": [
    {
-    "nombre": "ejemplo",
+    "nombre": "facturacion",
     "resumen": "Tres eventos de facturación",
     "valor": {
      "url": "https://tu-servidor.co/webhooks/trevol",
@@ -2050,6 +2329,18 @@
       "invoice.rejected",
       "credit_note.accepted"
      ]
+    }
+   },
+   {
+    "nombre": "todo",
+    "resumen": "Todos los eventos, también los de catálogos futuros",
+    "valor": {
+     "url": "https://tu-servidor.co/webhooks/trevol",
+     "description": "Todos los eventos, siempre",
+     "events": [
+      "*"
+     ],
+     "follow_latest_catalog": true
     }
    }
   ],
@@ -2075,6 +2366,22 @@
     "tipo": "string"
    }
   ],
+  "ejemplos": [],
+  "llave": "api_o_administracion"
+ },
+ {
+  "operationId": "deleteCompanyLogo",
+  "metodo": "DELETE",
+  "ruta": "/company/logo",
+  "recurso": "CompanySettings",
+  "idempotente": false,
+  "reintento": "solo_429",
+  "binario": null,
+  "lista": null,
+  "respuesta": "CompanyLogoDeleted",
+  "cuerpo": null,
+  "cuerpoRequerido": false,
+  "parametros": [],
   "ejemplos": [],
   "llave": "api_o_administracion"
  },
@@ -3252,6 +3559,81 @@
   "llave": "api_o_administracion"
  },
  {
+  "operationId": "listCatalogEntries",
+  "metodo": "GET",
+  "ruta": "/catalogs/{name}",
+  "recurso": "Catalogs",
+  "idempotente": false,
+  "reintento": "seguro",
+  "binario": null,
+  "lista": "CodeListEntryList",
+  "respuesta": "CodeListEntryList",
+  "cuerpo": null,
+  "cuerpoRequerido": false,
+  "parametros": [
+   {
+    "nombre": "name",
+    "en": "path",
+    "requerido": true,
+    "tipo": "string"
+   },
+   {
+    "nombre": "limit",
+    "en": "query",
+    "requerido": false,
+    "tipo": "integer"
+   },
+   {
+    "nombre": "starting_after",
+    "en": "query",
+    "requerido": false,
+    "tipo": "string"
+   },
+   {
+    "nombre": "q",
+    "en": "query",
+    "requerido": false,
+    "tipo": "string"
+   },
+   {
+    "nombre": "code",
+    "en": "query",
+    "requerido": false,
+    "tipo": "string"
+   },
+   {
+    "nombre": "department_code",
+    "en": "query",
+    "requerido": false,
+    "tipo": "string"
+   },
+   {
+    "nombre": "resource",
+    "en": "query",
+    "requerido": false,
+    "tipo": "string"
+   }
+  ],
+  "ejemplos": [],
+  "llave": "api_o_administracion"
+ },
+ {
+  "operationId": "listCatalogs",
+  "metodo": "GET",
+  "ruta": "/catalogs",
+  "recurso": "Catalogs",
+  "idempotente": false,
+  "reintento": "seguro",
+  "binario": null,
+  "lista": "CodeListList",
+  "respuesta": "CodeListList",
+  "cuerpo": null,
+  "cuerpoRequerido": false,
+  "parametros": [],
+  "ejemplos": [],
+  "llave": "api_o_administracion"
+ },
+ {
   "operationId": "listCreditNotes",
   "metodo": "GET",
   "ruta": "/credit_notes",
@@ -3296,6 +3678,18 @@
    },
    {
     "nombre": "created_to",
+    "en": "query",
+    "requerido": false,
+    "tipo": "string"
+   },
+   {
+    "nombre": "number",
+    "en": "query",
+    "requerido": false,
+    "tipo": "string"
+   },
+   {
+    "nombre": "prefix",
     "en": "query",
     "requerido": false,
     "tipo": "string"
@@ -3405,6 +3799,18 @@
     "en": "query",
     "requerido": false,
     "tipo": "string"
+   },
+   {
+    "nombre": "number",
+    "en": "query",
+    "requerido": false,
+    "tipo": "string"
+   },
+   {
+    "nombre": "prefix",
+    "en": "query",
+    "requerido": false,
+    "tipo": "string"
    }
   ],
   "ejemplos": [],
@@ -3455,6 +3861,18 @@
    },
    {
     "nombre": "direction",
+    "en": "query",
+    "requerido": false,
+    "tipo": "string"
+   },
+   {
+    "nombre": "number",
+    "en": "query",
+    "requerido": false,
+    "tipo": "string"
+   },
+   {
+    "nombre": "prefix",
     "en": "query",
     "requerido": false,
     "tipo": "string"
@@ -3546,6 +3964,18 @@
     "en": "query",
     "requerido": false,
     "tipo": "string"
+   },
+   {
+    "nombre": "number",
+    "en": "query",
+    "requerido": false,
+    "tipo": "string"
+   },
+   {
+    "nombre": "prefix",
+    "en": "query",
+    "requerido": false,
+    "tipo": "string"
    }
   ],
   "ejemplos": [],
@@ -3602,6 +4032,18 @@
    },
    {
     "nombre": "document_type",
+    "en": "query",
+    "requerido": false,
+    "tipo": "string"
+   },
+   {
+    "nombre": "number",
+    "en": "query",
+    "requerido": false,
+    "tipo": "string"
+   },
+   {
+    "nombre": "prefix",
     "en": "query",
     "requerido": false,
     "tipo": "string"
@@ -3749,6 +4191,18 @@
    },
    {
     "nombre": "created_to",
+    "en": "query",
+    "requerido": false,
+    "tipo": "string"
+   },
+   {
+    "nombre": "number",
+    "en": "query",
+    "requerido": false,
+    "tipo": "string"
+   },
+   {
+    "nombre": "prefix",
     "en": "query",
     "requerido": false,
     "tipo": "string"
@@ -3921,6 +4375,18 @@
     "en": "query",
     "requerido": false,
     "tipo": "string"
+   },
+   {
+    "nombre": "number",
+    "en": "query",
+    "requerido": false,
+    "tipo": "string"
+   },
+   {
+    "nombre": "prefix",
+    "en": "query",
+    "requerido": false,
+    "tipo": "string"
    }
   ],
   "ejemplos": [],
@@ -3992,8 +4458,71 @@
     "en": "query",
     "requerido": false,
     "tipo": "string"
+   },
+   {
+    "nombre": "number",
+    "en": "query",
+    "requerido": false,
+    "tipo": "string"
+   },
+   {
+    "nombre": "prefix",
+    "en": "query",
+    "requerido": false,
+    "tipo": "string"
    }
   ],
+  "ejemplos": [],
+  "llave": "api_o_administracion"
+ },
+ {
+  "operationId": "listPdfDesigns",
+  "metodo": "GET",
+  "ruta": "/pdf_designs",
+  "recurso": "PdfDesigns",
+  "idempotente": false,
+  "reintento": "seguro",
+  "binario": null,
+  "lista": "PdfDesignList",
+  "respuesta": "PdfDesignList",
+  "cuerpo": null,
+  "cuerpoRequerido": false,
+  "parametros": [
+   {
+    "nombre": "limit",
+    "en": "query",
+    "requerido": false,
+    "tipo": "integer"
+   },
+   {
+    "nombre": "starting_after",
+    "en": "query",
+    "requerido": false,
+    "tipo": "string"
+   },
+   {
+    "nombre": "include_archived",
+    "en": "query",
+    "requerido": false,
+    "tipo": "boolean"
+   }
+  ],
+  "ejemplos": [],
+  "llave": "api_o_administracion"
+ },
+ {
+  "operationId": "listPdfTemplates",
+  "metodo": "GET",
+  "ruta": "/pdf_templates",
+  "recurso": "PdfTemplates",
+  "idempotente": false,
+  "reintento": "seguro",
+  "binario": null,
+  "lista": "PdfTemplateList",
+  "respuesta": "PdfTemplateList",
+  "cuerpo": null,
+  "cuerpoRequerido": false,
+  "parametros": [],
   "ejemplos": [],
   "llave": "api_o_administracion"
  },
@@ -4107,6 +4636,18 @@
    },
    {
     "nombre": "invoice_cufe",
+    "en": "query",
+    "requerido": false,
+    "tipo": "string"
+   },
+   {
+    "nombre": "number",
+    "en": "query",
+    "requerido": false,
+    "tipo": "string"
+   },
+   {
+    "nombre": "prefix",
     "en": "query",
     "requerido": false,
     "tipo": "string"
@@ -4251,6 +4792,18 @@
     "en": "query",
     "requerido": false,
     "tipo": "string"
+   },
+   {
+    "nombre": "number",
+    "en": "query",
+    "requerido": false,
+    "tipo": "string"
+   },
+   {
+    "nombre": "prefix",
+    "en": "query",
+    "requerido": false,
+    "tipo": "string"
    }
   ],
   "ejemplos": [],
@@ -4301,6 +4854,18 @@
    },
    {
     "nombre": "created_to",
+    "en": "query",
+    "requerido": false,
+    "tipo": "string"
+   },
+   {
+    "nombre": "number",
+    "en": "query",
+    "requerido": false,
+    "tipo": "string"
+   },
+   {
+    "nombre": "prefix",
     "en": "query",
     "requerido": false,
     "tipo": "string"
@@ -4533,6 +5098,61 @@
       }
      ]
     }
+   },
+   {
+    "nombre": "pos_precio_incluido",
+    "resumen": "Tiquete POS con los precios de la caja (impuestos incluidos)",
+    "valor": {
+     "external_id": "TIQ-2",
+     "customer": {
+      "final_consumer": true
+     },
+     "pos": {
+      "register": {
+       "plate": "CJ-01",
+       "location": "Local 1, Jamundí",
+       "cashier": "PEREZ ANA",
+       "type": "Caja principal"
+      }
+     },
+     "payment": {
+      "form": "cash",
+      "methods": [
+       {
+        "code": "10"
+       }
+      ]
+     },
+     "items": [
+      {
+       "description": "Gaseosa 400 ml",
+       "code": "GAS-1",
+       "unit": "94",
+       "quantity": "2",
+       "unit_price": "3570",
+       "unit_price_includes_tax": true,
+       "taxes": [
+        {
+         "code": "01",
+         "rate": "19"
+        }
+       ]
+      },
+      {
+       "description": "Almuerzo",
+       "unit": "94",
+       "quantity": "1",
+       "unit_price": "19440",
+       "unit_price_includes_tax": true,
+       "taxes": [
+        {
+         "code": "04",
+         "rate": "8"
+        }
+       ]
+      }
+     ]
+    }
    }
   ],
   "llave": "api_o_administracion"
@@ -4726,6 +5346,57 @@
      "payment": {
       "form": "cash"
      }
+    }
+   },
+   {
+    "nombre": "precio_incluido",
+    "resumen": "Venta de mostrador con precios con IVA incluido",
+    "valor": {
+     "external_id": "TIENDA-2026-004512",
+     "customer": {
+      "final_consumer": true
+     },
+     "payment": {
+      "form": "cash",
+      "methods": [
+       {
+        "code": "10"
+       }
+      ]
+     },
+     "items": [
+      {
+       "code": "CAM-M",
+       "description": "Camiseta talla M",
+       "quantity": "3",
+       "unit_price": "5000",
+       "unit_price_includes_tax": true,
+       "taxes": [
+        {
+         "code": "01",
+         "rate": "19"
+        }
+       ]
+      },
+      {
+       "code": "BOL-1",
+       "description": "Bolsa con logo",
+       "unit": "NIU",
+       "quantity": "1",
+       "unit_price": "250",
+       "unit_price_includes_tax": true,
+       "taxes": [
+        {
+         "code": "01",
+         "rate": "19"
+        },
+        {
+         "code": "22",
+         "unit_amount": "66"
+        }
+       ]
+      }
+     ]
     }
    }
   ],
@@ -5129,6 +5800,38 @@
   "llave": "api_o_administracion"
  },
  {
+  "operationId": "retrieveCompanyLogo",
+  "metodo": "GET",
+  "ruta": "/company/logo",
+  "recurso": "CompanySettings",
+  "idempotente": false,
+  "reintento": "seguro",
+  "binario": null,
+  "lista": null,
+  "respuesta": "CompanyLogo",
+  "cuerpo": null,
+  "cuerpoRequerido": false,
+  "parametros": [],
+  "ejemplos": [],
+  "llave": "api_o_administracion"
+ },
+ {
+  "operationId": "retrieveCompanyLogoFile",
+  "metodo": "GET",
+  "ruta": "/company/logo/file",
+  "recurso": "CompanySettings",
+  "idempotente": false,
+  "reintento": "seguro",
+  "binario": "png",
+  "lista": null,
+  "respuesta": null,
+  "cuerpo": null,
+  "cuerpoRequerido": false,
+  "parametros": [],
+  "ejemplos": [],
+  "llave": "api_o_administracion"
+ },
+ {
   "operationId": "retrieveCreditNote",
   "metodo": "GET",
   "ruta": "/credit_notes/{id}",
@@ -5503,6 +6206,45 @@
   "llave": "api_o_administracion"
  },
  {
+  "operationId": "retrievePdfDesign",
+  "metodo": "GET",
+  "ruta": "/pdf_designs/{id}",
+  "recurso": "PdfDesigns",
+  "idempotente": false,
+  "reintento": "seguro",
+  "binario": null,
+  "lista": null,
+  "respuesta": "PdfDesign",
+  "cuerpo": null,
+  "cuerpoRequerido": false,
+  "parametros": [
+   {
+    "nombre": "id",
+    "en": "path",
+    "requerido": true,
+    "tipo": "string"
+   }
+  ],
+  "ejemplos": [],
+  "llave": "api_o_administracion"
+ },
+ {
+  "operationId": "retrievePdfSettings",
+  "metodo": "GET",
+  "ruta": "/company/pdf_settings",
+  "recurso": "CompanySettings",
+  "idempotente": false,
+  "reintento": "seguro",
+  "binario": null,
+  "lista": null,
+  "respuesta": "PdfSettings",
+  "cuerpo": null,
+  "cuerpoRequerido": false,
+  "parametros": [],
+  "ejemplos": [],
+  "llave": "api_o_administracion"
+ },
+ {
   "operationId": "retrieveProduct",
   "metodo": "GET",
   "ruta": "/products/{id}",
@@ -5828,6 +6570,51 @@
   "llave": "api_o_administracion"
  },
  {
+  "operationId": "sendCreditNoteEmail",
+  "metodo": "POST",
+  "ruta": "/credit_notes/{id}/email",
+  "recurso": "CreditNotes",
+  "idempotente": true,
+  "reintento": "seguro",
+  "binario": null,
+  "lista": null,
+  "respuesta": "EmailResend",
+  "cuerpo": "EmailResendRequest",
+  "cuerpoRequerido": false,
+  "parametros": [
+   {
+    "nombre": "id",
+    "en": "path",
+    "requerido": true,
+    "tipo": "string"
+   },
+   {
+    "nombre": "Idempotency-Key",
+    "en": "header",
+    "requerido": false,
+    "tipo": "string"
+   }
+  ],
+  "ejemplos": [
+   {
+    "nombre": "comprador",
+    "resumen": "Al comprador, como el correo original",
+    "valor": {}
+   },
+   {
+    "nombre": "otros",
+    "resumen": "A otras direcciones (producción, customers:read)",
+    "valor": {
+     "to": [
+      "contabilidad@ficorp.example",
+      "tesoreria@ficorp.example"
+     ]
+    }
+   }
+  ],
+  "llave": "api_o_administracion"
+ },
+ {
   "operationId": "sendDebitNote",
   "metodo": "POST",
   "ruta": "/debit_notes/{id}/send",
@@ -5848,6 +6635,51 @@
    }
   ],
   "ejemplos": [],
+  "llave": "api_o_administracion"
+ },
+ {
+  "operationId": "sendDebitNoteEmail",
+  "metodo": "POST",
+  "ruta": "/debit_notes/{id}/email",
+  "recurso": "DebitNotes",
+  "idempotente": true,
+  "reintento": "seguro",
+  "binario": null,
+  "lista": null,
+  "respuesta": "EmailResend",
+  "cuerpo": "EmailResendRequest",
+  "cuerpoRequerido": false,
+  "parametros": [
+   {
+    "nombre": "id",
+    "en": "path",
+    "requerido": true,
+    "tipo": "string"
+   },
+   {
+    "nombre": "Idempotency-Key",
+    "en": "header",
+    "requerido": false,
+    "tipo": "string"
+   }
+  ],
+  "ejemplos": [
+   {
+    "nombre": "comprador",
+    "resumen": "Al comprador, como el correo original",
+    "valor": {}
+   },
+   {
+    "nombre": "otros",
+    "resumen": "A otras direcciones (producción, customers:read)",
+    "valor": {
+     "to": [
+      "contabilidad@ficorp.example",
+      "tesoreria@ficorp.example"
+     ]
+    }
+   }
+  ],
   "llave": "api_o_administracion"
  },
  {
@@ -5897,6 +6729,96 @@
   "llave": "api_o_administracion"
  },
  {
+  "operationId": "sendEquivalentDocumentAdjustmentEmail",
+  "metodo": "POST",
+  "ruta": "/equivalent_document_adjustments/{id}/email",
+  "recurso": "EquivalentDocumentAdjustments",
+  "idempotente": true,
+  "reintento": "seguro",
+  "binario": null,
+  "lista": null,
+  "respuesta": "EmailResend",
+  "cuerpo": "EmailResendRequest",
+  "cuerpoRequerido": false,
+  "parametros": [
+   {
+    "nombre": "id",
+    "en": "path",
+    "requerido": true,
+    "tipo": "string"
+   },
+   {
+    "nombre": "Idempotency-Key",
+    "en": "header",
+    "requerido": false,
+    "tipo": "string"
+   }
+  ],
+  "ejemplos": [
+   {
+    "nombre": "comprador",
+    "resumen": "Al comprador, como el correo original",
+    "valor": {}
+   },
+   {
+    "nombre": "otros",
+    "resumen": "A otras direcciones (producción, customers:read)",
+    "valor": {
+     "to": [
+      "contabilidad@ficorp.example",
+      "tesoreria@ficorp.example"
+     ]
+    }
+   }
+  ],
+  "llave": "api_o_administracion"
+ },
+ {
+  "operationId": "sendEquivalentDocumentEmail",
+  "metodo": "POST",
+  "ruta": "/equivalent_documents/{id}/email",
+  "recurso": "EquivalentDocuments",
+  "idempotente": true,
+  "reintento": "seguro",
+  "binario": null,
+  "lista": null,
+  "respuesta": "EmailResend",
+  "cuerpo": "EmailResendRequest",
+  "cuerpoRequerido": false,
+  "parametros": [
+   {
+    "nombre": "id",
+    "en": "path",
+    "requerido": true,
+    "tipo": "string"
+   },
+   {
+    "nombre": "Idempotency-Key",
+    "en": "header",
+    "requerido": false,
+    "tipo": "string"
+   }
+  ],
+  "ejemplos": [
+   {
+    "nombre": "comprador",
+    "resumen": "Al comprador, como el correo original",
+    "valor": {}
+   },
+   {
+    "nombre": "otros",
+    "resumen": "A otras direcciones (producción, customers:read)",
+    "valor": {
+     "to": [
+      "contabilidad@ficorp.example",
+      "tesoreria@ficorp.example"
+     ]
+    }
+   }
+  ],
+  "llave": "api_o_administracion"
+ },
+ {
   "operationId": "sendInvoice",
   "metodo": "POST",
   "ruta": "/invoices/{id}/send",
@@ -5917,6 +6839,51 @@
    }
   ],
   "ejemplos": [],
+  "llave": "api_o_administracion"
+ },
+ {
+  "operationId": "sendInvoiceEmail",
+  "metodo": "POST",
+  "ruta": "/invoices/{id}/email",
+  "recurso": "Invoices",
+  "idempotente": true,
+  "reintento": "seguro",
+  "binario": null,
+  "lista": null,
+  "respuesta": "EmailResend",
+  "cuerpo": "EmailResendRequest",
+  "cuerpoRequerido": false,
+  "parametros": [
+   {
+    "nombre": "id",
+    "en": "path",
+    "requerido": true,
+    "tipo": "string"
+   },
+   {
+    "nombre": "Idempotency-Key",
+    "en": "header",
+    "requerido": false,
+    "tipo": "string"
+   }
+  ],
+  "ejemplos": [
+   {
+    "nombre": "comprador",
+    "resumen": "Al comprador, como el correo original",
+    "valor": {}
+   },
+   {
+    "nombre": "otros",
+    "resumen": "A otras direcciones (producción, customers:read)",
+    "valor": {
+     "to": [
+      "contabilidad@ficorp.example",
+      "tesoreria@ficorp.example"
+     ]
+    }
+   }
+  ],
   "llave": "api_o_administracion"
  },
  {
@@ -6058,6 +7025,30 @@
   "llave": "api_o_administracion"
  },
  {
+  "operationId": "updateCompanyLogo",
+  "metodo": "PUT",
+  "ruta": "/company/logo",
+  "recurso": "CompanySettings",
+  "idempotente": false,
+  "reintento": "solo_429",
+  "binario": null,
+  "lista": null,
+  "respuesta": "CompanyLogo",
+  "cuerpo": "CompanyLogoInput",
+  "cuerpoRequerido": true,
+  "parametros": [],
+  "ejemplos": [
+   {
+    "nombre": "png",
+    "resumen": "Un PNG en base64",
+    "valor": {
+     "image_base64": "iVBORw0KGgoAAAANSUhEUgAAAGAAAAAgAQMAAADXDu8XAAAABlBMVEX///8KZKiBydPRAAAAJ0lEQVR42mNgIAPw////AcZmQpagAcf+/////////0BDe+jlH3IAAC07DVBS46jVAAAAAElFTkSuQmCC"
+    }
+   }
+  ],
+  "llave": "api_o_administracion"
+ },
+ {
   "operationId": "updateCustomer",
   "metodo": "PATCH",
   "ruta": "/customers/{id}",
@@ -6130,6 +7121,70 @@
   "llave": "api_o_administracion"
  },
  {
+  "operationId": "updatePdfDesign",
+  "metodo": "PATCH",
+  "ruta": "/pdf_designs/{id}",
+  "recurso": "PdfDesigns",
+  "idempotente": false,
+  "reintento": "seguro",
+  "binario": null,
+  "lista": null,
+  "respuesta": "PdfDesign",
+  "cuerpo": "PdfDesignUpdate",
+  "cuerpoRequerido": true,
+  "parametros": [
+   {
+    "nombre": "id",
+    "en": "path",
+    "requerido": true,
+    "tipo": "string"
+   }
+  ],
+  "ejemplos": [
+   {
+    "nombre": "color",
+    "resumen": "Otro color",
+    "valor": {
+     "accent_color": "#0a64a8",
+     "expected_version": 1
+    }
+   },
+   {
+    "nombre": "nombre",
+    "resumen": "Solo el nombre",
+    "valor": {
+     "name": "Moderno azul"
+    }
+   }
+  ],
+  "llave": "api_o_administracion"
+ },
+ {
+  "operationId": "updatePdfSettings",
+  "metodo": "PATCH",
+  "ruta": "/company/pdf_settings",
+  "recurso": "CompanySettings",
+  "idempotente": false,
+  "reintento": "seguro",
+  "binario": null,
+  "lista": null,
+  "respuesta": "PdfSettings",
+  "cuerpo": "PdfSettingsUpdate",
+  "cuerpoRequerido": true,
+  "parametros": [],
+  "ejemplos": [
+   {
+    "nombre": "ambos",
+    "resumen": "Carta y tirilla",
+    "valor": {
+     "letter_design_id": "pdd_7d3e9a107d3e9a107d3e9a107d3e9a10",
+     "receipt_design_id": "pdd_41b2c6f041b2c6f041b2c6f041b2c6f0"
+    }
+   }
+  ],
+  "llave": "api_o_administracion"
+ },
+ {
   "operationId": "updateProduct",
   "metodo": "PATCH",
   "ruta": "/products/{id}",
@@ -6189,11 +7244,18 @@
   ],
   "ejemplos": [
    {
-    "nombre": "ejemplo",
+    "nombre": "pausar",
     "resumen": "Pausar el endpoint",
     "valor": {
      "description": "Pausado mientras migramos el servidor",
      "status": "paused"
+    }
+   },
+   {
+    "nombre": "seguir",
+    "resumen": "Seguir el catálogo más nuevo (con events [\"*\"])",
+    "valor": {
+     "follow_latest_catalog": true
     }
    }
   ],

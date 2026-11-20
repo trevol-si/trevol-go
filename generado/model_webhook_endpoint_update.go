@@ -24,6 +24,8 @@ type WebhookEndpointUpdate struct {
 	Description NullableString `json:"description,omitempty"`
 	// Eventos del catálogo (69 tipos, hasta 100 en la lista), o [\"*\"] para todos (no se mezcla). Solo existen en producción (llaves live): `balance.low`, `numbering.low`, `numbering.expiring`, `dian_sync.completed`, `dian_sync.failed`, `numbering_range.exhausted`. `webhook.test` no se suscribe.
 	Events []string `json:"events,omitempty"`
+	// Solo con `events: [\"*\"]` (si no, 422 en `/follow_latest_catalog`): el endpoint sigue el catálogo más nuevo. Cambiar a una lista explícita lo apaga.
+	FollowLatestCatalog *bool `json:"follow_latest_catalog,omitempty"`
 	// enabled reactiva (también uno desactivado por Trevol) y pone en cero el contador de fallos.
 	Status *string `json:"status,omitempty"`
 	AdditionalProperties map[string]interface{}
@@ -154,6 +156,38 @@ func (o *WebhookEndpointUpdate) SetEvents(v []string) {
 	o.Events = v
 }
 
+// GetFollowLatestCatalog returns the FollowLatestCatalog field value if set, zero value otherwise.
+func (o *WebhookEndpointUpdate) GetFollowLatestCatalog() bool {
+	if o == nil || IsNil(o.FollowLatestCatalog) {
+		var ret bool
+		return ret
+	}
+	return *o.FollowLatestCatalog
+}
+
+// GetFollowLatestCatalogOk returns a tuple with the FollowLatestCatalog field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *WebhookEndpointUpdate) GetFollowLatestCatalogOk() (*bool, bool) {
+	if o == nil || IsNil(o.FollowLatestCatalog) {
+		return nil, false
+	}
+	return o.FollowLatestCatalog, true
+}
+
+// HasFollowLatestCatalog returns a boolean if a field has been set.
+func (o *WebhookEndpointUpdate) HasFollowLatestCatalog() bool {
+	if o != nil && !IsNil(o.FollowLatestCatalog) {
+		return true
+	}
+
+	return false
+}
+
+// SetFollowLatestCatalog gets a reference to the given bool and assigns it to the FollowLatestCatalog field.
+func (o *WebhookEndpointUpdate) SetFollowLatestCatalog(v bool) {
+	o.FollowLatestCatalog = &v
+}
+
 // GetStatus returns the Status field value if set, zero value otherwise.
 func (o *WebhookEndpointUpdate) GetStatus() string {
 	if o == nil || IsNil(o.Status) {
@@ -205,6 +239,9 @@ func (o WebhookEndpointUpdate) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.Events) {
 		toSerialize["events"] = o.Events
 	}
+	if !IsNil(o.FollowLatestCatalog) {
+		toSerialize["follow_latest_catalog"] = o.FollowLatestCatalog
+	}
 	if !IsNil(o.Status) {
 		toSerialize["status"] = o.Status
 	}
@@ -233,6 +270,7 @@ func (o *WebhookEndpointUpdate) UnmarshalJSON(data []byte) (err error) {
 		delete(additionalProperties, "url")
 		delete(additionalProperties, "description")
 		delete(additionalProperties, "events")
+		delete(additionalProperties, "follow_latest_catalog")
 		delete(additionalProperties, "status")
 		o.AdditionalProperties = additionalProperties
 	}
