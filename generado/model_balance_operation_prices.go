@@ -17,7 +17,7 @@ import (
 // checks if the BalanceOperationPrices type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &BalanceOperationPrices{}
 
-// BalanceOperationPrices El precio en pesos de cada operación de la API que se cobra del saldo porque Trevol entra al portal de la DIAN (0 = gratis). Solo en producción.
+// BalanceOperationPrices El precio en pesos de cada operación que Trevol hace por la empresa en el portal de la DIAN y que se cobra del saldo (0 es gratis). Solo en producción.
 type BalanceOperationPrices struct {
 	DianSync *int32 `json:"dian_sync,omitempty"`
 	NumberingRefresh *int32 `json:"numbering_refresh,omitempty"`

@@ -5,12 +5,14 @@ de la 1.0, un cambio incompatible sube el número menor.
 
 ## [0.3.1] — 2026-11-19
 
-Solo textos de la especificación (la misma versión `2026-11-18` de la API; nada cambia en el código ni en los tipos):
+Solo textos de la especificación (la misma versión `2026-11-18` de la API; nada cambia en el código):
 
 - Crear una llave de empresa con la llave de administración: ya no dice que una llave de escritura de producción se crea en la app.
 - `createDianSync`: los topes dicen 2 sincronizaciones de la cuenta en curso a la vez (no 5).
 - Los eventos de un endpoint de webhooks: 69 tipos en el catálogo (decía 60).
 - `api_version` de un evento: la versión del formato de los eventos (hoy `2026-10-22`), la misma para todas las llaves.
+- `stop_reason` de la habilitación de una empresa (`AccountCompanyOnboarding`) lista un valor conocido menos: esa parada llega ahora como `dian_portal_unavailable`.
+- `GET /v1/balance`: el ejemplo trae los precios vigentes de `operation_prices` (200, 50, 100 y 500 pesos) y la descripción dice solo que 0 es gratis.
 
 ## [0.3.0] — 2026-11-19
 

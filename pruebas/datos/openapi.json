@@ -1619,7 +1619,7 @@
   "/balance": {
    "get": {
     "summary": "El saldo de la cuenta (lo comparten sus empresas)",
-    "description": "El saldo prepago de Trevol. Es de la **cuenta**, no de la empresa: todas las empresas de la cuenta lo comparten (`shared: true`) y cualquier llave de cualquiera de ellas, de lectura o de escritura, `test` o `live`, ve el mismo. Solo lo que se emite en producción (llaves `live`) lo consume; la habilitación (`test`) no cobra. `available` es lo que se puede gastar (en pesos); `held`, lo apartado por documentos que la DIAN todavía valida y por operaciones de la API en curso; `overdraft`, cuánto puede bajar `available` de cero al apartar un documento; `low_threshold`, el umbral del aviso de saldo bajo (el 20 % de la última recarga; `null` sin recargas). `level`: `empty` con `available` ≤ 0, `low` por debajo de `low_threshold`, si no `ok`. Con `available` por debajo del precio de un documento, emitir en producción responde 402 `insufficient_balance`. El evento `balance.low` avisa por webhook. `operation_prices`: el precio en pesos de cada operación de la API que se cobra del saldo porque Trevol entra al portal de la DIAN (`dian_sync`: `POST /v1/dian_syncs`; `numbering_refresh`: `POST /v1/numbering_ranges/refresh`; `numbering_association`: `POST /v1/numbering_ranges/{id}/associate`; `numbering_request`: `POST /v1/numbering_requests`, una vez por solicitud). 0 es gratis, y es 0 mientras el cobro de Trevol está apagado. Solo en producción: se aparta al crearla, se cobra si termina bien y se devuelve si falla; sin saldo, 402 `insufficient_balance` y no se crea nada.",
+    "description": "El saldo prepago de Trevol. Es de la **cuenta**, no de la empresa: todas las empresas de la cuenta lo comparten (`shared: true`) y cualquier llave de cualquiera de ellas, de lectura o de escritura, `test` o `live`, ve el mismo. Solo lo que se emite en producción (llaves `live`) lo consume; la habilitación (`test`) no cobra. `available` es lo que se puede gastar (en pesos); `held`, lo apartado por documentos que la DIAN todavía valida y por operaciones de la API en curso; `overdraft`, cuánto puede bajar `available` de cero al apartar un documento; `low_threshold`, el umbral del aviso de saldo bajo (el 20 % de la última recarga; `null` sin recargas). `level`: `empty` con `available` ≤ 0, `low` por debajo de `low_threshold`, si no `ok`. Con `available` por debajo del precio de un documento, emitir en producción responde 402 `insufficient_balance`. El evento `balance.low` avisa por webhook. `operation_prices`: el precio en pesos de cada operación que Trevol hace por la empresa en el portal de la DIAN y que se cobra del saldo (`dian_sync`: `POST /v1/dian_syncs`; `numbering_refresh`: `POST /v1/numbering_ranges/refresh`; `numbering_association`: `POST /v1/numbering_ranges/{id}/associate`; `numbering_request`: `POST /v1/numbering_requests`, una vez por solicitud). 0 es gratis. Solo en producción: se aparta al crearla, se cobra si termina bien y se devuelve si falla; sin saldo, 402 `insufficient_balance` y no se crea nada.",
     "responses": {
      "200": {
       "description": "El saldo",
@@ -1639,10 +1639,10 @@
          "updated_at": "2026-10-31T09:20:05-05:00",
          "shared": true,
          "operation_prices": {
-          "dian_sync": 0,
-          "numbering_refresh": 0,
-          "numbering_association": 0,
-          "numbering_request": 0
+          "dian_sync": 200,
+          "numbering_refresh": 50,
+          "numbering_association": 100,
+          "numbering_request": 500
          }
         }
        }
@@ -3061,10 +3061,10 @@
            "title": "No hay saldo",
            "status": 402,
            "code": "insufficient_balance",
-           "detail": "El saldo de la cuenta no alcanza para esta operación (se cobra porque Trevol entra al portal de la DIAN). Recarga y repite la petición con la misma Idempotency-Key.",
+           "detail": "El saldo de la cuenta no alcanza para esta operación. Recarga y repite la petición con la misma Idempotency-Key.",
            "retryable": false,
-           "balance_cop": 120,
-           "price_cop": 300,
+           "balance_cop": 30,
+           "price_cop": 200,
            "request_id": "req_5b1c5b1c5b1c5b1c5b1c5b1c"
           }
          }
@@ -17778,10 +17778,10 @@
            "title": "No hay saldo",
            "status": 402,
            "code": "insufficient_balance",
-           "detail": "El saldo de la cuenta no alcanza para esta operación (se cobra porque Trevol entra al portal de la DIAN). Recarga y repite la petición.",
+           "detail": "El saldo de la cuenta no alcanza para esta operación. Recarga y repite la petición.",
            "retryable": false,
-           "balance_cop": 120,
-           "price_cop": 300,
+           "balance_cop": 30,
+           "price_cop": 50,
            "request_id": "req_5b1c5b1c5b1c5b1c5b1c5b1c"
           }
          }
@@ -18164,10 +18164,10 @@
            "title": "No hay saldo",
            "status": 402,
            "code": "insufficient_balance",
-           "detail": "El saldo de la cuenta no alcanza para esta operación (se cobra porque Trevol entra al portal de la DIAN). Recarga y repite la petición con la misma Idempotency-Key.",
+           "detail": "El saldo de la cuenta no alcanza para esta operación. Recarga y repite la petición con la misma Idempotency-Key.",
            "retryable": false,
-           "balance_cop": 120,
-           "price_cop": 300,
+           "balance_cop": 30,
+           "price_cop": 200,
            "request_id": "req_5b1c5b1c5b1c5b1c5b1c5b1c"
           }
          }
@@ -18582,10 +18582,10 @@
            "title": "No hay saldo",
            "status": 402,
            "code": "insufficient_balance",
-           "detail": "El saldo de la cuenta no alcanza para esta operación (se cobra porque Trevol entra al portal de la DIAN). Recarga y repite la petición con la misma Idempotency-Key.",
+           "detail": "El saldo de la cuenta no alcanza para esta operación. Recarga y repite la petición con la misma Idempotency-Key.",
            "retryable": false,
-           "balance_cop": 120,
-           "price_cop": 300,
+           "balance_cop": 30,
+           "price_cop": 200,
            "request_id": "req_5b1c5b1c5b1c5b1c5b1c5b1c"
           }
          }
@@ -22868,7 +22868,7 @@
         },
         "example": {
          "object": "report_file",
-         "url": "https://ejemplo.supabase.co/storage/v1/object/sign/reportes/…?token=…&download=trevol-documentos-2026-01-01_2026-10-31.xlsx",
+         "url": "https://descargas.ejemplo.com/reportes/…?token=…&download=trevol-documentos-2026-01-01_2026-10-31.xlsx",
          "expires_at": "2026-11-18T09:40:00-05:00",
          "filename": "trevol-documentos-2026-01-01_2026-10-31.xlsx",
          "size_bytes": 6829104
@@ -25558,7 +25558,7 @@
           }
          },
          "escritura_live": {
-          "summary": "Una llave de escritura de producción, si Trevol la tiene apagada",
+          "summary": "Una llave de escritura de producción, cuando solo se crea en la app",
           "value": {
            "type": "https://platform.trevol.si/docs/errores#permission_denied",
            "title": "Sin permiso para esto",
@@ -43563,7 +43563,7 @@
    },
    "Balance": {
     "type": "object",
-    "description": "El saldo prepago de Trevol. Es de la **cuenta**, no de la empresa: todas las empresas de la cuenta lo comparten (`shared: true`) y cualquier llave de cualquiera de ellas, de lectura o de escritura, `test` o `live`, ve el mismo. Solo lo que se emite en producción (llaves `live`) lo consume; la habilitación (`test`) no cobra. `available` es lo que se puede gastar (en pesos); `held`, lo apartado por documentos que la DIAN todavía valida y por operaciones de la API en curso; `overdraft`, cuánto puede bajar `available` de cero al apartar un documento; `low_threshold`, el umbral del aviso de saldo bajo (el 20 % de la última recarga; `null` sin recargas). `level`: `empty` con `available` ≤ 0, `low` por debajo de `low_threshold`, si no `ok`. Con `available` por debajo del precio de un documento, emitir en producción responde 402 `insufficient_balance`. El evento `balance.low` avisa por webhook. `operation_prices`: el precio en pesos de cada operación de la API que se cobra del saldo porque Trevol entra al portal de la DIAN (`dian_sync`: `POST /v1/dian_syncs`; `numbering_refresh`: `POST /v1/numbering_ranges/refresh`; `numbering_association`: `POST /v1/numbering_ranges/{id}/associate`; `numbering_request`: `POST /v1/numbering_requests`, una vez por solicitud). 0 es gratis, y es 0 mientras el cobro de Trevol está apagado. Solo en producción: se aparta al crearla, se cobra si termina bien y se devuelve si falla; sin saldo, 402 `insufficient_balance` y no se crea nada.",
+    "description": "El saldo prepago de Trevol. Es de la **cuenta**, no de la empresa: todas las empresas de la cuenta lo comparten (`shared: true`) y cualquier llave de cualquiera de ellas, de lectura o de escritura, `test` o `live`, ve el mismo. Solo lo que se emite en producción (llaves `live`) lo consume; la habilitación (`test`) no cobra. `available` es lo que se puede gastar (en pesos); `held`, lo apartado por documentos que la DIAN todavía valida y por operaciones de la API en curso; `overdraft`, cuánto puede bajar `available` de cero al apartar un documento; `low_threshold`, el umbral del aviso de saldo bajo (el 20 % de la última recarga; `null` sin recargas). `level`: `empty` con `available` ≤ 0, `low` por debajo de `low_threshold`, si no `ok`. Con `available` por debajo del precio de un documento, emitir en producción responde 402 `insufficient_balance`. El evento `balance.low` avisa por webhook. `operation_prices`: el precio en pesos de cada operación que Trevol hace por la empresa en el portal de la DIAN y que se cobra del saldo (`dian_sync`: `POST /v1/dian_syncs`; `numbering_refresh`: `POST /v1/numbering_ranges/refresh`; `numbering_association`: `POST /v1/numbering_ranges/{id}/associate`; `numbering_request`: `POST /v1/numbering_requests`, una vez por solicitud). 0 es gratis. Solo en producción: se aparta al crearla, se cobra si termina bien y se devuelve si falla; sin saldo, 402 `insufficient_balance` y no se crea nada.",
     "required": [
      "object",
      "currency",
@@ -43640,7 +43640,7 @@
        "numbering_request"
       ],
       "additionalProperties": false,
-      "description": "El precio en pesos de cada operación de la API que se cobra del saldo porque Trevol entra al portal de la DIAN (0 = gratis). Solo en producción.",
+      "description": "El precio en pesos de cada operación que Trevol hace por la empresa en el portal de la DIAN y que se cobra del saldo (0 es gratis). Solo en producción.",
       "properties": {
        "dian_sync": {
         "type": "integer",
@@ -47425,7 +47425,6 @@
          "not_registered_for_testing",
          "test_set_rejected",
          "dian_portal_unavailable",
-         "captcha",
          "internal_error",
          null
         ],
