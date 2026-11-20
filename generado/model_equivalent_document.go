@@ -59,6 +59,10 @@ type EquivalentDocument struct {
 	Extension *Extension `json:"extension,omitempty"`
 	OriginNote *OriginNote `json:"origin_note,omitempty"`
 	Contingency NullableEquivalentDocumentContingency `json:"contingency,omitempty"`
+	// El que pidió el documento, o null.
+	PdfDesignId NullableString `json:"pdf_design_id,omitempty"`
+	// El diseño fijado al emitir; null mientras está pendiente.
+	PdfDesign NullablePdfDesignApplied `json:"pdf_design,omitempty"`
 	AdditionalProperties map[string]interface{}
 }
 
@@ -1196,6 +1200,90 @@ func (o *EquivalentDocument) UnsetContingency() {
 	o.Contingency.Unset()
 }
 
+// GetPdfDesignId returns the PdfDesignId field value if set, zero value otherwise (both if not set or set to explicit null).
+func (o *EquivalentDocument) GetPdfDesignId() string {
+	if o == nil || IsNil(o.PdfDesignId.Get()) {
+		var ret string
+		return ret
+	}
+	return *o.PdfDesignId.Get()
+}
+
+// GetPdfDesignIdOk returns a tuple with the PdfDesignId field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+// NOTE: If the value is an explicit nil, `nil, true` will be returned
+func (o *EquivalentDocument) GetPdfDesignIdOk() (*string, bool) {
+	if o == nil {
+		return nil, false
+	}
+	return o.PdfDesignId.Get(), o.PdfDesignId.IsSet()
+}
+
+// HasPdfDesignId returns a boolean if a field has been set.
+func (o *EquivalentDocument) HasPdfDesignId() bool {
+	if o != nil && o.PdfDesignId.IsSet() {
+		return true
+	}
+
+	return false
+}
+
+// SetPdfDesignId gets a reference to the given NullableString and assigns it to the PdfDesignId field.
+func (o *EquivalentDocument) SetPdfDesignId(v string) {
+	o.PdfDesignId.Set(&v)
+}
+// SetPdfDesignIdNil sets the value for PdfDesignId to be an explicit nil
+func (o *EquivalentDocument) SetPdfDesignIdNil() {
+	o.PdfDesignId.Set(nil)
+}
+
+// UnsetPdfDesignId ensures that no value is present for PdfDesignId, not even an explicit nil
+func (o *EquivalentDocument) UnsetPdfDesignId() {
+	o.PdfDesignId.Unset()
+}
+
+// GetPdfDesign returns the PdfDesign field value if set, zero value otherwise (both if not set or set to explicit null).
+func (o *EquivalentDocument) GetPdfDesign() PdfDesignApplied {
+	if o == nil || IsNil(o.PdfDesign.Get()) {
+		var ret PdfDesignApplied
+		return ret
+	}
+	return *o.PdfDesign.Get()
+}
+
+// GetPdfDesignOk returns a tuple with the PdfDesign field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+// NOTE: If the value is an explicit nil, `nil, true` will be returned
+func (o *EquivalentDocument) GetPdfDesignOk() (*PdfDesignApplied, bool) {
+	if o == nil {
+		return nil, false
+	}
+	return o.PdfDesign.Get(), o.PdfDesign.IsSet()
+}
+
+// HasPdfDesign returns a boolean if a field has been set.
+func (o *EquivalentDocument) HasPdfDesign() bool {
+	if o != nil && o.PdfDesign.IsSet() {
+		return true
+	}
+
+	return false
+}
+
+// SetPdfDesign gets a reference to the given NullablePdfDesignApplied and assigns it to the PdfDesign field.
+func (o *EquivalentDocument) SetPdfDesign(v PdfDesignApplied) {
+	o.PdfDesign.Set(&v)
+}
+// SetPdfDesignNil sets the value for PdfDesign to be an explicit nil
+func (o *EquivalentDocument) SetPdfDesignNil() {
+	o.PdfDesign.Set(nil)
+}
+
+// UnsetPdfDesign ensures that no value is present for PdfDesign, not even an explicit nil
+func (o *EquivalentDocument) UnsetPdfDesign() {
+	o.PdfDesign.Unset()
+}
+
 func (o EquivalentDocument) MarshalJSON() ([]byte, error) {
 	toSerialize,err := o.ToMap()
 	if err != nil {
@@ -1302,6 +1390,12 @@ func (o EquivalentDocument) ToMap() (map[string]interface{}, error) {
 	if o.Contingency.IsSet() {
 		toSerialize["contingency"] = o.Contingency.Get()
 	}
+	if o.PdfDesignId.IsSet() {
+		toSerialize["pdf_design_id"] = o.PdfDesignId.Get()
+	}
+	if o.PdfDesign.IsSet() {
+		toSerialize["pdf_design"] = o.PdfDesign.Get()
+	}
 
 	for key, value := range o.AdditionalProperties {
 		toSerialize[key] = value
@@ -1356,6 +1450,8 @@ func (o *EquivalentDocument) UnmarshalJSON(data []byte) (err error) {
 		delete(additionalProperties, "extension")
 		delete(additionalProperties, "origin_note")
 		delete(additionalProperties, "contingency")
+		delete(additionalProperties, "pdf_design_id")
+		delete(additionalProperties, "pdf_design")
 		o.AdditionalProperties = additionalProperties
 	}
 

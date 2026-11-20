@@ -25,6 +25,8 @@ type WebhookEndpointInput struct {
 	Description NullableString `json:"description,omitempty"`
 	// Eventos del catálogo (69 tipos, hasta 100 en la lista), o [\"*\"] para todos (no se mezcla). Solo existen en producción (llaves live): `balance.low`, `numbering.low`, `numbering.expiring`, `dian_sync.completed`, `dian_sync.failed`, `numbering_range.exhausted`. `webhook.test` no se suscribe.
 	Events []string `json:"events"`
+	// Solo con `events: [\"*\"]` (si no, 422 en `/follow_latest_catalog`): el endpoint sigue el catálogo más nuevo. Cambiar a una lista explícita lo apaga.
+	FollowLatestCatalog *bool `json:"follow_latest_catalog,omitempty"`
 	AdditionalProperties map[string]interface{}
 }
 
@@ -139,6 +141,38 @@ func (o *WebhookEndpointInput) SetEvents(v []string) {
 	o.Events = v
 }
 
+// GetFollowLatestCatalog returns the FollowLatestCatalog field value if set, zero value otherwise.
+func (o *WebhookEndpointInput) GetFollowLatestCatalog() bool {
+	if o == nil || IsNil(o.FollowLatestCatalog) {
+		var ret bool
+		return ret
+	}
+	return *o.FollowLatestCatalog
+}
+
+// GetFollowLatestCatalogOk returns a tuple with the FollowLatestCatalog field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *WebhookEndpointInput) GetFollowLatestCatalogOk() (*bool, bool) {
+	if o == nil || IsNil(o.FollowLatestCatalog) {
+		return nil, false
+	}
+	return o.FollowLatestCatalog, true
+}
+
+// HasFollowLatestCatalog returns a boolean if a field has been set.
+func (o *WebhookEndpointInput) HasFollowLatestCatalog() bool {
+	if o != nil && !IsNil(o.FollowLatestCatalog) {
+		return true
+	}
+
+	return false
+}
+
+// SetFollowLatestCatalog gets a reference to the given bool and assigns it to the FollowLatestCatalog field.
+func (o *WebhookEndpointInput) SetFollowLatestCatalog(v bool) {
+	o.FollowLatestCatalog = &v
+}
+
 func (o WebhookEndpointInput) MarshalJSON() ([]byte, error) {
 	toSerialize,err := o.ToMap()
 	if err != nil {
@@ -154,6 +188,9 @@ func (o WebhookEndpointInput) ToMap() (map[string]interface{}, error) {
 		toSerialize["description"] = o.Description.Get()
 	}
 	toSerialize["events"] = o.Events
+	if !IsNil(o.FollowLatestCatalog) {
+		toSerialize["follow_latest_catalog"] = o.FollowLatestCatalog
+	}
 
 	for key, value := range o.AdditionalProperties {
 		toSerialize[key] = value
@@ -201,6 +238,7 @@ func (o *WebhookEndpointInput) UnmarshalJSON(data []byte) (err error) {
 		delete(additionalProperties, "url")
 		delete(additionalProperties, "description")
 		delete(additionalProperties, "events")
+		delete(additionalProperties, "follow_latest_catalog")
 		o.AdditionalProperties = additionalProperties
 	}
 

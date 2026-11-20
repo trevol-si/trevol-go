@@ -19,6 +19,7 @@ var _ MappedNullable = &DocumentTotalsItem{}
 
 // DocumentTotalsItem struct for DocumentTotalsItem
 type DocumentTotalsItem struct {
+	// Cantidad × precio SIN impuestos.
 	Gross *string `json:"gross,omitempty"`
 	Discount *string `json:"discount,omitempty"`
 	LineExtension *string `json:"line_extension,omitempty"`

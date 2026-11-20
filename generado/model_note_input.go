@@ -41,6 +41,8 @@ type NoteInput struct {
 	Concept string `json:"concept"`
 	Description *string `json:"description,omitempty"`
 	Invoice *InvoiceReference `json:"invoice,omitempty"`
+	// El diseño del PDF de este documento (`pdd_…` o `classic`); gana al de la numeración y al predeterminado. `null` es lo mismo que no mandarlo. Guía: Diseño del PDF.
+	PdfDesignId NullableString `json:"pdf_design_id,omitempty"`
 	AdditionalProperties map[string]interface{}
 }
 
@@ -498,6 +500,48 @@ func (o *NoteInput) SetInvoice(v InvoiceReference) {
 	o.Invoice = &v
 }
 
+// GetPdfDesignId returns the PdfDesignId field value if set, zero value otherwise (both if not set or set to explicit null).
+func (o *NoteInput) GetPdfDesignId() string {
+	if o == nil || IsNil(o.PdfDesignId.Get()) {
+		var ret string
+		return ret
+	}
+	return *o.PdfDesignId.Get()
+}
+
+// GetPdfDesignIdOk returns a tuple with the PdfDesignId field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+// NOTE: If the value is an explicit nil, `nil, true` will be returned
+func (o *NoteInput) GetPdfDesignIdOk() (*string, bool) {
+	if o == nil {
+		return nil, false
+	}
+	return o.PdfDesignId.Get(), o.PdfDesignId.IsSet()
+}
+
+// HasPdfDesignId returns a boolean if a field has been set.
+func (o *NoteInput) HasPdfDesignId() bool {
+	if o != nil && o.PdfDesignId.IsSet() {
+		return true
+	}
+
+	return false
+}
+
+// SetPdfDesignId gets a reference to the given NullableString and assigns it to the PdfDesignId field.
+func (o *NoteInput) SetPdfDesignId(v string) {
+	o.PdfDesignId.Set(&v)
+}
+// SetPdfDesignIdNil sets the value for PdfDesignId to be an explicit nil
+func (o *NoteInput) SetPdfDesignIdNil() {
+	o.PdfDesignId.Set(nil)
+}
+
+// UnsetPdfDesignId ensures that no value is present for PdfDesignId, not even an explicit nil
+func (o *NoteInput) UnsetPdfDesignId() {
+	o.PdfDesignId.Unset()
+}
+
 func (o NoteInput) MarshalJSON() ([]byte, error) {
 	toSerialize,err := o.ToMap()
 	if err != nil {
@@ -545,6 +589,9 @@ func (o NoteInput) ToMap() (map[string]interface{}, error) {
 	}
 	if !IsNil(o.Invoice) {
 		toSerialize["invoice"] = o.Invoice
+	}
+	if o.PdfDesignId.IsSet() {
+		toSerialize["pdf_design_id"] = o.PdfDesignId.Get()
 	}
 
 	for key, value := range o.AdditionalProperties {
@@ -604,6 +651,7 @@ func (o *NoteInput) UnmarshalJSON(data []byte) (err error) {
 		delete(additionalProperties, "concept")
 		delete(additionalProperties, "description")
 		delete(additionalProperties, "invoice")
+		delete(additionalProperties, "pdf_design_id")
 		o.AdditionalProperties = additionalProperties
 	}
 

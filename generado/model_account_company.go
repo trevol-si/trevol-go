@@ -22,6 +22,8 @@ var _ MappedNullable = &AccountCompany{}
 type AccountCompany struct {
 	Id *string `json:"id,omitempty"`
 	Object *string `json:"object,omitempty"`
+	// Solo en el entorno SIMULADO (la empresa simulada de la cuenta): el objeto se validó, se calculó y se firmó como siempre, pero nunca llegó a la DIAN ni tiene validez. Un objeto real no lleva esta propiedad. En la empresa de `/v1/account/companies`: solo la ve una llave de administración de pruebas (`tva_test_…`); para una de producción no existe.
+	Simulated *bool `json:"simulated,omitempty"`
 	// El NIT, sin DV.
 	Nit *string `json:"nit,omitempty"`
 	// El dígito de verificación del NIT (como texto).
@@ -127,6 +129,38 @@ func (o *AccountCompany) HasObject() bool {
 // SetObject gets a reference to the given string and assigns it to the Object field.
 func (o *AccountCompany) SetObject(v string) {
 	o.Object = &v
+}
+
+// GetSimulated returns the Simulated field value if set, zero value otherwise.
+func (o *AccountCompany) GetSimulated() bool {
+	if o == nil || IsNil(o.Simulated) {
+		var ret bool
+		return ret
+	}
+	return *o.Simulated
+}
+
+// GetSimulatedOk returns a tuple with the Simulated field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *AccountCompany) GetSimulatedOk() (*bool, bool) {
+	if o == nil || IsNil(o.Simulated) {
+		return nil, false
+	}
+	return o.Simulated, true
+}
+
+// HasSimulated returns a boolean if a field has been set.
+func (o *AccountCompany) HasSimulated() bool {
+	if o != nil && !IsNil(o.Simulated) {
+		return true
+	}
+
+	return false
+}
+
+// SetSimulated gets a reference to the given bool and assigns it to the Simulated field.
+func (o *AccountCompany) SetSimulated(v bool) {
+	o.Simulated = &v
 }
 
 // GetNit returns the Nit field value if set, zero value otherwise.
@@ -547,6 +581,9 @@ func (o AccountCompany) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.Object) {
 		toSerialize["object"] = o.Object
 	}
+	if !IsNil(o.Simulated) {
+		toSerialize["simulated"] = o.Simulated
+	}
 	if !IsNil(o.Nit) {
 		toSerialize["nit"] = o.Nit
 	}
@@ -604,6 +641,7 @@ func (o *AccountCompany) UnmarshalJSON(data []byte) (err error) {
 	if err = json.Unmarshal(data, &additionalProperties); err == nil {
 		delete(additionalProperties, "id")
 		delete(additionalProperties, "object")
+		delete(additionalProperties, "simulated")
 		delete(additionalProperties, "nit")
 		delete(additionalProperties, "check_digit")
 		delete(additionalProperties, "name")

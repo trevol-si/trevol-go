@@ -186,6 +186,17 @@ func (a *RadianEventsAPIService) CreateRadianEventExecute(r ApiCreateRadianEvent
 					newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
+		if localVarHTTPResponse.StatusCode == 403 {
+			var v Problem
+			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.error = err.Error()
+				return localVarReturnValue, localVarHTTPResponse, newErr
+			}
+					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+					newErr.model = v
+			return localVarReturnValue, localVarHTTPResponse, newErr
+		}
 			var v Problem
 			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
 			if err != nil {
@@ -297,6 +308,17 @@ func (a *RadianEventsAPIService) DownloadRadianEventXmlExecute(r ApiDownloadRadi
 			body:  localVarBody,
 			error: localVarHTTPResponse.Status,
 		}
+		if localVarHTTPResponse.StatusCode == 403 {
+			var v Problem
+			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.error = err.Error()
+				return localVarReturnValue, localVarHTTPResponse, newErr
+			}
+					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+					newErr.model = v
+			return localVarReturnValue, localVarHTTPResponse, newErr
+		}
 			var v Problem
 			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
 			if err != nil {
@@ -331,6 +353,8 @@ type ApiListRadianEventsRequest struct {
 	createdTo *string
 	eventCode *string
 	invoiceCufe *string
+	number *string
+	prefix *string
 }
 
 func (r ApiListRadianEventsRequest) Limit(limit int32) ApiListRadianEventsRequest {
@@ -370,6 +394,18 @@ func (r ApiListRadianEventsRequest) EventCode(eventCode string) ApiListRadianEve
 
 func (r ApiListRadianEventsRequest) InvoiceCufe(invoiceCufe string) ApiListRadianEventsRequest {
 	r.invoiceCufe = &invoiceCufe
+	return r
+}
+
+// El número completo exacto del EVENTO, como sale en &#x60;number&#x60; (p. ej. &#x60;AR994000123&#x60;), no el de la factura (esa va con &#x60;invoice_cufe&#x60;).
+func (r ApiListRadianEventsRequest) Number(number string) ApiListRadianEventsRequest {
+	r.number = &number
+	return r
+}
+
+// El prefijo exacto del evento, como sale en &#x60;prefix&#x60; (&#x60;AR&#x60;, &#x60;RC&#x60;, &#x60;RB&#x60;, &#x60;AE&#x60; o &#x60;E0xx&#x60;). Para filtrar por tipo es mejor &#x60;event_code&#x60;.
+func (r ApiListRadianEventsRequest) Prefix(prefix string) ApiListRadianEventsRequest {
+	r.prefix = &prefix
 	return r
 }
 
@@ -437,6 +473,12 @@ func (a *RadianEventsAPIService) ListRadianEventsExecute(r ApiListRadianEventsRe
 	if r.invoiceCufe != nil {
 		parameterAddToHeaderOrQuery(localVarQueryParams, "invoice_cufe", r.invoiceCufe, "form", "")
 	}
+	if r.number != nil {
+		parameterAddToHeaderOrQuery(localVarQueryParams, "number", r.number, "form", "")
+	}
+	if r.prefix != nil {
+		parameterAddToHeaderOrQuery(localVarQueryParams, "prefix", r.prefix, "form", "")
+	}
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{}
 
@@ -475,6 +517,17 @@ func (a *RadianEventsAPIService) ListRadianEventsExecute(r ApiListRadianEventsRe
 		newErr := &GenericOpenAPIError{
 			body:  localVarBody,
 			error: localVarHTTPResponse.Status,
+		}
+		if localVarHTTPResponse.StatusCode == 403 {
+			var v Problem
+			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.error = err.Error()
+				return localVarReturnValue, localVarHTTPResponse, newErr
+			}
+					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+					newErr.model = v
+			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 			var v Problem
 			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
@@ -586,6 +639,17 @@ func (a *RadianEventsAPIService) RetrieveRadianEventExecute(r ApiRetrieveRadianE
 		newErr := &GenericOpenAPIError{
 			body:  localVarBody,
 			error: localVarHTTPResponse.Status,
+		}
+		if localVarHTTPResponse.StatusCode == 403 {
+			var v Problem
+			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.error = err.Error()
+				return localVarReturnValue, localVarHTTPResponse, newErr
+			}
+					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+					newErr.model = v
+			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 			var v Problem
 			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
@@ -705,6 +769,17 @@ func (a *RadianEventsAPIService) RetrieveTacitAcceptanceByCufeExecute(r ApiRetri
 			body:  localVarBody,
 			error: localVarHTTPResponse.Status,
 		}
+		if localVarHTTPResponse.StatusCode == 403 {
+			var v Problem
+			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.error = err.Error()
+				return localVarReturnValue, localVarHTTPResponse, newErr
+			}
+					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+					newErr.model = v
+			return localVarReturnValue, localVarHTTPResponse, newErr
+		}
 			var v Problem
 			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
 			if err != nil {
@@ -819,6 +894,17 @@ func (a *RadianEventsAPIService) SendRadianEventExecute(r ApiSendRadianEventRequ
 			error: localVarHTTPResponse.Status,
 		}
 		if localVarHTTPResponse.StatusCode == 409 {
+			var v Problem
+			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.error = err.Error()
+				return localVarReturnValue, localVarHTTPResponse, newErr
+			}
+					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+					newErr.model = v
+			return localVarReturnValue, localVarHTTPResponse, newErr
+		}
+		if localVarHTTPResponse.StatusCode == 403 {
 			var v Problem
 			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
 			if err != nil {

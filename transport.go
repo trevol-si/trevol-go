@@ -148,6 +148,8 @@ func aceptar(binario string) string {
 		return "application/xml, " + problema
 	case "zip":
 		return "application/zip, " + problema
+	case "png": // el logo de la empresa (0.4.0)
+		return "image/png, " + problema
 	case "csv": // los reportes: CSV o Excel según el formato
 		return "text/csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, " + problema
 	}

@@ -23,6 +23,8 @@ type InvoiceBatch struct {
 	Id *string `json:"id,omitempty"`
 	Object *string `json:"object,omitempty"`
 	Environment *string `json:"environment,omitempty"`
+	// Solo en el entorno SIMULADO (la empresa simulada de la cuenta): el objeto se validó, se calculó y se firmó como siempre, pero nunca llegó a la DIAN ni tiene validez. Un objeto real no lleva esta propiedad.
+	Simulated *bool `json:"simulated,omitempty"`
 	// completed cuando todas sus facturas reservadas llegaron a un estado final.
 	Status *string `json:"status,omitempty"`
 	CreatedAt *time.Time `json:"created_at,omitempty"`
@@ -146,6 +148,38 @@ func (o *InvoiceBatch) HasEnvironment() bool {
 // SetEnvironment gets a reference to the given string and assigns it to the Environment field.
 func (o *InvoiceBatch) SetEnvironment(v string) {
 	o.Environment = &v
+}
+
+// GetSimulated returns the Simulated field value if set, zero value otherwise.
+func (o *InvoiceBatch) GetSimulated() bool {
+	if o == nil || IsNil(o.Simulated) {
+		var ret bool
+		return ret
+	}
+	return *o.Simulated
+}
+
+// GetSimulatedOk returns a tuple with the Simulated field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *InvoiceBatch) GetSimulatedOk() (*bool, bool) {
+	if o == nil || IsNil(o.Simulated) {
+		return nil, false
+	}
+	return o.Simulated, true
+}
+
+// HasSimulated returns a boolean if a field has been set.
+func (o *InvoiceBatch) HasSimulated() bool {
+	if o != nil && !IsNil(o.Simulated) {
+		return true
+	}
+
+	return false
+}
+
+// SetSimulated gets a reference to the given bool and assigns it to the Simulated field.
+func (o *InvoiceBatch) SetSimulated(v bool) {
+	o.Simulated = &v
 }
 
 // GetStatus returns the Status field value if set, zero value otherwise.
@@ -337,6 +371,9 @@ func (o InvoiceBatch) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.Environment) {
 		toSerialize["environment"] = o.Environment
 	}
+	if !IsNil(o.Simulated) {
+		toSerialize["simulated"] = o.Simulated
+	}
 	if !IsNil(o.Status) {
 		toSerialize["status"] = o.Status
 	}
@@ -377,6 +414,7 @@ func (o *InvoiceBatch) UnmarshalJSON(data []byte) (err error) {
 		delete(additionalProperties, "id")
 		delete(additionalProperties, "object")
 		delete(additionalProperties, "environment")
+		delete(additionalProperties, "simulated")
 		delete(additionalProperties, "status")
 		delete(additionalProperties, "created_at")
 		delete(additionalProperties, "completed_at")

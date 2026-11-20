@@ -824,6 +824,8 @@ type ApiListDebitNotesRequest struct {
 	externalId *string
 	createdFrom *string
 	createdTo *string
+	number *string
+	prefix *string
 }
 
 func (r ApiListDebitNotesRequest) Limit(limit int32) ApiListDebitNotesRequest {
@@ -853,6 +855,18 @@ func (r ApiListDebitNotesRequest) CreatedFrom(createdFrom string) ApiListDebitNo
 
 func (r ApiListDebitNotesRequest) CreatedTo(createdTo string) ApiListDebitNotesRequest {
 	r.createdTo = &createdTo
+	return r
+}
+
+// El número completo exacto, como sale en &#x60;number&#x60; (p. ej. &#x60;SETP990000123&#x60;; sin prefijo, solo el consecutivo), sin ceros a la izquierda, espacios ni guiones. Puede traer más de un documento.
+func (r ApiListDebitNotesRequest) Number(number string) ApiListDebitNotesRequest {
+	r.number = &number
+	return r
+}
+
+// El prefijo exacto, como sale en &#x60;prefix&#x60;. Solo, lista una numeración; con &#x60;number&#x60;, quita la ambigüedad.
+func (r ApiListDebitNotesRequest) Prefix(prefix string) ApiListDebitNotesRequest {
+	r.prefix = &prefix
 	return r
 }
 
@@ -911,6 +925,12 @@ func (a *DebitNotesAPIService) ListDebitNotesExecute(r ApiListDebitNotesRequest)
 	}
 	if r.createdTo != nil {
 		parameterAddToHeaderOrQuery(localVarQueryParams, "created_to", r.createdTo, "form", "")
+	}
+	if r.number != nil {
+		parameterAddToHeaderOrQuery(localVarQueryParams, "number", r.number, "form", "")
+	}
+	if r.prefix != nil {
+		parameterAddToHeaderOrQuery(localVarQueryParams, "prefix", r.prefix, "form", "")
 	}
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{}
@@ -1286,6 +1306,194 @@ func (a *DebitNotesAPIService) SendDebitNoteExecute(r ApiSendDebitNoteRequest) (
 			error: localVarHTTPResponse.Status,
 		}
 		if localVarHTTPResponse.StatusCode == 409 {
+			var v Problem
+			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.error = err.Error()
+				return localVarReturnValue, localVarHTTPResponse, newErr
+			}
+					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+					newErr.model = v
+			return localVarReturnValue, localVarHTTPResponse, newErr
+		}
+			var v Problem
+			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.error = err.Error()
+				return localVarReturnValue, localVarHTTPResponse, newErr
+			}
+					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+					newErr.model = v
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+	if err != nil {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: err.Error(),
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	return localVarReturnValue, localVarHTTPResponse, nil
+}
+
+type ApiSendDebitNoteEmailRequest struct {
+	ctx context.Context
+	ApiService *DebitNotesAPIService
+	id string
+	idempotencyKey *string
+	emailResendRequest *EmailResendRequest
+}
+
+// Obligatoria: 1 a 255 caracteres ASCII visibles, única por pedido (7 días).
+func (r ApiSendDebitNoteEmailRequest) IdempotencyKey(idempotencyKey string) ApiSendDebitNoteEmailRequest {
+	r.idempotencyKey = &idempotencyKey
+	return r
+}
+
+func (r ApiSendDebitNoteEmailRequest) EmailResendRequest(emailResendRequest EmailResendRequest) ApiSendDebitNoteEmailRequest {
+	r.emailResendRequest = &emailResendRequest
+	return r
+}
+
+func (r ApiSendDebitNoteEmailRequest) Execute() (*EmailResend, *http.Response, error) {
+	return r.ApiService.SendDebitNoteEmailExecute(r)
+}
+
+/*
+SendDebitNoteEmail Reenviar el correo de una nota débito
+
+Reenvía el correo del documento validado: el mismo ZIP (el AttachedDocument y el PDF), la misma plantilla y el mismo asunto. Sin cuerpo, va al destinatario de siempre: en producción, el correo del comprador (`customer.email`); en habilitación, solo a quien emitió el documento (con «[PRUEBA – sin validez legal]» en el asunto). Con `to` (de 1 a 3 direcciones; solo producción y solo con el permiso `customers:read`, porque el ZIP trae los datos del comprador) va a esas direcciones, un correo por destinatario: nadie ve a los demás.
+
+Solo sirve cuando el documento está validado y su correo original ya terminó (si todavía se está enviando o se va a reintentar, 409 `invalid_state` con `reason: delivery_pending` y `Retry-After`; si ya no está programada, `delivery_incomplete`, sin reintento). Si el correo original falló y ya no se va a reintentar, sí se puede reenviar. A una dirección que rebotó o se quejó no le volvemos a escribir (409 `email_suppressed`). Topes: 5 reenvíos por documento al día y 200 por empresa al día en producción (20 en habilitación; cuentan reenvíos, no destinatarios: con 3 direcciones, hasta 600 correos); al pasarse, 429 con `limit: "email_resend"` y `Retry-After` hasta la medianoche (hora de Colombia).
+
+`Idempotency-Key` obligatoria: repetirla devuelve el mismo resultado sin volver a enviar. El reenvío queda en `delivery.email_resends` del documento (`last.deliveries` dice cómo le fue a cada destinatario del último reenvío, también si rebotó o se quejó después); `delivery.status` y `delivery.email` siguen hablando del correo original. Sin `customers:read`, las direcciones salen en `null`.
+
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @param id
+ @return ApiSendDebitNoteEmailRequest
+*/
+func (a *DebitNotesAPIService) SendDebitNoteEmail(ctx context.Context, id string) ApiSendDebitNoteEmailRequest {
+	return ApiSendDebitNoteEmailRequest{
+		ApiService: a,
+		ctx: ctx,
+		id: id,
+	}
+}
+
+// Execute executes the request
+//  @return EmailResend
+func (a *DebitNotesAPIService) SendDebitNoteEmailExecute(r ApiSendDebitNoteEmailRequest) (*EmailResend, *http.Response, error) {
+	var (
+		localVarHTTPMethod   = http.MethodPost
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *EmailResend
+	)
+
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DebitNotesAPIService.SendDebitNoteEmail")
+	if err != nil {
+		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
+	}
+
+	localVarPath := localBasePath + "/debit_notes/{id}/email"
+	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterValueToString(r.id, "id")), -1)
+
+	localVarHeaderParams := make(map[string]string)
+	localVarQueryParams := url.Values{}
+	localVarFormParams := url.Values{}
+
+	// to determine the Content-Type header
+	localVarHTTPContentTypes := []string{"application/json"}
+
+	// set Content-Type header
+	localVarHTTPContentType := selectHeaderContentType(localVarHTTPContentTypes)
+	if localVarHTTPContentType != "" {
+		localVarHeaderParams["Content-Type"] = localVarHTTPContentType
+	}
+
+	// to determine the Accept header
+	localVarHTTPHeaderAccepts := []string{"application/json", "application/problem+json"}
+
+	// set Accept header
+	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
+	if localVarHTTPHeaderAccept != "" {
+		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
+	}
+	if r.idempotencyKey != nil {
+		parameterAddToHeaderOrQuery(localVarHeaderParams, "Idempotency-Key", r.idempotencyKey, "simple", "")
+	}
+	// body params
+	localVarPostBody = r.emailResendRequest
+	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
+	if err != nil {
+		return localVarReturnValue, nil, err
+	}
+
+	localVarHTTPResponse, err := a.client.callAPI(req)
+	if err != nil || localVarHTTPResponse == nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
+	localVarHTTPResponse.Body.Close()
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
+	if err != nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	if localVarHTTPResponse.StatusCode >= 300 {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: localVarHTTPResponse.Status,
+		}
+		if localVarHTTPResponse.StatusCode == 403 {
+			var v Problem
+			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.error = err.Error()
+				return localVarReturnValue, localVarHTTPResponse, newErr
+			}
+					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+					newErr.model = v
+			return localVarReturnValue, localVarHTTPResponse, newErr
+		}
+		if localVarHTTPResponse.StatusCode == 409 {
+			var v Problem
+			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.error = err.Error()
+				return localVarReturnValue, localVarHTTPResponse, newErr
+			}
+					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+					newErr.model = v
+			return localVarReturnValue, localVarHTTPResponse, newErr
+		}
+		if localVarHTTPResponse.StatusCode == 422 {
+			var v Problem
+			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.error = err.Error()
+				return localVarReturnValue, localVarHTTPResponse, newErr
+			}
+					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+					newErr.model = v
+			return localVarReturnValue, localVarHTTPResponse, newErr
+		}
+		if localVarHTTPResponse.StatusCode == 429 {
+			var v Problem
+			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.error = err.Error()
+				return localVarReturnValue, localVarHTTPResponse, newErr
+			}
+					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+					newErr.model = v
+			return localVarReturnValue, localVarHTTPResponse, newErr
+		}
+		if localVarHTTPResponse.StatusCode == 503 {
 			var v Problem
 			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
 			if err != nil {

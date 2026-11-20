@@ -343,6 +343,8 @@ type ApiListDianDocumentsRequest struct {
 	issuedFrom *string
 	issuedTo *string
 	direction *string
+	number *string
+	prefix *string
 }
 
 func (r ApiListDianDocumentsRequest) Limit(limit int32) ApiListDianDocumentsRequest {
@@ -378,6 +380,18 @@ func (r ApiListDianDocumentsRequest) Direction(direction string) ApiListDianDocu
 	return r
 }
 
+// El número completo exacto, como sale en &#x60;number&#x60; (sin prefijo, solo el consecutivo). En lo recibido es el del proveedor y puede repetirse entre proveedores.
+func (r ApiListDianDocumentsRequest) Number(number string) ApiListDianDocumentsRequest {
+	r.number = &number
+	return r
+}
+
+// El prefijo exacto, como sale en &#x60;prefix&#x60;. Solo, lista una numeración; con &#x60;number&#x60;, quita la ambigüedad.
+func (r ApiListDianDocumentsRequest) Prefix(prefix string) ApiListDianDocumentsRequest {
+	r.prefix = &prefix
+	return r
+}
+
 func (r ApiListDianDocumentsRequest) Execute() (*DianDocumentList, *http.Response, error) {
 	return r.ApiService.ListDianDocumentsExecute(r)
 }
@@ -385,7 +399,7 @@ func (r ApiListDianDocumentsRequest) Execute() (*DianDocumentList, *http.Respons
 /*
 ListDianDocuments Lo que la empresa emitió y recibió según la DIAN (con Trevol o con otro sistema)
 
-Lo que la DIAN tiene de la empresa de la llave, emitido con Trevol o con cualquier otro sistema, tal como lo trajo la sincronización de Trevol («Sincronizar con la DIAN» en la app, o `POST /v1/dian_syncs`). `direction`: `issued` (por defecto: lo EMITIDO), `received` (lo RECIBIDO de los proveedores, por la sincronización o por el buzón de recepción; lo del buzón aparece cuando una sincronización con lo recibido ya lo trajo de la DIAN) o `all`. Del más nuevo al más viejo por fecha de expedición. Es de solo lectura y no se cobra; no tiene PDF ni acciones aquí (`cufe` lo identifica ante la DIAN). El XML de cualquiera se pide a la DIAN en el momento (`xml_available` y `GET /v1/dian_documents/{id}/xml`; el de lo emitido trae los datos personales del cliente y exige el permiso `customers:read` de la llave). Lo que se emitió con Trevol aparece también en su recurso (`/invoices`…) con el mismo `cufe`. Filtros: `type` y `issued_from` / `issued_to` (AAAA-MM-DD, incluidos). Paginación por cursor: `limit` (1 a 100, 20 por defecto) y `starting_after` (el `id` de la última fila que tienes, pedida con la misma `direction`).
+Lo que la DIAN tiene de la empresa de la llave, emitido con Trevol o con cualquier otro sistema, tal como lo trajo la sincronización de Trevol («Sincronizar con la DIAN» en la app, o `POST /v1/dian_syncs`). `direction`: `issued` (por defecto: lo EMITIDO), `received` (lo RECIBIDO de los proveedores, por la sincronización o por el buzón de recepción; lo del buzón aparece cuando una sincronización con lo recibido ya lo trajo de la DIAN) o `all`. Del más nuevo al más viejo por fecha de expedición. Es de solo lectura y no se cobra; no tiene PDF ni acciones aquí (`cufe` lo identifica ante la DIAN). El XML de cualquiera se pide a la DIAN en el momento (`xml_available` y `GET /v1/dian_documents/{id}/xml`; el de lo emitido trae los datos personales del cliente y exige el permiso `customers:read` de la llave). Lo que se emitió con Trevol aparece también en su recurso (`/invoices`…) con el mismo `cufe`. Filtros: `type`, `issued_from` / `issued_to` (AAAA-MM-DD, incluidos) y, para buscar un documento por su número, `number` (el número completo exacto, como sale en `number`: `?number=FE7595`) y `prefix` (el prefijo exacto). En lo recibido el número es el del proveedor y puede repetirse entre proveedores: por eso es una lista. Paginación por cursor: `limit` (1 a 100, 20 por defecto) y `starting_after` (el `id` de la última fila que tienes, pedida con la misma `direction`).
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @return ApiListDianDocumentsRequest
@@ -443,6 +457,12 @@ func (a *DianDocumentsAPIService) ListDianDocumentsExecute(r ApiListDianDocument
 		var defaultValue string = "issued"
 		parameterAddToHeaderOrQuery(localVarQueryParams, "direction", defaultValue, "form", "")
 		r.direction = &defaultValue
+	}
+	if r.number != nil {
+		parameterAddToHeaderOrQuery(localVarQueryParams, "number", r.number, "form", "")
+	}
+	if r.prefix != nil {
+		parameterAddToHeaderOrQuery(localVarQueryParams, "prefix", r.prefix, "form", "")
 	}
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{}

@@ -25,6 +25,8 @@ type Delivery struct {
 	Zip *bool `json:"zip,omitempty"`
 	Xml *bool `json:"xml,omitempty"`
 	Email NullableDeliveryEmail `json:"email,omitempty"`
+	// Los reenvíos del correo con `POST …/{id}/email`; null si nunca se reenvió. `status` y `email` siguen hablando del correo original. `last.deliveries` dice cómo le fue a cada destinatario del último reenvío, también si rebotó o se quejó después. Sin `customers:read`, `last.to` y `last.deliveries[].to` salen en null.
+	EmailResends NullableDeliveryEmailResends `json:"email_resends,omitempty"`
 	AdditionalProperties map[string]interface{}
 }
 
@@ -227,6 +229,48 @@ func (o *Delivery) UnsetEmail() {
 	o.Email.Unset()
 }
 
+// GetEmailResends returns the EmailResends field value if set, zero value otherwise (both if not set or set to explicit null).
+func (o *Delivery) GetEmailResends() DeliveryEmailResends {
+	if o == nil || IsNil(o.EmailResends.Get()) {
+		var ret DeliveryEmailResends
+		return ret
+	}
+	return *o.EmailResends.Get()
+}
+
+// GetEmailResendsOk returns a tuple with the EmailResends field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+// NOTE: If the value is an explicit nil, `nil, true` will be returned
+func (o *Delivery) GetEmailResendsOk() (*DeliveryEmailResends, bool) {
+	if o == nil {
+		return nil, false
+	}
+	return o.EmailResends.Get(), o.EmailResends.IsSet()
+}
+
+// HasEmailResends returns a boolean if a field has been set.
+func (o *Delivery) HasEmailResends() bool {
+	if o != nil && o.EmailResends.IsSet() {
+		return true
+	}
+
+	return false
+}
+
+// SetEmailResends gets a reference to the given NullableDeliveryEmailResends and assigns it to the EmailResends field.
+func (o *Delivery) SetEmailResends(v DeliveryEmailResends) {
+	o.EmailResends.Set(&v)
+}
+// SetEmailResendsNil sets the value for EmailResends to be an explicit nil
+func (o *Delivery) SetEmailResendsNil() {
+	o.EmailResends.Set(nil)
+}
+
+// UnsetEmailResends ensures that no value is present for EmailResends, not even an explicit nil
+func (o *Delivery) UnsetEmailResends() {
+	o.EmailResends.Unset()
+}
+
 func (o Delivery) MarshalJSON() ([]byte, error) {
 	toSerialize,err := o.ToMap()
 	if err != nil {
@@ -251,6 +295,9 @@ func (o Delivery) ToMap() (map[string]interface{}, error) {
 	}
 	if o.Email.IsSet() {
 		toSerialize["email"] = o.Email.Get()
+	}
+	if o.EmailResends.IsSet() {
+		toSerialize["email_resends"] = o.EmailResends.Get()
 	}
 
 	for key, value := range o.AdditionalProperties {
@@ -279,6 +326,7 @@ func (o *Delivery) UnmarshalJSON(data []byte) (err error) {
 		delete(additionalProperties, "zip")
 		delete(additionalProperties, "xml")
 		delete(additionalProperties, "email")
+		delete(additionalProperties, "email_resends")
 		o.AdditionalProperties = additionalProperties
 	}
 

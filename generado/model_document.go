@@ -24,6 +24,8 @@ type Document struct {
 	Id *string `json:"id,omitempty"`
 	Object *string `json:"object,omitempty"`
 	Environment *string `json:"environment,omitempty"`
+	// Solo en el entorno SIMULADO (la empresa simulada de la cuenta): el objeto se validó, se calculó y se firmó como siempre, pero nunca llegó a la DIAN ni tiene validez. Un objeto real no lleva esta propiedad.
+	Simulated *bool `json:"simulated,omitempty"`
 	// `processing` solo en la versión 2026-10-22: la DIAN no confirmó y Trevol sigue resolviendo el documento (el resultado llega por GET y por webhook; no crees otro documento para la misma venta). En 2026-10-21 ese documento se ve como `error`.
 	Status *string `json:"status,omitempty"`
 	Number NullableString `json:"number,omitempty"`
@@ -57,6 +59,10 @@ type Document struct {
 	Delivery *Delivery `json:"delivery,omitempty"`
 	CreatedAt *time.Time `json:"created_at,omitempty"`
 	UpdatedAt NullableTime `json:"updated_at,omitempty"`
+	// El que pidió el documento, o null.
+	PdfDesignId NullableString `json:"pdf_design_id,omitempty"`
+	// El diseño fijado al emitir; null mientras está pendiente.
+	PdfDesign NullablePdfDesignApplied `json:"pdf_design,omitempty"`
 	AdditionalProperties map[string]interface{}
 }
 
@@ -173,6 +179,38 @@ func (o *Document) HasEnvironment() bool {
 // SetEnvironment gets a reference to the given string and assigns it to the Environment field.
 func (o *Document) SetEnvironment(v string) {
 	o.Environment = &v
+}
+
+// GetSimulated returns the Simulated field value if set, zero value otherwise.
+func (o *Document) GetSimulated() bool {
+	if o == nil || IsNil(o.Simulated) {
+		var ret bool
+		return ret
+	}
+	return *o.Simulated
+}
+
+// GetSimulatedOk returns a tuple with the Simulated field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *Document) GetSimulatedOk() (*bool, bool) {
+	if o == nil || IsNil(o.Simulated) {
+		return nil, false
+	}
+	return o.Simulated, true
+}
+
+// HasSimulated returns a boolean if a field has been set.
+func (o *Document) HasSimulated() bool {
+	if o != nil && !IsNil(o.Simulated) {
+		return true
+	}
+
+	return false
+}
+
+// SetSimulated gets a reference to the given bool and assigns it to the Simulated field.
+func (o *Document) SetSimulated(v bool) {
+	o.Simulated = &v
 }
 
 // GetStatus returns the Status field value if set, zero value otherwise.
@@ -1139,6 +1177,90 @@ func (o *Document) UnsetUpdatedAt() {
 	o.UpdatedAt.Unset()
 }
 
+// GetPdfDesignId returns the PdfDesignId field value if set, zero value otherwise (both if not set or set to explicit null).
+func (o *Document) GetPdfDesignId() string {
+	if o == nil || IsNil(o.PdfDesignId.Get()) {
+		var ret string
+		return ret
+	}
+	return *o.PdfDesignId.Get()
+}
+
+// GetPdfDesignIdOk returns a tuple with the PdfDesignId field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+// NOTE: If the value is an explicit nil, `nil, true` will be returned
+func (o *Document) GetPdfDesignIdOk() (*string, bool) {
+	if o == nil {
+		return nil, false
+	}
+	return o.PdfDesignId.Get(), o.PdfDesignId.IsSet()
+}
+
+// HasPdfDesignId returns a boolean if a field has been set.
+func (o *Document) HasPdfDesignId() bool {
+	if o != nil && o.PdfDesignId.IsSet() {
+		return true
+	}
+
+	return false
+}
+
+// SetPdfDesignId gets a reference to the given NullableString and assigns it to the PdfDesignId field.
+func (o *Document) SetPdfDesignId(v string) {
+	o.PdfDesignId.Set(&v)
+}
+// SetPdfDesignIdNil sets the value for PdfDesignId to be an explicit nil
+func (o *Document) SetPdfDesignIdNil() {
+	o.PdfDesignId.Set(nil)
+}
+
+// UnsetPdfDesignId ensures that no value is present for PdfDesignId, not even an explicit nil
+func (o *Document) UnsetPdfDesignId() {
+	o.PdfDesignId.Unset()
+}
+
+// GetPdfDesign returns the PdfDesign field value if set, zero value otherwise (both if not set or set to explicit null).
+func (o *Document) GetPdfDesign() PdfDesignApplied {
+	if o == nil || IsNil(o.PdfDesign.Get()) {
+		var ret PdfDesignApplied
+		return ret
+	}
+	return *o.PdfDesign.Get()
+}
+
+// GetPdfDesignOk returns a tuple with the PdfDesign field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+// NOTE: If the value is an explicit nil, `nil, true` will be returned
+func (o *Document) GetPdfDesignOk() (*PdfDesignApplied, bool) {
+	if o == nil {
+		return nil, false
+	}
+	return o.PdfDesign.Get(), o.PdfDesign.IsSet()
+}
+
+// HasPdfDesign returns a boolean if a field has been set.
+func (o *Document) HasPdfDesign() bool {
+	if o != nil && o.PdfDesign.IsSet() {
+		return true
+	}
+
+	return false
+}
+
+// SetPdfDesign gets a reference to the given NullablePdfDesignApplied and assigns it to the PdfDesign field.
+func (o *Document) SetPdfDesign(v PdfDesignApplied) {
+	o.PdfDesign.Set(&v)
+}
+// SetPdfDesignNil sets the value for PdfDesign to be an explicit nil
+func (o *Document) SetPdfDesignNil() {
+	o.PdfDesign.Set(nil)
+}
+
+// UnsetPdfDesign ensures that no value is present for PdfDesign, not even an explicit nil
+func (o *Document) UnsetPdfDesign() {
+	o.PdfDesign.Unset()
+}
+
 func (o Document) MarshalJSON() ([]byte, error) {
 	toSerialize,err := o.ToMap()
 	if err != nil {
@@ -1157,6 +1279,9 @@ func (o Document) ToMap() (map[string]interface{}, error) {
 	}
 	if !IsNil(o.Environment) {
 		toSerialize["environment"] = o.Environment
+	}
+	if !IsNil(o.Simulated) {
+		toSerialize["simulated"] = o.Simulated
 	}
 	if !IsNil(o.Status) {
 		toSerialize["status"] = o.Status
@@ -1239,6 +1364,12 @@ func (o Document) ToMap() (map[string]interface{}, error) {
 	if o.UpdatedAt.IsSet() {
 		toSerialize["updated_at"] = o.UpdatedAt.Get()
 	}
+	if o.PdfDesignId.IsSet() {
+		toSerialize["pdf_design_id"] = o.PdfDesignId.Get()
+	}
+	if o.PdfDesign.IsSet() {
+		toSerialize["pdf_design"] = o.PdfDesign.Get()
+	}
 
 	for key, value := range o.AdditionalProperties {
 		toSerialize[key] = value
@@ -1264,6 +1395,7 @@ func (o *Document) UnmarshalJSON(data []byte) (err error) {
 		delete(additionalProperties, "id")
 		delete(additionalProperties, "object")
 		delete(additionalProperties, "environment")
+		delete(additionalProperties, "simulated")
 		delete(additionalProperties, "status")
 		delete(additionalProperties, "number")
 		delete(additionalProperties, "prefix")
@@ -1291,6 +1423,8 @@ func (o *Document) UnmarshalJSON(data []byte) (err error) {
 		delete(additionalProperties, "delivery")
 		delete(additionalProperties, "created_at")
 		delete(additionalProperties, "updated_at")
+		delete(additionalProperties, "pdf_design_id")
+		delete(additionalProperties, "pdf_design")
 		o.AdditionalProperties = additionalProperties
 	}
 

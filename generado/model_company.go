@@ -28,6 +28,8 @@ type Company struct {
 	TradeName NullableString `json:"trade_name,omitempty"`
 	Status *string `json:"status,omitempty"`
 	Environment NullableString `json:"environment,omitempty"`
+	// Solo en el entorno SIMULADO (la empresa simulada de la cuenta): el objeto se validó, se calculó y se firmó como siempre, pero nunca llegó a la DIAN ni tiene validez. Un objeto real no lleva esta propiedad.
+	Simulated *bool `json:"simulated,omitempty"`
 	// Las numeraciones (resoluciones) activas del ambiente de la llave.
 	Numbering []CompanyNumbering `json:"numbering,omitempty"`
 	// La llave con que se llamó.
@@ -362,6 +364,38 @@ func (o *Company) UnsetEnvironment() {
 	o.Environment.Unset()
 }
 
+// GetSimulated returns the Simulated field value if set, zero value otherwise.
+func (o *Company) GetSimulated() bool {
+	if o == nil || IsNil(o.Simulated) {
+		var ret bool
+		return ret
+	}
+	return *o.Simulated
+}
+
+// GetSimulatedOk returns a tuple with the Simulated field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *Company) GetSimulatedOk() (*bool, bool) {
+	if o == nil || IsNil(o.Simulated) {
+		return nil, false
+	}
+	return o.Simulated, true
+}
+
+// HasSimulated returns a boolean if a field has been set.
+func (o *Company) HasSimulated() bool {
+	if o != nil && !IsNil(o.Simulated) {
+		return true
+	}
+
+	return false
+}
+
+// SetSimulated gets a reference to the given bool and assigns it to the Simulated field.
+func (o *Company) SetSimulated(v bool) {
+	o.Simulated = &v
+}
+
 // GetNumbering returns the Numbering field value if set, zero value otherwise.
 func (o *Company) GetNumbering() []CompanyNumbering {
 	if o == nil || IsNil(o.Numbering) {
@@ -492,6 +526,9 @@ func (o Company) ToMap() (map[string]interface{}, error) {
 	if o.Environment.IsSet() {
 		toSerialize["environment"] = o.Environment.Get()
 	}
+	if !IsNil(o.Simulated) {
+		toSerialize["simulated"] = o.Simulated
+	}
 	if !IsNil(o.Numbering) {
 		toSerialize["numbering"] = o.Numbering
 	}
@@ -531,6 +568,7 @@ func (o *Company) UnmarshalJSON(data []byte) (err error) {
 		delete(additionalProperties, "trade_name")
 		delete(additionalProperties, "status")
 		delete(additionalProperties, "environment")
+		delete(additionalProperties, "simulated")
 		delete(additionalProperties, "numbering")
 		delete(additionalProperties, "key")
 		delete(additionalProperties, "capabilities")

@@ -11,6 +11,29 @@ Regenerado con la especificación de las cuentas compartidas (la misma versión 
 - `Problem.reason` documenta `key_owner_without_access` también para el saldo (`GET /v1/balance` y sus movimientos), los talonarios y la creación de empresas con una llave de administración; `balance_cop` del 402 es siempre el saldo de la cuenta y no viene si la persona responsable de la llave no lo puede ver.
 - `GET /v1/balance`, sus movimientos y `POST /v1/balance/top_ups` documentan su `403` (`key_owner_without_access`): la llave de un facturador no lee el saldo de la cuenta ni lo recarga, y por eso no recibe `key_owner`. Solo cambian textos de la documentación del código.
 
+## [0.4.0] — 2026-11-19
+
+Regenerado con las novedades de la API de noviembre (la misma versión `2026-11-18`; 178 operaciones y 70 tipos de evento). Todo es
+aditivo: el código que ya funciona no cambia.
+
+- Recursos nuevos `CatalogsAPI`, `PdfTemplatesAPI`, `PdfDesignsAPI` y `CompanySettingsAPI`: las listas de valores (`listCatalogs` y `listCatalogEntries`: los códigos que acepta cada campo), las
+  plantillas y los diseños del PDF (`listPdfTemplates`, `listPdfDesigns`, `createPdfDesign`, `retrievePdfDesign`, `updatePdfDesign` y
+  `archivePdfDesign`) y los ajustes del PDF y el logo de la empresa (`retrievePdfSettings`, `updatePdfSettings`, `retrieveCompanyLogo`,
+  `updateCompanyLogo`, `deleteCompanyLogo` y `retrieveCompanyLogoFile`).
+- Reenviar el correo de un documento validado: `sendInvoiceEmail`, `sendCreditNoteEmail`, `sendDebitNoteEmail`,
+  `sendEquivalentDocumentEmail` y `sendEquivalentDocumentAdjustmentEmail` (con `Idempotency-Key`; `to` es opcional). El documento trae
+  `delivery.email_resends`.
+- Buscar por número: las listas de documentos y `listDianDocuments` aceptan `number` y `prefix`.
+- La factura, su vista previa y cada factura de un lote aceptan `numbering` (`prefix`) para elegir la numeración; la vista previa la
+  devuelve en `numbering`.
+- `pdf_design_id` al crear o corregir facturas, notas y documentos equivalentes POS; esos documentos traen `pdf_design_id` y
+  `pdf_design`.
+- `simulated` en los documentos, el lote, la empresa y los eventos de la empresa simulada.
+- Webhooks: `follow_latest_catalog` en los endpoints.
+- Errores tipados para los códigos nuevos: `logo_invalid` y `pdf_design_invalid` → `KindValidation`; `pdf_design_limit_reached`,
+  `pdf_design_in_use`, `pdf_design_outdated` y `pdf_design_archived` → `KindConflict`. `Problem` trae `findings` (en `pdf_design_invalid`) y
+  `current_version` (en `pdf_design_outdated`).
+
 ## [0.3.1] — 2026-11-19
 
 Solo textos de la especificación (la misma versión `2026-11-18` de la API; nada cambia en el código):

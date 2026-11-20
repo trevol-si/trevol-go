@@ -23,6 +23,8 @@ type Preview struct {
 	// El `object` del documento que se emitiría (`invoice`, `credit_note`, `payroll`…).
 	Document *string `json:"document,omitempty"`
 	Environment NullableString `json:"environment,omitempty"`
+	// Solo en la factura que pide `numbering`: la numeración que la numeraría (el prefijo normalizado), ya comprobada. No reserva número.
+	Numbering *PreviewNumbering `json:"numbering,omitempty"`
 	// Los totales calculados: la misma forma que `totals` del documento (en nómina, devengados, deducciones y total del comprobante).
 	Totals map[string]interface{} `json:"totals,omitempty"`
 	AdditionalProperties map[string]interface{}
@@ -153,6 +155,38 @@ func (o *Preview) UnsetEnvironment() {
 	o.Environment.Unset()
 }
 
+// GetNumbering returns the Numbering field value if set, zero value otherwise.
+func (o *Preview) GetNumbering() PreviewNumbering {
+	if o == nil || IsNil(o.Numbering) {
+		var ret PreviewNumbering
+		return ret
+	}
+	return *o.Numbering
+}
+
+// GetNumberingOk returns a tuple with the Numbering field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *Preview) GetNumberingOk() (*PreviewNumbering, bool) {
+	if o == nil || IsNil(o.Numbering) {
+		return nil, false
+	}
+	return o.Numbering, true
+}
+
+// HasNumbering returns a boolean if a field has been set.
+func (o *Preview) HasNumbering() bool {
+	if o != nil && !IsNil(o.Numbering) {
+		return true
+	}
+
+	return false
+}
+
+// SetNumbering gets a reference to the given PreviewNumbering and assigns it to the Numbering field.
+func (o *Preview) SetNumbering(v PreviewNumbering) {
+	o.Numbering = &v
+}
+
 // GetTotals returns the Totals field value if set, zero value otherwise.
 func (o *Preview) GetTotals() map[string]interface{} {
 	if o == nil || IsNil(o.Totals) {
@@ -204,6 +238,9 @@ func (o Preview) ToMap() (map[string]interface{}, error) {
 	if o.Environment.IsSet() {
 		toSerialize["environment"] = o.Environment.Get()
 	}
+	if !IsNil(o.Numbering) {
+		toSerialize["numbering"] = o.Numbering
+	}
 	if !IsNil(o.Totals) {
 		toSerialize["totals"] = o.Totals
 	}
@@ -232,6 +269,7 @@ func (o *Preview) UnmarshalJSON(data []byte) (err error) {
 		delete(additionalProperties, "object")
 		delete(additionalProperties, "document")
 		delete(additionalProperties, "environment")
+		delete(additionalProperties, "numbering")
 		delete(additionalProperties, "totals")
 		o.AdditionalProperties = additionalProperties
 	}

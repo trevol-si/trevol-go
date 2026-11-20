@@ -54,6 +54,8 @@ type EquivalentDocumentInput struct {
 	Contingency *Contingency `json:"contingency,omitempty"`
 	// Solo en el POS: el prefijo de la resolución POS que numera (una empresa con varias cajas o establecimientos tiene varias). Sin él, la más nueva vigente. Si no existe, `numbering_unavailable` (`no_resolution`).
 	Numbering *Numbering `json:"numbering,omitempty"`
+	// El diseño del PDF de este documento (`pdd_…` o `classic`); gana al de la numeración y al predeterminado. `null` es lo mismo que no mandarlo. Guía: Diseño del PDF.
+	PdfDesignId NullableString `json:"pdf_design_id,omitempty"`
 	AdditionalProperties map[string]interface{}
 }
 
@@ -678,6 +680,48 @@ func (o *EquivalentDocumentInput) SetNumbering(v Numbering) {
 	o.Numbering = &v
 }
 
+// GetPdfDesignId returns the PdfDesignId field value if set, zero value otherwise (both if not set or set to explicit null).
+func (o *EquivalentDocumentInput) GetPdfDesignId() string {
+	if o == nil || IsNil(o.PdfDesignId.Get()) {
+		var ret string
+		return ret
+	}
+	return *o.PdfDesignId.Get()
+}
+
+// GetPdfDesignIdOk returns a tuple with the PdfDesignId field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+// NOTE: If the value is an explicit nil, `nil, true` will be returned
+func (o *EquivalentDocumentInput) GetPdfDesignIdOk() (*string, bool) {
+	if o == nil {
+		return nil, false
+	}
+	return o.PdfDesignId.Get(), o.PdfDesignId.IsSet()
+}
+
+// HasPdfDesignId returns a boolean if a field has been set.
+func (o *EquivalentDocumentInput) HasPdfDesignId() bool {
+	if o != nil && o.PdfDesignId.IsSet() {
+		return true
+	}
+
+	return false
+}
+
+// SetPdfDesignId gets a reference to the given NullableString and assigns it to the PdfDesignId field.
+func (o *EquivalentDocumentInput) SetPdfDesignId(v string) {
+	o.PdfDesignId.Set(&v)
+}
+// SetPdfDesignIdNil sets the value for PdfDesignId to be an explicit nil
+func (o *EquivalentDocumentInput) SetPdfDesignIdNil() {
+	o.PdfDesignId.Set(nil)
+}
+
+// UnsetPdfDesignId ensures that no value is present for PdfDesignId, not even an explicit nil
+func (o *EquivalentDocumentInput) UnsetPdfDesignId() {
+	o.PdfDesignId.Unset()
+}
+
 func (o EquivalentDocumentInput) MarshalJSON() ([]byte, error) {
 	toSerialize,err := o.ToMap()
 	if err != nil {
@@ -743,6 +787,9 @@ func (o EquivalentDocumentInput) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.Numbering) {
 		toSerialize["numbering"] = o.Numbering
 	}
+	if o.PdfDesignId.IsSet() {
+		toSerialize["pdf_design_id"] = o.PdfDesignId.Get()
+	}
 
 	for key, value := range o.AdditionalProperties {
 		toSerialize[key] = value
@@ -805,6 +852,7 @@ func (o *EquivalentDocumentInput) UnmarshalJSON(data []byte) (err error) {
 		delete(additionalProperties, "origin_note")
 		delete(additionalProperties, "contingency")
 		delete(additionalProperties, "numbering")
+		delete(additionalProperties, "pdf_design_id")
 		o.AdditionalProperties = additionalProperties
 	}
 

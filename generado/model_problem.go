@@ -31,7 +31,7 @@ type Problem struct {
 	Document *Document `json:"document,omitempty"`
 	// En `external_id_in_use` y `duplicate_document`: el id (con el prefijo de su clase) del recurso que ya existe. En `numbering_request_in_progress`: la solicitud en curso (`nreq_…`). En `duplicate_customer` y `duplicate_product`: el `cus_…` o `prod_…` que ya existe. No viene en un `duplicate_customer` por `document_number` pedido con una llave sin `customers:read` (diría de quién es ese documento).
 	ExistingId *string `json:"existing_id,omitempty"`
-	// En `company_not_enabled` (`missing_legal_representative`, `missing_pin`, `missing_software`, `payroll_not_enabled`) y en `numbering_unavailable` (`missing_technical_key`, `no_contingency_numbering`, `no_resolution`, `prefix_in_use`, `resolution_exhausted`, `resolution_expired`, `resolution_not_yet_valid`): por qué. En `permission_denied`: `key_owner_without_access` (la persona responsable de la llave ya no tiene acceso a la empresa, no puede gestionar lo que pide la ruta: webhooks, numeración, talonarios o sincronización con la DIAN, o no puede ver el saldo de la cuenta) y `number_paused` (el número de WhatsApp está en pausa hasta que la empresa le asigne una persona responsable). En `automatic_mode_unavailable` (`credentials_missing`, `mandate_required`: falta el mandato para integraciones que se acepta en la app, `disabled`) y en `permission_denied` de una ruta que solo existe en producción (`live_mode_required`). En `permission_denied` de una llave de administración: `environment_mismatch` (`Trevol-Environment` no es el ambiente de la llave), `live_mode_required` (el alta de empresas pide una llave de producción) y `scope_list` (una llave con alcance de lista no da de alta empresas; como esa llave no puede tener `companies:write`, lo que llega en la práctica es el 403 con `required_permission: companies:write`).
+	// En `company_not_enabled` (`missing_legal_representative`, `missing_pin`, `missing_software`, `payroll_not_enabled`), en `numbering_unavailable` (`missing_technical_key`, `no_contingency_numbering`, `no_resolution`, `prefix_in_use`, `resolution_exhausted`, `resolution_expired`, `resolution_not_yet_valid`) y en `invalid_state` al reenviar el correo (`delivery_incomplete`, `delivery_pending`, `email_suppressed`, `no_recipient`, `not_accepted`): por qué. En `permission_denied`: `key_owner_without_access` (la persona responsable de la llave ya no tiene acceso a la empresa, no puede gestionar lo que pide la ruta: webhooks, numeración, talonarios, sincronización con la DIAN o diseños del PDF, o no puede ver el saldo de la cuenta) y `number_paused` (el número de WhatsApp está en pausa hasta que la empresa le asigne una persona responsable). En `automatic_mode_unavailable` (`credentials_missing`, `mandate_required`: falta el mandato para integraciones que se acepta en la app, `disabled`) y en `permission_denied` de una ruta que solo existe en producción (`live_mode_required`). En `permission_denied` de una llave de administración: `environment_mismatch` (`Trevol-Environment` no es el ambiente de la llave), `live_mode_required` (el alta de empresas pide una llave de producción) y `scope_list` (una llave con alcance de lista no da de alta empresas; como esa llave no puede tener `companies:write`, lo que llega en la práctica es el 403 con `required_permission: companies:write`). En `logo_invalid` (`animated`, `empty`, `svg_not_supported`, `too_large`, `too_many_pixels`, `too_small`, `unreadable`, `unsupported_format`) y en `permission_denied` del diseño del PDF (`pdf_design_writes_disabled`: el titular no permitió en la app que la API lo cambie). En `permission_denied` de una llave de la empresa simulada: `simulated_not_supported` (eso no existe en el entorno simulado: el adquiriente en la DIAN, RADIAN, el saldo y las recargas, el XML de un documento de la DIAN, el reenvío del correo, el documento equivalente y la nómina; o el entorno simulado está apagado).
 	Reason *string `json:"reason,omitempty"`
 	// En `previous_event_pending`: el evento que la DIAN todavía no muestra.
 	Previous *string `json:"previous,omitempty"`
@@ -43,7 +43,7 @@ type Problem struct {
 	BalanceCop *int32 `json:"balance_cop,omitempty"`
 	// En `insufficient_balance` de una operación cobrada: lo que cuesta la operación, en pesos.
 	PriceCop *int32 `json:"price_cop,omitempty"`
-	// En `rate_limited`: qué límite se pasó. Con una llave de administración: `lecturas` (600 peticiones por minuto de la llave en `/v1/account`), `account_key` (el mismo contador, visto desde una ruta de empresa), `api_keys` (60 llaves de empresa creadas o revocadas por hora) y `account_queries` (60 consultas de documentos o eventos por minuto, sumando las llaves de la cuenta). En `company_limit_reached`: `hour` (20 altas por hora) o `day` (100 por día).
+	// En `rate_limited`: qué límite se pasó (`email_resend`: los reenvíos del correo de un documento o de la empresa en el día; `pdf_design`: los cambios de diseño del PDF o del logo seguidos, que no son la ventana de las cabeceras RateLimit). Con una llave de administración: `lecturas` (600 peticiones por minuto de la llave en `/v1/account`), `account_key` (el mismo contador, visto desde una ruta de empresa), `api_keys` (60 llaves de empresa creadas o revocadas por hora) y `account_queries` (60 consultas de documentos o eventos por minuto, sumando las llaves de la cuenta). En `company_limit_reached`: `hour` (20 altas por hora) o `day` (100 por día). `simulated`: un tope del entorno simulado (las peticiones por minuto de tu empresa simulada, sumando sus llaves; las de todas las cuentas en unos segundos o los envíos por hora; o demasiados documentos o webhooks por procesar en tu empresa simulada o en todo el entorno).
 	Limit *string `json:"limit,omitempty"`
 	// En `tacit_acceptance_not_due`: desde cuándo procede la aceptación tácita. `null` si la DIAN todavía no muestra el recibo del bien (032) de la compradora: consulta de nuevo en unos minutos con `GET /v1/invoices/{id}/tacit_acceptance`.
 	AvailableFrom NullableString `json:"available_from,omitempty"`
@@ -57,6 +57,10 @@ type Problem struct {
 	RequiredPermission *string `json:"required_permission,omitempty"`
 	// En `company_exists`: la empresa que ya está en la cuenta con ese NIT.
 	Company *AccountCompany `json:"company,omitempty"`
+	// En `pdf_design_invalid`: qué no cabe y en qué tipos de documento.
+	Findings []ProblemFinding `json:"findings,omitempty"`
+	// En `pdf_design_outdated`: la versión actual del diseño.
+	CurrentVersion *int32 `json:"current_version,omitempty"`
 	// En `report_too_large`: cuántos documentos tiene lo pedido.
 	Rows *int32 `json:"rows,omitempty"`
 	// En `report_too_large`: cuántos admite una exportación.
@@ -881,6 +885,70 @@ func (o *Problem) SetCompany(v AccountCompany) {
 	o.Company = &v
 }
 
+// GetFindings returns the Findings field value if set, zero value otherwise.
+func (o *Problem) GetFindings() []ProblemFinding {
+	if o == nil || IsNil(o.Findings) {
+		var ret []ProblemFinding
+		return ret
+	}
+	return o.Findings
+}
+
+// GetFindingsOk returns a tuple with the Findings field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *Problem) GetFindingsOk() ([]ProblemFinding, bool) {
+	if o == nil || IsNil(o.Findings) {
+		return nil, false
+	}
+	return o.Findings, true
+}
+
+// HasFindings returns a boolean if a field has been set.
+func (o *Problem) HasFindings() bool {
+	if o != nil && !IsNil(o.Findings) {
+		return true
+	}
+
+	return false
+}
+
+// SetFindings gets a reference to the given []ProblemFinding and assigns it to the Findings field.
+func (o *Problem) SetFindings(v []ProblemFinding) {
+	o.Findings = v
+}
+
+// GetCurrentVersion returns the CurrentVersion field value if set, zero value otherwise.
+func (o *Problem) GetCurrentVersion() int32 {
+	if o == nil || IsNil(o.CurrentVersion) {
+		var ret int32
+		return ret
+	}
+	return *o.CurrentVersion
+}
+
+// GetCurrentVersionOk returns a tuple with the CurrentVersion field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *Problem) GetCurrentVersionOk() (*int32, bool) {
+	if o == nil || IsNil(o.CurrentVersion) {
+		return nil, false
+	}
+	return o.CurrentVersion, true
+}
+
+// HasCurrentVersion returns a boolean if a field has been set.
+func (o *Problem) HasCurrentVersion() bool {
+	if o != nil && !IsNil(o.CurrentVersion) {
+		return true
+	}
+
+	return false
+}
+
+// SetCurrentVersion gets a reference to the given int32 and assigns it to the CurrentVersion field.
+func (o *Problem) SetCurrentVersion(v int32) {
+	o.CurrentVersion = &v
+}
+
 // GetRows returns the Rows field value if set, zero value otherwise.
 func (o *Problem) GetRows() int32 {
 	if o == nil || IsNil(o.Rows) {
@@ -1027,6 +1095,12 @@ func (o Problem) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.Company) {
 		toSerialize["company"] = o.Company
 	}
+	if !IsNil(o.Findings) {
+		toSerialize["findings"] = o.Findings
+	}
+	if !IsNil(o.CurrentVersion) {
+		toSerialize["current_version"] = o.CurrentVersion
+	}
 	if !IsNil(o.Rows) {
 		toSerialize["rows"] = o.Rows
 	}
@@ -1079,6 +1153,8 @@ func (o *Problem) UnmarshalJSON(data []byte) (err error) {
 		delete(additionalProperties, "existing_active")
 		delete(additionalProperties, "required_permission")
 		delete(additionalProperties, "company")
+		delete(additionalProperties, "findings")
+		delete(additionalProperties, "current_version")
 		delete(additionalProperties, "rows")
 		delete(additionalProperties, "max_rows")
 		o.AdditionalProperties = additionalProperties

@@ -1,6 +1,8 @@
 [
 	"Account",
 	"Balance",
+	"Catalogs",
+	"CompanySettings",
 	"CreditNotes",
 	"Customers",
 	"DebitNotes",
@@ -18,6 +20,8 @@
 	"PaperNumberingRanges",
 	"PayrollAdjustments",
 	"Payrolls",
+	"PdfDesigns",
+	"PdfTemplates",
 	"Products",
 	"RadianEvents",
 	"RadianStatus",

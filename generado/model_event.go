@@ -26,6 +26,8 @@ type Event struct {
 	// UTC.
 	Timestamp *time.Time `json:"timestamp,omitempty"`
 	Environment *string `json:"environment,omitempty"`
+	// Solo en el entorno SIMULADO (la empresa simulada de la cuenta): el objeto se validó, se calculó y se firmó como siempre, pero nunca llegó a la DIAN ni tiene validez. Un objeto real no lleva esta propiedad.
+	Simulated *bool `json:"simulated,omitempty"`
 	// La versión del formato de los eventos (hoy `2026-10-22`), la misma para todas las llaves: el resumen del documento no cambia con la versión de la llave.
 	ApiVersion *string `json:"api_version,omitempty"`
 	// Los datos del evento, según su `type` (ver el esquema de cada tipo).
@@ -212,6 +214,38 @@ func (o *Event) SetEnvironment(v string) {
 	o.Environment = &v
 }
 
+// GetSimulated returns the Simulated field value if set, zero value otherwise.
+func (o *Event) GetSimulated() bool {
+	if o == nil || IsNil(o.Simulated) {
+		var ret bool
+		return ret
+	}
+	return *o.Simulated
+}
+
+// GetSimulatedOk returns a tuple with the Simulated field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *Event) GetSimulatedOk() (*bool, bool) {
+	if o == nil || IsNil(o.Simulated) {
+		return nil, false
+	}
+	return o.Simulated, true
+}
+
+// HasSimulated returns a boolean if a field has been set.
+func (o *Event) HasSimulated() bool {
+	if o != nil && !IsNil(o.Simulated) {
+		return true
+	}
+
+	return false
+}
+
+// SetSimulated gets a reference to the given bool and assigns it to the Simulated field.
+func (o *Event) SetSimulated(v bool) {
+	o.Simulated = &v
+}
+
 // GetApiVersion returns the ApiVersion field value if set, zero value otherwise.
 func (o *Event) GetApiVersion() string {
 	if o == nil || IsNil(o.ApiVersion) {
@@ -301,6 +335,9 @@ func (o Event) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.Environment) {
 		toSerialize["environment"] = o.Environment
 	}
+	if !IsNil(o.Simulated) {
+		toSerialize["simulated"] = o.Simulated
+	}
 	if !IsNil(o.ApiVersion) {
 		toSerialize["api_version"] = o.ApiVersion
 	}
@@ -334,6 +371,7 @@ func (o *Event) UnmarshalJSON(data []byte) (err error) {
 		delete(additionalProperties, "type")
 		delete(additionalProperties, "timestamp")
 		delete(additionalProperties, "environment")
+		delete(additionalProperties, "simulated")
 		delete(additionalProperties, "api_version")
 		delete(additionalProperties, "data")
 		o.AdditionalProperties = additionalProperties

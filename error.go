@@ -26,7 +26,7 @@ const (
 	KindInvalidRequest Kind = "InvalidRequestError"
 	// KindIdempotency: idempotency_key_reused.
 	KindIdempotency Kind = "IdempotencyError"
-	// KindValidation: validation_error (422). `Errors` dice qué campo (`Pointer`) y por qué.
+	// KindValidation: validation_error (422; `Errors` dice qué campo, `Pointer`, y por qué), logo_invalid y pdf_design_invalid.
 	KindValidation Kind = "ValidationError"
 	// KindConflict: external_id_in_use, invalid_state, duplicate_document, request_in_progress, previous_event_pending,
 	// file_unavailable, webhook_limit_reached, company_exists (`Problem["company"]` es la empresa que ya está en la cuenta),
