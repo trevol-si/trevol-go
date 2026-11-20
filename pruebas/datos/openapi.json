@@ -1619,7 +1619,7 @@
   "/balance": {
    "get": {
     "summary": "El saldo de la cuenta (lo comparten sus empresas)",
-    "description": "El saldo prepago de Trevol. Es de la **cuenta**, no de la empresa: todas las empresas de la cuenta lo comparten (`shared: true`) y cualquier llave de cualquiera de ellas, de lectura o de escritura, `test` o `live`, ve el mismo. Solo lo que se emite en producción (llaves `live`) lo consume; la habilitación (`test`) no cobra. `available` es lo que se puede gastar (en pesos); `held`, lo apartado por documentos que la DIAN todavía valida y por operaciones de la API en curso; `overdraft`, cuánto puede bajar `available` de cero al apartar un documento; `low_threshold`, el umbral del aviso de saldo bajo (el 20 % de la última recarga; `null` sin recargas). `level`: `empty` con `available` ≤ 0, `low` por debajo de `low_threshold`, si no `ok`. Con `available` por debajo del precio de un documento, emitir en producción responde 402 `insufficient_balance`. El evento `balance.low` avisa por webhook. `operation_prices`: el precio en pesos de cada operación que Trevol hace por la empresa en el portal de la DIAN y que se cobra del saldo (`dian_sync`: `POST /v1/dian_syncs`; `numbering_refresh`: `POST /v1/numbering_ranges/refresh`; `numbering_association`: `POST /v1/numbering_ranges/{id}/associate`; `numbering_request`: `POST /v1/numbering_requests`, una vez por solicitud). 0 es gratis. Solo en producción: se aparta al crearla, se cobra si termina bien y se devuelve si falla; sin saldo, 402 `insufficient_balance` y no se crea nada. Si la persona responsable de la llave no puede ver el saldo de la cuenta (en una cuenta compartida, un Facturador: en la app solo ve si alcanza), 403 `permission_denied` con `reason: key_owner_without_access`, y el 402 llega sin `balance_cop`.",
+    "description": "El saldo prepago de Trevol. Es de la **cuenta**, no de la empresa: todas las empresas de la cuenta lo comparten (`shared: true`) y toda llave que lo lee, de cualquiera de ellas, de lectura o de escritura, `test` o `live`, ve el mismo (en una cuenta compartida, la llave de un Facturador no lo lee: 403, abajo). Solo lo que se emite en producción (llaves `live`) lo consume; la habilitación (`test`) no cobra. `available` es lo que se puede gastar (en pesos); `held`, lo apartado por documentos que la DIAN todavía valida y por operaciones de la API en curso; `overdraft`, cuánto puede bajar `available` de cero al apartar un documento; `low_threshold`, el umbral del aviso de saldo bajo (el 20 % de la última recarga; `null` sin recargas). `level`: `empty` con `available` ≤ 0, `low` por debajo de `low_threshold`, si no `ok`. Con `available` por debajo del precio de un documento, emitir en producción responde 402 `insufficient_balance`. El evento `balance.low` avisa por webhook. `operation_prices`: el precio en pesos de cada operación que Trevol hace por la empresa en el portal de la DIAN y que se cobra del saldo (`dian_sync`: `POST /v1/dian_syncs`; `numbering_refresh`: `POST /v1/numbering_ranges/refresh`; `numbering_association`: `POST /v1/numbering_ranges/{id}/associate`; `numbering_request`: `POST /v1/numbering_requests`, una vez por solicitud). 0 es gratis. Solo en producción: se aparta al crearla, se cobra si termina bien y se devuelve si falla; sin saldo, 402 `insufficient_balance` y no se crea nada. Si la persona responsable de la llave no puede ver el saldo de la cuenta (en una cuenta compartida, un Facturador: en la app solo ve si alcanza), 403 `permission_denied` con `reason: key_owner_without_access`, y el 402 llega sin `balance_cop`. Por eso `key_owner` (el nivel del saldo propio de la persona responsable, si la llave paga con él) solo llega a las llaves de quien puede ver el saldo de la cuenta.",
     "responses": {
      "200": {
       "description": "El saldo",
@@ -1645,6 +1645,24 @@
           "numbering_request": 500
          },
          "key_owner": null
+        }
+       }
+      },
+      "headers": {
+       "Request-Id": {
+        "$ref": "#/components/headers/Request-Id"
+       },
+       "Trevol-Version": {
+        "$ref": "#/components/headers/Trevol-Version"
+       }
+      }
+     },
+     "403": {
+      "description": "La persona responsable de la llave no puede ver el saldo de la cuenta (`key_owner_without_access`)",
+      "content": {
+       "application/problem+json": {
+        "schema": {
+         "$ref": "#/components/schemas/Problem"
         }
        }
       },
@@ -1871,6 +1889,24 @@
        }
       }
      },
+     "403": {
+      "description": "La persona responsable de la llave no puede ver los movimientos de la cuenta (`key_owner_without_access`)",
+      "content": {
+       "application/problem+json": {
+        "schema": {
+         "$ref": "#/components/schemas/Problem"
+        }
+       }
+      },
+      "headers": {
+       "Request-Id": {
+        "$ref": "#/components/headers/Request-Id"
+       },
+       "Trevol-Version": {
+        "$ref": "#/components/headers/Trevol-Version"
+       }
+      }
+     },
      "422": {
       "description": "Error (application/problem+json)",
       "content": {
@@ -1942,7 +1978,7 @@
   "/balance/top_ups": {
    "post": {
     "summary": "Preparar una recarga del saldo (para el widget de Wompi)",
-    "description": "Prepara una recarga del saldo de la cuenta y devuelve lo que necesita el widget de Wompi (`WidgetCheckout`: `publicKey`, `currency`, `amountInCents`, `reference`, `signature: {integrity}` y `expirationTime`). El pago se hace en el widget; cuando Wompi lo aprueba, Trevol abona el saldo (y la factura de la recarga sale a nombre de `buyer`). Preparar no mueve saldo y la firma vence en una hora: si el widget venció, prepara otra. Solo llaves de escritura; exige `Idempotency-Key` (repetir con la misma clave devuelve la MISMA recarga). Sin `buyer`, la factura va a nombre de la empresa de la llave con sus datos (NIT, DV, razón social, correo, teléfono, dirección y municipio); si no alcanzan, 422 en `buyer.*`. El monto va entre la recarga mínima y la máxima (422 `top_up_below_minimum` / `top_up_above_maximum` con `minimum_cop` / `maximum_cop`). Es dinero real con cualquier llave (también `test`): el saldo es uno solo. Hasta 20 por llave cada 10 minutos (429).",
+    "description": "Prepara una recarga del saldo de la cuenta y devuelve lo que necesita el widget de Wompi (`WidgetCheckout`: `publicKey`, `currency`, `amountInCents`, `reference`, `signature: {integrity}` y `expirationTime`). El pago se hace en el widget; cuando Wompi lo aprueba, Trevol abona el saldo (y la factura de la recarga sale a nombre de `buyer`). Preparar no mueve saldo y la firma vence en una hora: si el widget venció, prepara otra. Solo llaves de escritura; exige `Idempotency-Key` (repetir con la misma clave devuelve la MISMA recarga). Sin `buyer`, la factura va a nombre de la empresa de la llave con sus datos (NIT, DV, razón social, correo, teléfono, dirección y municipio); si no alcanzan, 422 en `buyer.*`. El monto va entre la recarga mínima y la máxima (422 `top_up_below_minimum` / `top_up_above_maximum` con `minimum_cop` / `maximum_cop`). Es dinero real con cualquier llave (también `test`): el saldo es uno solo. Hasta 20 por llave cada 10 minutos (429). En una cuenta compartida, solo si la persona responsable de la llave puede recargar el saldo de la cuenta (el titular y los administradores); si no, 403 `permission_denied` con `reason: key_owner_without_access`.",
     "parameters": [
      {
       "name": "Idempotency-Key",
@@ -2011,6 +2047,27 @@
           "signature": "5d5d5d5d5d5d5d5d5d5d5d5d5d5d5d5d5d5d5d5d5d5d5d5d5d5d5d5d5d5d5d5d",
           "expiration_time": "2026-10-31T15:20:05.000Z"
          }
+        }
+       }
+      },
+      "headers": {
+       "Request-Id": {
+        "$ref": "#/components/headers/Request-Id"
+       },
+       "Trevol-Version": {
+        "$ref": "#/components/headers/Trevol-Version"
+       },
+       "Idempotent-Replayed": {
+        "$ref": "#/components/headers/Idempotent-Replayed"
+       }
+      }
+     },
+     "403": {
+      "description": "La persona responsable de la llave no puede recargar el saldo de la cuenta (`key_owner_without_access`)",
+      "content": {
+       "application/problem+json": {
+        "schema": {
+         "$ref": "#/components/schemas/Problem"
         }
        }
       },
@@ -43564,7 +43621,7 @@
    },
    "Balance": {
     "type": "object",
-    "description": "El saldo prepago de Trevol. Es de la **cuenta**, no de la empresa: todas las empresas de la cuenta lo comparten (`shared: true`) y cualquier llave de cualquiera de ellas, de lectura o de escritura, `test` o `live`, ve el mismo. Solo lo que se emite en producción (llaves `live`) lo consume; la habilitación (`test`) no cobra. `available` es lo que se puede gastar (en pesos); `held`, lo apartado por documentos que la DIAN todavía valida y por operaciones de la API en curso; `overdraft`, cuánto puede bajar `available` de cero al apartar un documento; `low_threshold`, el umbral del aviso de saldo bajo (el 20 % de la última recarga; `null` sin recargas). `level`: `empty` con `available` ≤ 0, `low` por debajo de `low_threshold`, si no `ok`. Con `available` por debajo del precio de un documento, emitir en producción responde 402 `insufficient_balance`. El evento `balance.low` avisa por webhook. `operation_prices`: el precio en pesos de cada operación que Trevol hace por la empresa en el portal de la DIAN y que se cobra del saldo (`dian_sync`: `POST /v1/dian_syncs`; `numbering_refresh`: `POST /v1/numbering_ranges/refresh`; `numbering_association`: `POST /v1/numbering_ranges/{id}/associate`; `numbering_request`: `POST /v1/numbering_requests`, una vez por solicitud). 0 es gratis. Solo en producción: se aparta al crearla, se cobra si termina bien y se devuelve si falla; sin saldo, 402 `insufficient_balance` y no se crea nada. Si la persona responsable de la llave no puede ver el saldo de la cuenta (en una cuenta compartida, un Facturador: en la app solo ve si alcanza), 403 `permission_denied` con `reason: key_owner_without_access`, y el 402 llega sin `balance_cop`.",
+    "description": "El saldo prepago de Trevol. Es de la **cuenta**, no de la empresa: todas las empresas de la cuenta lo comparten (`shared: true`) y toda llave que lo lee, de cualquiera de ellas, de lectura o de escritura, `test` o `live`, ve el mismo (en una cuenta compartida, la llave de un Facturador no lo lee: 403, abajo). Solo lo que se emite en producción (llaves `live`) lo consume; la habilitación (`test`) no cobra. `available` es lo que se puede gastar (en pesos); `held`, lo apartado por documentos que la DIAN todavía valida y por operaciones de la API en curso; `overdraft`, cuánto puede bajar `available` de cero al apartar un documento; `low_threshold`, el umbral del aviso de saldo bajo (el 20 % de la última recarga; `null` sin recargas). `level`: `empty` con `available` ≤ 0, `low` por debajo de `low_threshold`, si no `ok`. Con `available` por debajo del precio de un documento, emitir en producción responde 402 `insufficient_balance`. El evento `balance.low` avisa por webhook. `operation_prices`: el precio en pesos de cada operación que Trevol hace por la empresa en el portal de la DIAN y que se cobra del saldo (`dian_sync`: `POST /v1/dian_syncs`; `numbering_refresh`: `POST /v1/numbering_ranges/refresh`; `numbering_association`: `POST /v1/numbering_ranges/{id}/associate`; `numbering_request`: `POST /v1/numbering_requests`, una vez por solicitud). 0 es gratis. Solo en producción: se aparta al crearla, se cobra si termina bien y se devuelve si falla; sin saldo, 402 `insufficient_balance` y no se crea nada. Si la persona responsable de la llave no puede ver el saldo de la cuenta (en una cuenta compartida, un Facturador: en la app solo ve si alcanza), 403 `permission_denied` con `reason: key_owner_without_access`, y el 402 llega sin `balance_cop`. Por eso `key_owner` (el nivel del saldo propio de la persona responsable, si la llave paga con él) solo llega a las llaves de quien puede ver el saldo de la cuenta.",
     "required": [
      "object",
      "currency",

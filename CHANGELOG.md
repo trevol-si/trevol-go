@@ -9,6 +9,7 @@ Regenerado con la especificación de las cuentas compartidas (la misma versión 
 
 - `Balance.key_owner` tiene su tipo (`BalanceKeyOwner`, solo `level`) y es obligatorio: siempre viene, en `null` si la llave paga con el saldo de la cuenta.
 - `Problem.reason` documenta `key_owner_without_access` también para el saldo (`GET /v1/balance` y sus movimientos), los talonarios y la creación de empresas con una llave de administración; `balance_cop` del 402 es siempre el saldo de la cuenta y no viene si la persona responsable de la llave no lo puede ver.
+- `GET /v1/balance`, sus movimientos y `POST /v1/balance/top_ups` documentan su `403` (`key_owner_without_access`): la llave de un facturador no lee el saldo de la cuenta ni lo recarga, y por eso no recibe `key_owner`. Solo cambian textos de la documentación del código.
 
 ## [0.3.1] — 2026-11-19
 
