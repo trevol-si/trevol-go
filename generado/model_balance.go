@@ -18,7 +18,7 @@ import (
 // checks if the Balance type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &Balance{}
 
-// Balance El saldo prepago de Trevol. Es de la **cuenta**, no de la empresa: todas las empresas de la cuenta lo comparten (`shared: true`) y cualquier llave de cualquiera de ellas, de lectura o de escritura, `test` o `live`, ve el mismo. Solo lo que se emite en producción (llaves `live`) lo consume; la habilitación (`test`) no cobra. `available` es lo que se puede gastar (en pesos); `held`, lo apartado por documentos que la DIAN todavía valida y por operaciones de la API en curso; `overdraft`, cuánto puede bajar `available` de cero al apartar un documento; `low_threshold`, el umbral del aviso de saldo bajo (el 20 % de la última recarga; `null` sin recargas). `level`: `empty` con `available` ≤ 0, `low` por debajo de `low_threshold`, si no `ok`. Con `available` por debajo del precio de un documento, emitir en producción responde 402 `insufficient_balance`. El evento `balance.low` avisa por webhook. `operation_prices`: el precio en pesos de cada operación que Trevol hace por la empresa en el portal de la DIAN y que se cobra del saldo (`dian_sync`: `POST /v1/dian_syncs`; `numbering_refresh`: `POST /v1/numbering_ranges/refresh`; `numbering_association`: `POST /v1/numbering_ranges/{id}/associate`; `numbering_request`: `POST /v1/numbering_requests`, una vez por solicitud). 0 es gratis. Solo en producción: se aparta al crearla, se cobra si termina bien y se devuelve si falla; sin saldo, 402 `insufficient_balance` y no se crea nada.
+// Balance El saldo prepago de Trevol. Es de la **cuenta**, no de la empresa: todas las empresas de la cuenta lo comparten (`shared: true`) y cualquier llave de cualquiera de ellas, de lectura o de escritura, `test` o `live`, ve el mismo. Solo lo que se emite en producción (llaves `live`) lo consume; la habilitación (`test`) no cobra. `available` es lo que se puede gastar (en pesos); `held`, lo apartado por documentos que la DIAN todavía valida y por operaciones de la API en curso; `overdraft`, cuánto puede bajar `available` de cero al apartar un documento; `low_threshold`, el umbral del aviso de saldo bajo (el 20 % de la última recarga; `null` sin recargas). `level`: `empty` con `available` ≤ 0, `low` por debajo de `low_threshold`, si no `ok`. Con `available` por debajo del precio de un documento, emitir en producción responde 402 `insufficient_balance`. El evento `balance.low` avisa por webhook. `operation_prices`: el precio en pesos de cada operación que Trevol hace por la empresa en el portal de la DIAN y que se cobra del saldo (`dian_sync`: `POST /v1/dian_syncs`; `numbering_refresh`: `POST /v1/numbering_ranges/refresh`; `numbering_association`: `POST /v1/numbering_ranges/{id}/associate`; `numbering_request`: `POST /v1/numbering_requests`, una vez por solicitud). 0 es gratis. Solo en producción: se aparta al crearla, se cobra si termina bien y se devuelve si falla; sin saldo, 402 `insufficient_balance` y no se crea nada. Si la persona responsable de la llave no puede ver el saldo de la cuenta (en una cuenta compartida, un Facturador: en la app solo ve si alcanza), 403 `permission_denied` con `reason: key_owner_without_access`, y el 402 llega sin `balance_cop`.
 type Balance struct {
 	Object *string `json:"object,omitempty"`
 	Currency *string `json:"currency,omitempty"`
@@ -35,6 +35,8 @@ type Balance struct {
 	UpdatedAt NullableTime `json:"updated_at,omitempty"`
 	// Siempre true: el saldo es de la cuenta y lo comparten todas sus empresas.
 	Shared *bool `json:"shared,omitempty"`
+	// Cuando la llave paga primero con el saldo propio de su persona responsable (lo activa esa persona en la app): el nivel de ese saldo propio, sin montos (quien tiene la llave no ve cuánto tiene esa persona). null si la llave paga con el saldo de la cuenta. Los demás campos siguen siendo los de la cuenta.
+	KeyOwner NullableBalanceKeyOwner `json:"key_owner,omitempty"`
 	// El precio en pesos de cada operación que Trevol hace por la empresa en el portal de la DIAN y que se cobra del saldo (0 es gratis). Solo en producción.
 	OperationPrices *BalanceOperationPrices `json:"operation_prices,omitempty"`
 	AdditionalProperties map[string]interface{}
@@ -367,6 +369,48 @@ func (o *Balance) SetShared(v bool) {
 	o.Shared = &v
 }
 
+// GetKeyOwner returns the KeyOwner field value if set, zero value otherwise (both if not set or set to explicit null).
+func (o *Balance) GetKeyOwner() BalanceKeyOwner {
+	if o == nil || IsNil(o.KeyOwner.Get()) {
+		var ret BalanceKeyOwner
+		return ret
+	}
+	return *o.KeyOwner.Get()
+}
+
+// GetKeyOwnerOk returns a tuple with the KeyOwner field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+// NOTE: If the value is an explicit nil, `nil, true` will be returned
+func (o *Balance) GetKeyOwnerOk() (*BalanceKeyOwner, bool) {
+	if o == nil {
+		return nil, false
+	}
+	return o.KeyOwner.Get(), o.KeyOwner.IsSet()
+}
+
+// HasKeyOwner returns a boolean if a field has been set.
+func (o *Balance) HasKeyOwner() bool {
+	if o != nil && o.KeyOwner.IsSet() {
+		return true
+	}
+
+	return false
+}
+
+// SetKeyOwner gets a reference to the given NullableBalanceKeyOwner and assigns it to the KeyOwner field.
+func (o *Balance) SetKeyOwner(v BalanceKeyOwner) {
+	o.KeyOwner.Set(&v)
+}
+// SetKeyOwnerNil sets the value for KeyOwner to be an explicit nil
+func (o *Balance) SetKeyOwnerNil() {
+	o.KeyOwner.Set(nil)
+}
+
+// UnsetKeyOwner ensures that no value is present for KeyOwner, not even an explicit nil
+func (o *Balance) UnsetKeyOwner() {
+	o.KeyOwner.Unset()
+}
+
 // GetOperationPrices returns the OperationPrices field value if set, zero value otherwise.
 func (o *Balance) GetOperationPrices() BalanceOperationPrices {
 	if o == nil || IsNil(o.OperationPrices) {
@@ -436,6 +480,9 @@ func (o Balance) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.Shared) {
 		toSerialize["shared"] = o.Shared
 	}
+	if o.KeyOwner.IsSet() {
+		toSerialize["key_owner"] = o.KeyOwner.Get()
+	}
 	if !IsNil(o.OperationPrices) {
 		toSerialize["operation_prices"] = o.OperationPrices
 	}
@@ -470,6 +517,7 @@ func (o *Balance) UnmarshalJSON(data []byte) (err error) {
 		delete(additionalProperties, "level")
 		delete(additionalProperties, "updated_at")
 		delete(additionalProperties, "shared")
+		delete(additionalProperties, "key_owner")
 		delete(additionalProperties, "operation_prices")
 		o.AdditionalProperties = additionalProperties
 	}

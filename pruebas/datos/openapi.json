@@ -1619,7 +1619,7 @@
   "/balance": {
    "get": {
     "summary": "El saldo de la cuenta (lo comparten sus empresas)",
-    "description": "El saldo prepago de Trevol. Es de la **cuenta**, no de la empresa: todas las empresas de la cuenta lo comparten (`shared: true`) y cualquier llave de cualquiera de ellas, de lectura o de escritura, `test` o `live`, ve el mismo. Solo lo que se emite en producción (llaves `live`) lo consume; la habilitación (`test`) no cobra. `available` es lo que se puede gastar (en pesos); `held`, lo apartado por documentos que la DIAN todavía valida y por operaciones de la API en curso; `overdraft`, cuánto puede bajar `available` de cero al apartar un documento; `low_threshold`, el umbral del aviso de saldo bajo (el 20 % de la última recarga; `null` sin recargas). `level`: `empty` con `available` ≤ 0, `low` por debajo de `low_threshold`, si no `ok`. Con `available` por debajo del precio de un documento, emitir en producción responde 402 `insufficient_balance`. El evento `balance.low` avisa por webhook. `operation_prices`: el precio en pesos de cada operación que Trevol hace por la empresa en el portal de la DIAN y que se cobra del saldo (`dian_sync`: `POST /v1/dian_syncs`; `numbering_refresh`: `POST /v1/numbering_ranges/refresh`; `numbering_association`: `POST /v1/numbering_ranges/{id}/associate`; `numbering_request`: `POST /v1/numbering_requests`, una vez por solicitud). 0 es gratis. Solo en producción: se aparta al crearla, se cobra si termina bien y se devuelve si falla; sin saldo, 402 `insufficient_balance` y no se crea nada.",
+    "description": "El saldo prepago de Trevol. Es de la **cuenta**, no de la empresa: todas las empresas de la cuenta lo comparten (`shared: true`) y cualquier llave de cualquiera de ellas, de lectura o de escritura, `test` o `live`, ve el mismo. Solo lo que se emite en producción (llaves `live`) lo consume; la habilitación (`test`) no cobra. `available` es lo que se puede gastar (en pesos); `held`, lo apartado por documentos que la DIAN todavía valida y por operaciones de la API en curso; `overdraft`, cuánto puede bajar `available` de cero al apartar un documento; `low_threshold`, el umbral del aviso de saldo bajo (el 20 % de la última recarga; `null` sin recargas). `level`: `empty` con `available` ≤ 0, `low` por debajo de `low_threshold`, si no `ok`. Con `available` por debajo del precio de un documento, emitir en producción responde 402 `insufficient_balance`. El evento `balance.low` avisa por webhook. `operation_prices`: el precio en pesos de cada operación que Trevol hace por la empresa en el portal de la DIAN y que se cobra del saldo (`dian_sync`: `POST /v1/dian_syncs`; `numbering_refresh`: `POST /v1/numbering_ranges/refresh`; `numbering_association`: `POST /v1/numbering_ranges/{id}/associate`; `numbering_request`: `POST /v1/numbering_requests`, una vez por solicitud). 0 es gratis. Solo en producción: se aparta al crearla, se cobra si termina bien y se devuelve si falla; sin saldo, 402 `insufficient_balance` y no se crea nada. Si la persona responsable de la llave no puede ver el saldo de la cuenta (en una cuenta compartida, un Facturador: en la app solo ve si alcanza), 403 `permission_denied` con `reason: key_owner_without_access`, y el 402 llega sin `balance_cop`.",
     "responses": {
      "200": {
       "description": "El saldo",
@@ -1643,7 +1643,8 @@
           "numbering_refresh": 50,
           "numbering_association": 100,
           "numbering_request": 500
-         }
+         },
+         "key_owner": null
         }
        }
       },
@@ -1709,7 +1710,7 @@
   "/balance/transactions": {
    "get": {
     "summary": "Los movimientos del saldo de la cuenta",
-    "description": "Los movimientos del saldo de la cuenta (de todas sus empresas), del más nuevo al más viejo: lo mismo que «Saldo y recargas» en la app. Un documento es UNA fila (`type: document`) con su `status`: `pending` (apartado mientras la DIAN lo valida), `charged` (validado y cobrado) o `released` (la DIAN lo rechazó: no se cobró y `amount` es 0); `company` dice qué empresa lo emitió. Lo demás es una fila por movimiento: `top_up` (recarga, con su `reference`), `top_up_reversal`, `bonus`, `adjustment`, `license_fee`, `expiration` u `other`. Una operación de la API que se cobra (una sincronización o una de numeración, ver `operation_prices` en `GET /v1/balance`) es también UNA fila (`type: operation`) con el mismo `status` que un documento (`released`: no terminó y no se cobró) y `operation: {type, id}` (el id de la sincronización, la asociación o la solicitud; null en una lectura de numeraciones). `amount` es lo que el movimiento hizo con el disponible, con signo; `available_after`, el disponible justo después. Filtro `type`: `all` (por defecto), `documents`, `funding` (todo lo que no es un documento, también las operaciones), `top_ups` u `operations`. Paginación por cursor: `limit` (1 a 100, 25 por defecto) y `starting_after` (el `id` de la última fila que tienes). Con una llave de administración con alcance de lista, lo de una empresa que la llave no alcanza sale con su monto, su `status` y `available_after`, pero sin `company`, `document` ni `reference`, y con la descripción «Movimiento de otra empresa de la cuenta».",
+    "description": "Los movimientos del saldo de la cuenta (de todas sus empresas), del más nuevo al más viejo: lo mismo que «Saldo y pagos» en la app. Un documento es UNA fila (`type: document`) con su `status`: `pending` (apartado mientras la DIAN lo valida), `charged` (validado y cobrado) o `released` (la DIAN lo rechazó: no se cobró y `amount` es 0); `company` dice qué empresa lo emitió. Lo demás es una fila por movimiento: `top_up` (recarga, con su `reference`), `top_up_reversal`, `bonus`, `adjustment`, `license_fee`, `expiration` u `other`. Una operación de la API que se cobra (una sincronización o una de numeración, ver `operation_prices` en `GET /v1/balance`) es también UNA fila (`type: operation`) con el mismo `status` que un documento (`released`: no terminó y no se cobró) y `operation: {type, id}` (el id de la sincronización, la asociación o la solicitud; null en una lectura de numeraciones). `amount` es lo que el movimiento hizo con el disponible, con signo; `available_after`, el disponible justo después. Filtro `type`: `all` (por defecto), `documents`, `funding` (todo lo que no es un documento, también las operaciones), `top_ups` u `operations`. Paginación por cursor: `limit` (1 a 100, 25 por defecto) y `starting_after` (el `id` de la última fila que tienes). Con una llave de administración con alcance de lista, lo de una empresa que la llave no alcanza sale con su monto, su `status` y `available_after`, pero sin `company`, `document` ni `reference`, y con la descripción «Movimiento de otra empresa de la cuenta». Solo si la persona responsable de la llave puede ver los movimientos de la cuenta (en una cuenta compartida, el titular y los administradores); si no, 403 `permission_denied` con `reason: key_owner_without_access`.",
     "parameters": [
      {
       "name": "limit",
@@ -43563,7 +43564,7 @@
    },
    "Balance": {
     "type": "object",
-    "description": "El saldo prepago de Trevol. Es de la **cuenta**, no de la empresa: todas las empresas de la cuenta lo comparten (`shared: true`) y cualquier llave de cualquiera de ellas, de lectura o de escritura, `test` o `live`, ve el mismo. Solo lo que se emite en producción (llaves `live`) lo consume; la habilitación (`test`) no cobra. `available` es lo que se puede gastar (en pesos); `held`, lo apartado por documentos que la DIAN todavía valida y por operaciones de la API en curso; `overdraft`, cuánto puede bajar `available` de cero al apartar un documento; `low_threshold`, el umbral del aviso de saldo bajo (el 20 % de la última recarga; `null` sin recargas). `level`: `empty` con `available` ≤ 0, `low` por debajo de `low_threshold`, si no `ok`. Con `available` por debajo del precio de un documento, emitir en producción responde 402 `insufficient_balance`. El evento `balance.low` avisa por webhook. `operation_prices`: el precio en pesos de cada operación que Trevol hace por la empresa en el portal de la DIAN y que se cobra del saldo (`dian_sync`: `POST /v1/dian_syncs`; `numbering_refresh`: `POST /v1/numbering_ranges/refresh`; `numbering_association`: `POST /v1/numbering_ranges/{id}/associate`; `numbering_request`: `POST /v1/numbering_requests`, una vez por solicitud). 0 es gratis. Solo en producción: se aparta al crearla, se cobra si termina bien y se devuelve si falla; sin saldo, 402 `insufficient_balance` y no se crea nada.",
+    "description": "El saldo prepago de Trevol. Es de la **cuenta**, no de la empresa: todas las empresas de la cuenta lo comparten (`shared: true`) y cualquier llave de cualquiera de ellas, de lectura o de escritura, `test` o `live`, ve el mismo. Solo lo que se emite en producción (llaves `live`) lo consume; la habilitación (`test`) no cobra. `available` es lo que se puede gastar (en pesos); `held`, lo apartado por documentos que la DIAN todavía valida y por operaciones de la API en curso; `overdraft`, cuánto puede bajar `available` de cero al apartar un documento; `low_threshold`, el umbral del aviso de saldo bajo (el 20 % de la última recarga; `null` sin recargas). `level`: `empty` con `available` ≤ 0, `low` por debajo de `low_threshold`, si no `ok`. Con `available` por debajo del precio de un documento, emitir en producción responde 402 `insufficient_balance`. El evento `balance.low` avisa por webhook. `operation_prices`: el precio en pesos de cada operación que Trevol hace por la empresa en el portal de la DIAN y que se cobra del saldo (`dian_sync`: `POST /v1/dian_syncs`; `numbering_refresh`: `POST /v1/numbering_ranges/refresh`; `numbering_association`: `POST /v1/numbering_ranges/{id}/associate`; `numbering_request`: `POST /v1/numbering_requests`, una vez por solicitud). 0 es gratis. Solo en producción: se aparta al crearla, se cobra si termina bien y se devuelve si falla; sin saldo, 402 `insufficient_balance` y no se crea nada. Si la persona responsable de la llave no puede ver el saldo de la cuenta (en una cuenta compartida, un Facturador: en la app solo ve si alcanza), 403 `permission_denied` con `reason: key_owner_without_access`, y el 402 llega sin `balance_cop`.",
     "required": [
      "object",
      "currency",
@@ -43574,6 +43575,7 @@
      "level",
      "updated_at",
      "shared",
+     "key_owner",
      "operation_prices"
     ],
     "properties": {
@@ -43630,6 +43632,28 @@
        true
       ],
       "description": "Siempre true: el saldo es de la cuenta y lo comparten todas sus empresas."
+     },
+     "key_owner": {
+      "type": [
+       "object",
+       "null"
+      ],
+      "required": [
+       "level"
+      ],
+      "additionalProperties": false,
+      "description": "Cuando la llave paga primero con el saldo propio de su persona responsable (lo activa esa persona en la app): el nivel de ese saldo propio, sin montos (quien tiene la llave no ve cuánto tiene esa persona). null si la llave paga con el saldo de la cuenta. Los demás campos siguen siendo los de la cuenta.",
+      "properties": {
+       "level": {
+        "type": "string",
+        "enum": [
+         "ok",
+         "low",
+         "empty"
+        ],
+        "description": "ok, low (por debajo de su umbral de aviso) o empty (en cero o menos)."
+       }
+      }
      },
      "operation_prices": {
       "type": "object",
@@ -44847,6 +44871,7 @@
        "credentials_missing",
        "disabled",
        "environment_mismatch",
+       "key_owner_without_access",
        "live_mode_required",
        "mandate_required",
        "missing_legal_representative",
@@ -44855,6 +44880,7 @@
        "missing_technical_key",
        "no_contingency_numbering",
        "no_resolution",
+       "number_paused",
        "payroll_not_enabled",
        "prefix_in_use",
        "resolution_exhausted",
@@ -44862,7 +44888,7 @@
        "resolution_not_yet_valid",
        "scope_list"
       ],
-      "description": "En `company_not_enabled` (`missing_legal_representative`, `missing_pin`, `missing_software`, `payroll_not_enabled`) y en `numbering_unavailable` (`missing_technical_key`, `no_contingency_numbering`, `no_resolution`, `prefix_in_use`, `resolution_exhausted`, `resolution_expired`, `resolution_not_yet_valid`): por qué. En `automatic_mode_unavailable` (`credentials_missing`, `mandate_required`: falta el mandato para integraciones que se acepta en la app, `disabled`) y en `permission_denied` de una ruta que solo existe en producción (`live_mode_required`). En `permission_denied` de una llave de administración: `environment_mismatch` (`Trevol-Environment` no es el ambiente de la llave), `live_mode_required` (el alta de empresas pide una llave de producción) y `scope_list` (una llave con alcance de lista no da de alta empresas; como esa llave no puede tener `companies:write`, lo que llega en la práctica es el 403 con `required_permission: companies:write`)."
+      "description": "En `company_not_enabled` (`missing_legal_representative`, `missing_pin`, `missing_software`, `payroll_not_enabled`) y en `numbering_unavailable` (`missing_technical_key`, `no_contingency_numbering`, `no_resolution`, `prefix_in_use`, `resolution_exhausted`, `resolution_expired`, `resolution_not_yet_valid`): por qué. En `permission_denied`: `key_owner_without_access` (la persona responsable de la llave ya no tiene acceso a la empresa, no puede gestionar lo que pide la ruta: webhooks, numeración, talonarios o sincronización con la DIAN, o no puede ver el saldo de la cuenta) y `number_paused` (el número de WhatsApp está en pausa hasta que la empresa le asigne una persona responsable). En `automatic_mode_unavailable` (`credentials_missing`, `mandate_required`: falta el mandato para integraciones que se acepta en la app, `disabled`) y en `permission_denied` de una ruta que solo existe en producción (`live_mode_required`). En `permission_denied` de una llave de administración: `environment_mismatch` (`Trevol-Environment` no es el ambiente de la llave), `live_mode_required` (el alta de empresas pide una llave de producción) y `scope_list` (una llave con alcance de lista no da de alta empresas; como esa llave no puede tener `companies:write`, lo que llega en la práctica es el 403 con `required_permission: companies:write`)."
      },
      "previous": {
       "type": "string",
@@ -44884,7 +44910,7 @@
      },
      "balance_cop": {
       "type": "integer",
-      "description": "En `insufficient_balance` de una operación cobrada: el saldo disponible de la cuenta, en pesos."
+      "description": "En `insufficient_balance` de una operación cobrada: el saldo disponible de la cuenta, en pesos (el mismo `available` de `GET /v1/balance`). No viene si la persona responsable de la llave no puede ver el saldo de la cuenta."
      },
      "price_cop": {
       "type": "integer",
