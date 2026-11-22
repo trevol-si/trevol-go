@@ -3,9 +3,9 @@
 El formato sigue [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/) y el versionado, [SemVer](https://semver.org/lang/es/): antes
 de la 1.0, un cambio incompatible sube el número menor.
 
-## [Sin publicar]
+## [0.5.0] — 2026-11-22 (sin publicar)
 
-Regenerado con la especificación de las cuentas compartidas (la misma versión `2026-11-18` de la API; se publica junto con ellas):
+Regenerado con la especificación de las cuentas compartidas (la misma versión `2026-11-18` de la API; se publica junto con ellas, después de la 0.4.0). Sube el número menor porque `key_owner` pasa a ser obligatorio en `Balance`:
 
 - `Balance.key_owner` tiene su tipo (`BalanceKeyOwner`, solo `level`) y es obligatorio: siempre viene, en `null` si la llave paga con el saldo de la cuenta.
 - `Problem.reason` documenta `key_owner_without_access` también para el saldo (`GET /v1/balance` y sus movimientos), los talonarios y la creación de empresas con una llave de administración; `balance_cop` del 402 es siempre el saldo de la cuenta y no viene si la persona responsable de la llave no lo puede ver.
