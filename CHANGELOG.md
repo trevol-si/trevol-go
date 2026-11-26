@@ -3,7 +3,7 @@
 El formato sigue [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/) y el versionado, [SemVer](https://semver.org/lang/es/): antes
 de la 1.0, un cambio incompatible sube el número menor.
 
-## [0.6.0] — 2026-11-25 (sin publicar)
+## [0.6.0] — 2026-11-25
 
 Regenerado con el PDF de la DIAN (la misma versión `2026-11-18` de la API; 180 operaciones y 70 tipos de evento). Todo es aditivo: el
 código que ya funciona no cambia.
