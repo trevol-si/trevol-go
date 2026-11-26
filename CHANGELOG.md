@@ -3,7 +3,23 @@
 El formato sigue [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/) y el versionado, [SemVer](https://semver.org/lang/es/): antes
 de la 1.0, un cambio incompatible sube el número menor.
 
-## [0.5.0] — 2026-11-22 (sin publicar)
+## [0.6.0] — 2026-11-25 (sin publicar)
+
+Regenerado con el PDF de la DIAN (la misma versión `2026-11-18` de la API; 180 operaciones y 70 tipos de evento). Todo es aditivo: el
+código que ya funciona no cambia.
+
+- `requestDianDocumentPdf` pide el PDF oficial que genera la DIAN de un documento de la empresa (emitido o recibido) y devuelve un
+  `DianDocumentPdf` (`status`: `pending`, `ready`, `failed` o `expired`). Trevol lo pide a la DIAN y puede tardar unos segundos o
+  minutos. Repetir la petición es seguro: si ya hay uno en camino o listo, devuelve ese y no se cobra otra vez.
+- `downloadDianDocumentPdf` baja el PDF (como `downloadDianDocumentXml` baja el XML). Mientras viene en camino lanza el error
+  reintentable `file_unavailable` (`reason: "pending"`, con `Retry-After`): espera y vuelve a llamarlo, o mira `pdf_status` del
+  documento (`retrieveDianDocument`) hasta que sea `ready`.
+- `DianDocument` trae `pdf_available` y `pdf_status`; el aviso `dian_document.received`, `pdf_available`.
+- `Balance.operation_prices` trae `dian_document_pdf` (lo que cuesta pedirlo) y un movimiento del saldo puede tener
+  `operation.type: "dian_document_pdf"`.
+- `Problem.reason` documenta `pending`, `not_requested` y `dian_failed` (`file_unavailable` del PDF de la DIAN).
+
+## [0.5.0] — 2026-11-22
 
 Regenerado con la especificación de las cuentas compartidas (la misma versión `2026-11-18` de la API; se publica junto con ellas, después de la 0.4.0). Sube el número menor porque `key_owner` pasa a ser obligatorio en `Balance`:
 

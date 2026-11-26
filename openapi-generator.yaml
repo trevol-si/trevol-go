@@ -6,7 +6,7 @@ generatorName: go
 inputSpec: especificacion/openapi.sdk.json
 additionalProperties:
   packageName: generado
-  packageVersion: 0.5.0
+  packageVersion: 0.6.0
   isGoSubmodule: true
   withGoMod: false
   enumClassPrefix: true

@@ -20,7 +20,7 @@ var _ MappedNullable = &BalanceTransactionOperation{}
 // BalanceTransactionOperation Solo en `type: operation`: la operación de la API que se cobró y el id de lo que creó.
 type BalanceTransactionOperation struct {
 	Type *string `json:"type,omitempty"`
-	// dsync_… (sincronización), nas_… (asociación) o nreq_… (solicitud); null en una lectura de numeraciones.
+	// dsync_… (sincronización), nas_… (asociación), nreq_… (solicitud) o ddoc_… (el documento del PDF de la DIAN); null en una lectura de numeraciones.
 	Id NullableString `json:"id,omitempty"`
 	AdditionalProperties map[string]interface{}
 }

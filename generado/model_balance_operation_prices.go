@@ -17,12 +17,13 @@ import (
 // checks if the BalanceOperationPrices type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &BalanceOperationPrices{}
 
-// BalanceOperationPrices El precio en pesos de cada operación que Trevol hace por la empresa en el portal de la DIAN y que se cobra del saldo (0 es gratis). Solo en producción.
+// BalanceOperationPrices El precio en pesos de cada operación de la API que Trevol hace por la empresa ante la DIAN y que se cobra del saldo (0 es gratis). Solo en producción.
 type BalanceOperationPrices struct {
 	DianSync *int32 `json:"dian_sync,omitempty"`
 	NumberingRefresh *int32 `json:"numbering_refresh,omitempty"`
 	NumberingAssociation *int32 `json:"numbering_association,omitempty"`
 	NumberingRequest *int32 `json:"numbering_request,omitempty"`
+	DianDocumentPdf *int32 `json:"dian_document_pdf,omitempty"`
 	AdditionalProperties map[string]interface{}
 }
 
@@ -173,6 +174,38 @@ func (o *BalanceOperationPrices) SetNumberingRequest(v int32) {
 	o.NumberingRequest = &v
 }
 
+// GetDianDocumentPdf returns the DianDocumentPdf field value if set, zero value otherwise.
+func (o *BalanceOperationPrices) GetDianDocumentPdf() int32 {
+	if o == nil || IsNil(o.DianDocumentPdf) {
+		var ret int32
+		return ret
+	}
+	return *o.DianDocumentPdf
+}
+
+// GetDianDocumentPdfOk returns a tuple with the DianDocumentPdf field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *BalanceOperationPrices) GetDianDocumentPdfOk() (*int32, bool) {
+	if o == nil || IsNil(o.DianDocumentPdf) {
+		return nil, false
+	}
+	return o.DianDocumentPdf, true
+}
+
+// HasDianDocumentPdf returns a boolean if a field has been set.
+func (o *BalanceOperationPrices) HasDianDocumentPdf() bool {
+	if o != nil && !IsNil(o.DianDocumentPdf) {
+		return true
+	}
+
+	return false
+}
+
+// SetDianDocumentPdf gets a reference to the given int32 and assigns it to the DianDocumentPdf field.
+func (o *BalanceOperationPrices) SetDianDocumentPdf(v int32) {
+	o.DianDocumentPdf = &v
+}
+
 func (o BalanceOperationPrices) MarshalJSON() ([]byte, error) {
 	toSerialize,err := o.ToMap()
 	if err != nil {
@@ -194,6 +227,9 @@ func (o BalanceOperationPrices) ToMap() (map[string]interface{}, error) {
 	}
 	if !IsNil(o.NumberingRequest) {
 		toSerialize["numbering_request"] = o.NumberingRequest
+	}
+	if !IsNil(o.DianDocumentPdf) {
+		toSerialize["dian_document_pdf"] = o.DianDocumentPdf
 	}
 
 	for key, value := range o.AdditionalProperties {
@@ -221,6 +257,7 @@ func (o *BalanceOperationPrices) UnmarshalJSON(data []byte) (err error) {
 		delete(additionalProperties, "numbering_refresh")
 		delete(additionalProperties, "numbering_association")
 		delete(additionalProperties, "numbering_request")
+		delete(additionalProperties, "dian_document_pdf")
 		o.AdditionalProperties = additionalProperties
 	}
 

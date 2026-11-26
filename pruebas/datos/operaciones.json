@@ -2381,6 +2381,29 @@
   "llave": "api_o_administracion"
  },
  {
+  "operationId": "downloadDianDocumentPdf",
+  "metodo": "GET",
+  "ruta": "/dian_documents/{id}/pdf",
+  "recurso": "DianDocuments",
+  "idempotente": false,
+  "reintento": "seguro",
+  "binario": "pdf",
+  "lista": null,
+  "respuesta": null,
+  "cuerpo": null,
+  "cuerpoRequerido": false,
+  "parametros": [
+   {
+    "nombre": "id",
+    "en": "path",
+    "requerido": true,
+    "tipo": "string"
+   }
+  ],
+  "ejemplos": [],
+  "llave": "api_o_administracion"
+ },
+ {
   "operationId": "downloadDianDocumentXml",
   "metodo": "GET",
   "ruta": "/dian_documents/{id}/xml",
@@ -5376,6 +5399,29 @@
   "cuerpo": null,
   "cuerpoRequerido": false,
   "parametros": [],
+  "ejemplos": [],
+  "llave": "api_o_administracion"
+ },
+ {
+  "operationId": "requestDianDocumentPdf",
+  "metodo": "POST",
+  "ruta": "/dian_documents/{id}/pdf",
+  "recurso": "DianDocuments",
+  "idempotente": false,
+  "reintento": "solo_429",
+  "binario": null,
+  "lista": null,
+  "respuesta": "DianDocumentPdf",
+  "cuerpo": null,
+  "cuerpoRequerido": false,
+  "parametros": [
+   {
+    "nombre": "id",
+    "en": "path",
+    "requerido": true,
+    "tipo": "string"
+   }
+  ],
   "ejemplos": [],
   "llave": "api_o_administracion"
  },

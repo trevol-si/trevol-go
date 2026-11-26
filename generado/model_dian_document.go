@@ -17,7 +17,7 @@ import (
 // checks if the DianDocument type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &DianDocument{}
 
-// DianDocument Un documento de la empresa ante la DIAN (emitido con Trevol o con otro sistema, o recibido de un proveedor), tal como lo trajo la sincronización o el buzón. Es de solo lectura: no tiene PDF ni acciones aquí; su XML se le pide a la DIAN (`xml_available`).
+// DianDocument Un documento de la empresa ante la DIAN (emitido con Trevol o con otro sistema, o recibido de un proveedor), tal como lo trajo la sincronización o el buzón. Es de solo lectura: su XML se le pide a la DIAN (`xml_available`) y también el PDF oficial que genera la DIAN (`pdf_available`, `pdf_status`).
 type DianDocument struct {
 	// Úsalo en `starting_after` para pedir la página siguiente.
 	Id *string `json:"id,omitempty"`
@@ -48,6 +48,10 @@ type DianDocument struct {
 	Source *string `json:"source,omitempty"`
 	// Si se le puede pedir el XML a la DIAN con GET /v1/dian_documents/{id}/xml (tiene CUFE y la DIAN lo verificó; Trevol no lo guarda). En lo emitido, además, si la llave tiene el permiso customers:read (su XML trae los datos personales del cliente).
 	XmlAvailable *bool `json:"xml_available,omitempty"`
+	// Si se le puede pedir a la DIAN el PDF oficial del documento con POST /v1/dian_documents/{id}/pdf: solo en producción, con CUFE y verificado por la DIAN. En lo emitido, además, si la llave tiene el permiso customers:read.
+	PdfAvailable *bool `json:"pdf_available,omitempty"`
+	// Cómo va el PDF de la DIAN: `not_requested` (nunca se pidió, o el que se pidió venció a los 90 días), `pending` (Trevol lo está pidiendo a la DIAN), `ready` (se baja con GET /v1/dian_documents/{id}/pdf) o `failed` (la DIAN no lo entregó; no se cobró: se puede pedir otra vez).
+	PdfStatus *DianDocumentPdfState `json:"pdf_status,omitempty"`
 	AdditionalProperties map[string]interface{}
 }
 
@@ -736,6 +740,70 @@ func (o *DianDocument) SetXmlAvailable(v bool) {
 	o.XmlAvailable = &v
 }
 
+// GetPdfAvailable returns the PdfAvailable field value if set, zero value otherwise.
+func (o *DianDocument) GetPdfAvailable() bool {
+	if o == nil || IsNil(o.PdfAvailable) {
+		var ret bool
+		return ret
+	}
+	return *o.PdfAvailable
+}
+
+// GetPdfAvailableOk returns a tuple with the PdfAvailable field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *DianDocument) GetPdfAvailableOk() (*bool, bool) {
+	if o == nil || IsNil(o.PdfAvailable) {
+		return nil, false
+	}
+	return o.PdfAvailable, true
+}
+
+// HasPdfAvailable returns a boolean if a field has been set.
+func (o *DianDocument) HasPdfAvailable() bool {
+	if o != nil && !IsNil(o.PdfAvailable) {
+		return true
+	}
+
+	return false
+}
+
+// SetPdfAvailable gets a reference to the given bool and assigns it to the PdfAvailable field.
+func (o *DianDocument) SetPdfAvailable(v bool) {
+	o.PdfAvailable = &v
+}
+
+// GetPdfStatus returns the PdfStatus field value if set, zero value otherwise.
+func (o *DianDocument) GetPdfStatus() DianDocumentPdfState {
+	if o == nil || IsNil(o.PdfStatus) {
+		var ret DianDocumentPdfState
+		return ret
+	}
+	return *o.PdfStatus
+}
+
+// GetPdfStatusOk returns a tuple with the PdfStatus field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *DianDocument) GetPdfStatusOk() (*DianDocumentPdfState, bool) {
+	if o == nil || IsNil(o.PdfStatus) {
+		return nil, false
+	}
+	return o.PdfStatus, true
+}
+
+// HasPdfStatus returns a boolean if a field has been set.
+func (o *DianDocument) HasPdfStatus() bool {
+	if o != nil && !IsNil(o.PdfStatus) {
+		return true
+	}
+
+	return false
+}
+
+// SetPdfStatus gets a reference to the given DianDocumentPdfState and assigns it to the PdfStatus field.
+func (o *DianDocument) SetPdfStatus(v DianDocumentPdfState) {
+	o.PdfStatus = &v
+}
+
 func (o DianDocument) MarshalJSON() ([]byte, error) {
 	toSerialize,err := o.ToMap()
 	if err != nil {
@@ -800,6 +868,12 @@ func (o DianDocument) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.XmlAvailable) {
 		toSerialize["xml_available"] = o.XmlAvailable
 	}
+	if !IsNil(o.PdfAvailable) {
+		toSerialize["pdf_available"] = o.PdfAvailable
+	}
+	if !IsNil(o.PdfStatus) {
+		toSerialize["pdf_status"] = o.PdfStatus
+	}
 
 	for key, value := range o.AdditionalProperties {
 		toSerialize[key] = value
@@ -840,6 +914,8 @@ func (o *DianDocument) UnmarshalJSON(data []byte) (err error) {
 		delete(additionalProperties, "received_on")
 		delete(additionalProperties, "source")
 		delete(additionalProperties, "xml_available")
+		delete(additionalProperties, "pdf_available")
+		delete(additionalProperties, "pdf_status")
 		o.AdditionalProperties = additionalProperties
 	}
 

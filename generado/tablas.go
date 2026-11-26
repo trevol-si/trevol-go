@@ -4,7 +4,7 @@ package generado
 
 import "encoding/json"
 
-const Version = "0.5.0"
+const Version = "0.6.0"
 const APIVersion = "2026-11-18"
 
 // Operacion describe una operación de la API. Reintento: "seguro" (GET, preview, PATCH y todo POST/PUT con Idempotency-Key que no devuelva un secreto una sola vez) o "solo_429".
@@ -67,6 +67,7 @@ var Operaciones = []Operacion{
 	{"downloadDebitNotePdf", "GET", "/debit_notes/{id}/pdf", "DebitNotes", false, "seguro", "pdf", "api_o_administracion"},
 	{"downloadDebitNoteXml", "GET", "/debit_notes/{id}/xml", "DebitNotes", false, "seguro", "xml", "api_o_administracion"},
 	{"downloadDebitNoteZip", "GET", "/debit_notes/{id}/zip", "DebitNotes", false, "seguro", "zip", "api_o_administracion"},
+	{"downloadDianDocumentPdf", "GET", "/dian_documents/{id}/pdf", "DianDocuments", false, "seguro", "pdf", "api_o_administracion"},
 	{"downloadDianDocumentXml", "GET", "/dian_documents/{id}/xml", "DianDocuments", false, "seguro", "xml", "api_o_administracion"},
 	{"downloadEquivalentDocumentAdjustmentDianResponse", "GET", "/equivalent_document_adjustments/{id}/dian_response", "EquivalentDocumentAdjustments", false, "seguro", "xml", "api_o_administracion"},
 	{"downloadEquivalentDocumentAdjustmentPdf", "GET", "/equivalent_document_adjustments/{id}/pdf", "EquivalentDocumentAdjustments", false, "seguro", "pdf", "api_o_administracion"},
@@ -140,6 +141,7 @@ var Operaciones = []Operacion{
 	{"previewSupportDocument", "POST", "/support_documents/preview", "SupportDocuments", false, "seguro", "", "api_o_administracion"},
 	{"previewSupportDocumentAdjustment", "POST", "/support_document_adjustments/preview", "SupportDocumentAdjustments", false, "seguro", "", "api_o_administracion"},
 	{"refreshNumberingRanges", "POST", "/numbering_ranges/refresh", "NumberingRanges", false, "solo_429", "", "api_o_administracion"},
+	{"requestDianDocumentPdf", "POST", "/dian_documents/{id}/pdf", "DianDocuments", false, "solo_429", "", "api_o_administracion"},
 	{"resendEvent", "POST", "/events/{id}/resend", "Events", false, "solo_429", "", "api_o_administracion"},
 	{"retrieveAccount", "GET", "/account", "Account", false, "seguro", "", "administracion"},
 	{"retrieveAccountCompany", "GET", "/account/companies/{id}", "Account", false, "seguro", "", "administracion"},

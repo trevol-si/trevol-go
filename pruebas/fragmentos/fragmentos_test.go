@@ -26,7 +26,7 @@ func operaciones(t *testing.T) []string {
 	if err := json.Unmarshal(crudo, &d); err != nil {
 		t.Fatal(err)
 	}
-	if len(d.Fragmentos) != 178 { // 0.4.0: + 19
+	if len(d.Fragmentos) != 180 { // 0.4.0: + 19; 0.6.0: + 2 (el PDF de la DIAN)
 		t.Fatalf("hay %d operaciones", len(d.Fragmentos))
 	}
 	var ops []string

@@ -38,6 +38,8 @@ type DianDocumentEventData struct {
 	Source *string `json:"source,omitempty"`
 	// Si se le puede pedir el XML a la DIAN con GET /v1/dian_documents/{id}/xml (tiene CUFE y la DIAN lo verificó).
 	XmlAvailable *bool `json:"xml_available,omitempty"`
+	// Si se le puede pedir el PDF oficial de la DIAN con POST /v1/dian_documents/{id}/pdf (además, solo en producción).
+	PdfAvailable *bool `json:"pdf_available,omitempty"`
 	AdditionalProperties map[string]interface{}
 }
 
@@ -694,6 +696,38 @@ func (o *DianDocumentEventData) SetXmlAvailable(v bool) {
 	o.XmlAvailable = &v
 }
 
+// GetPdfAvailable returns the PdfAvailable field value if set, zero value otherwise.
+func (o *DianDocumentEventData) GetPdfAvailable() bool {
+	if o == nil || IsNil(o.PdfAvailable) {
+		var ret bool
+		return ret
+	}
+	return *o.PdfAvailable
+}
+
+// GetPdfAvailableOk returns a tuple with the PdfAvailable field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *DianDocumentEventData) GetPdfAvailableOk() (*bool, bool) {
+	if o == nil || IsNil(o.PdfAvailable) {
+		return nil, false
+	}
+	return o.PdfAvailable, true
+}
+
+// HasPdfAvailable returns a boolean if a field has been set.
+func (o *DianDocumentEventData) HasPdfAvailable() bool {
+	if o != nil && !IsNil(o.PdfAvailable) {
+		return true
+	}
+
+	return false
+}
+
+// SetPdfAvailable gets a reference to the given bool and assigns it to the PdfAvailable field.
+func (o *DianDocumentEventData) SetPdfAvailable(v bool) {
+	o.PdfAvailable = &v
+}
+
 func (o DianDocumentEventData) MarshalJSON() ([]byte, error) {
 	toSerialize,err := o.ToMap()
 	if err != nil {
@@ -755,6 +789,9 @@ func (o DianDocumentEventData) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.XmlAvailable) {
 		toSerialize["xml_available"] = o.XmlAvailable
 	}
+	if !IsNil(o.PdfAvailable) {
+		toSerialize["pdf_available"] = o.PdfAvailable
+	}
 
 	for key, value := range o.AdditionalProperties {
 		toSerialize[key] = value
@@ -794,6 +831,7 @@ func (o *DianDocumentEventData) UnmarshalJSON(data []byte) (err error) {
 		delete(additionalProperties, "counterpart")
 		delete(additionalProperties, "source")
 		delete(additionalProperties, "xml_available")
+		delete(additionalProperties, "pdf_available")
 		o.AdditionalProperties = additionalProperties
 	}
 

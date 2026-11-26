@@ -17,7 +17,7 @@ import (
 // checks if the AccountDianDocument type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &AccountDianDocument{}
 
-// AccountDianDocument Un documento de una empresa de tu cuenta ante la DIAN, emitido o recibido, tal como lo trajo la sincronización (el mismo `dian_document` de `GET /v1/dian_documents`, sin `xml_available`), con la empresa y, en las facturas, el resumen RADIAN. Lo que llegó al buzón y la sincronización todavía no vio no aparece.
+// AccountDianDocument Un documento de una empresa de tu cuenta ante la DIAN, emitido o recibido, tal como lo trajo la sincronización (el mismo `dian_document` de `GET /v1/dian_documents`, sin `xml_available` ni el PDF), con la empresa y, en las facturas, el resumen RADIAN. Lo que llegó al buzón y la sincronización todavía no vio no aparece.
 type AccountDianDocument struct {
 	// Úsalo en `starting_after` para pedir la página siguiente.
 	Id *string `json:"id,omitempty"`

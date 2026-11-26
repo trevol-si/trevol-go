@@ -2010,7 +2010,7 @@
   "/balance": {
    "get": {
     "summary": "El saldo de la cuenta (lo comparten sus empresas)",
-    "description": "El saldo prepago de Trevol. Es de la **cuenta**, no de la empresa: todas las empresas de la cuenta lo comparten (`shared: true`) y toda llave que lo lee, de cualquiera de ellas, de lectura o de escritura, `test` o `live`, ve el mismo (en una cuenta compartida, la llave de un Facturador no lo lee: 403, abajo). Solo lo que se emite en producción (llaves `live`) lo consume; la habilitación (`test`) no cobra. `available` es lo que se puede gastar (en pesos); `held`, lo apartado por documentos que la DIAN todavía valida y por operaciones de la API en curso; `overdraft`, cuánto puede bajar `available` de cero al apartar un documento; `low_threshold`, el umbral del aviso de saldo bajo (el 20 % de la última recarga; `null` sin recargas). `level`: `empty` con `available` ≤ 0, `low` por debajo de `low_threshold`, si no `ok`. Con `available` por debajo del precio de un documento, emitir en producción responde 402 `insufficient_balance`. El evento `balance.low` avisa por webhook. `operation_prices`: el precio en pesos de cada operación que Trevol hace por la empresa en el portal de la DIAN y que se cobra del saldo (`dian_sync`: `POST /v1/dian_syncs`; `numbering_refresh`: `POST /v1/numbering_ranges/refresh`; `numbering_association`: `POST /v1/numbering_ranges/{id}/associate`; `numbering_request`: `POST /v1/numbering_requests`, una vez por solicitud). 0 es gratis. Solo en producción: se aparta al crearla, se cobra si termina bien y se devuelve si falla; sin saldo, 402 `insufficient_balance` y no se crea nada. Si la persona responsable de la llave no puede ver el saldo de la cuenta (en una cuenta compartida, un Facturador: en la app solo ve si alcanza), 403 `permission_denied` con `reason: key_owner_without_access`, y el 402 llega sin `balance_cop`. Por eso `key_owner` (el nivel del saldo propio de la persona responsable, si la llave paga con él) solo llega a las llaves de quien puede ver el saldo de la cuenta.",
+    "description": "El saldo prepago de Trevol. Es de la **cuenta**, no de la empresa: todas las empresas de la cuenta lo comparten (`shared: true`) y toda llave que lo lee, de cualquiera de ellas, de lectura o de escritura, `test` o `live`, ve el mismo (en una cuenta compartida, la llave de un Facturador no lo lee: 403, abajo). Solo lo que se emite en producción (llaves `live`) lo consume; la habilitación (`test`) no cobra. `available` es lo que se puede gastar (en pesos); `held`, lo apartado por documentos que la DIAN todavía valida y por operaciones de la API en curso; `overdraft`, cuánto puede bajar `available` de cero al apartar un documento; `low_threshold`, el umbral del aviso de saldo bajo (el 20 % de la última recarga; `null` sin recargas). `level`: `empty` con `available` ≤ 0, `low` por debajo de `low_threshold`, si no `ok`. Con `available` por debajo del precio de un documento, emitir en producción responde 402 `insufficient_balance`. El evento `balance.low` avisa por webhook. `operation_prices`: el precio en pesos de cada operación de la API que Trevol hace por la empresa ante la DIAN y que se cobra del saldo (`dian_sync`: `POST /v1/dian_syncs`; `numbering_refresh`: `POST /v1/numbering_ranges/refresh`; `numbering_association`: `POST /v1/numbering_ranges/{id}/associate`; `numbering_request`: `POST /v1/numbering_requests`, una vez por solicitud; `dian_document_pdf`: `POST /v1/dian_documents/{id}/pdf`, una vez por PDF que llega). 0 es gratis. Solo en producción: se aparta al crearla, se cobra si termina bien y se devuelve si falla; sin saldo, 402 `insufficient_balance` y no se crea nada. Si la persona responsable de la llave no puede ver el saldo de la cuenta (en una cuenta compartida, un Facturador: en la app solo ve si alcanza), 403 `permission_denied` con `reason: key_owner_without_access`, y el 402 llega sin `balance_cop`. Por eso `key_owner` (el nivel del saldo propio de la persona responsable, si la llave paga con él) solo llega a las llaves de quien puede ver el saldo de la cuenta.",
     "responses": {
      "200": {
       "description": "El saldo",
@@ -2033,7 +2033,8 @@
           "dian_sync": 200,
           "numbering_refresh": 50,
           "numbering_association": 100,
-          "numbering_request": 500
+          "numbering_request": 500,
+          "dian_document_pdf": 100
          },
          "key_owner": null
         }
@@ -2958,7 +2959,9 @@
            "direction": "issued",
            "received_on": null,
            "source": "sync",
-           "xml_available": true
+           "xml_available": true,
+           "pdf_available": true,
+           "pdf_status": "not_requested"
           }
          ]
         }
@@ -3163,7 +3166,9 @@
          "direction": "received",
          "received_on": "2026-11-13",
          "source": "sync",
-         "xml_available": true
+         "xml_available": true,
+         "pdf_available": true,
+         "pdf_status": "ready"
         }
        }
       },
@@ -3551,6 +3556,518 @@
      "Documentos en la DIAN"
     ],
     "operationId": "downloadDianDocumentXml"
+   }
+  },
+  "/dian_documents/{id}/pdf": {
+   "parameters": [
+    {
+     "name": "id",
+     "in": "path",
+     "required": true,
+     "schema": {
+      "type": "string"
+     }
+    },
+    {
+     "name": "Trevol-Company",
+     "in": "header",
+     "required": false,
+     "description": "Solo con una llave de administración (`tva_…`), y entonces obligatoria: el `com_…` de la empresa. Con una llave `tvl_` se ignora. Ver `llave_administracion`.",
+     "schema": {
+      "type": "string",
+      "pattern": "^com_[0-9a-f]{32}$"
+     }
+    },
+    {
+     "name": "Trevol-Environment",
+     "in": "header",
+     "required": false,
+     "description": "Solo con una llave de administración (`tva_…`), y entonces obligatoria: `test` o `live`, el de la llave. Con una llave `tvl_` se ignora.",
+     "schema": {
+      "type": "string",
+      "enum": [
+       "test",
+       "live"
+      ]
+     }
+    }
+   ],
+   "post": {
+    "summary": "Pedir el PDF de la DIAN de un documento",
+    "description": "Pide el PDF oficial que genera la DIAN de un documento de la empresa de la llave (emitido o recibido): la representación gráfica de la DIAN, la misma que ofrece su portal. Trevol lo pide a la DIAN y puede tardar unos segundos o minutos: responde 202 con el objeto `dian_document_pdf` (`status: pending`), `Location` y `Retry-After`; cuando está listo, bájalo con GET /v1/dian_documents/{id}/pdf (o mira `pdf_status` en el documento). Si ya hay uno en camino o listo, lo devuelve sin pedir otro ni cobrar (200 si ya está listo): repetir la petición es seguro y no necesita `Idempotency-Key`. Se cobra del saldo cuando llega (`dian_document_pdf` en `operation_prices` de GET /v1/balance); si la DIAN no lo entrega, no se cobra. Se guarda 90 días: bajarlo otra vez no se cobra; después vence y pedirlo es un pedido nuevo. Solo producción (con una llave de prueba, 403 `live_mode_required`) y con una llave de escritura. Lo emitido trae los datos personales del cliente: exige el permiso `customers:read` de la llave. Errores: 404 (otra empresa u otro ambiente), 409 `file_unavailable` (sin CUFE: mira `pdf_available`), 402 `insufficient_balance` (no se pidió nada) y 429 con `limit: dian_document_pdf`.",
+    "responses": {
+     "200": {
+      "description": "Ya estaba listo (no se cobra otra vez)",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/DianDocumentPdf"
+        },
+        "example": {
+         "object": "dian_document_pdf",
+         "document_id": "ddoc_9b2e4c6a9b2e4c6a9b2e4c6a9b2e4c6a",
+         "status": "ready",
+         "size_bytes": 84213,
+         "requested_at": "2026-11-25T15:04:05Z",
+         "ready_at": "2026-11-25T15:04:31Z",
+         "expires_at": "2027-02-23T15:04:31Z",
+         "error": null
+        }
+       }
+      },
+      "headers": {
+       "Request-Id": {
+        "$ref": "#/components/headers/Request-Id"
+       },
+       "Trevol-Version": {
+        "$ref": "#/components/headers/Trevol-Version"
+       },
+       "RateLimit-Policy": {
+        "$ref": "#/components/headers/RateLimit-Policy"
+       },
+       "RateLimit": {
+        "$ref": "#/components/headers/RateLimit"
+       },
+       "Trevol-Simulated": {
+        "$ref": "#/components/headers/Trevol-Simulated"
+       }
+      }
+     },
+     "202": {
+      "description": "Pedido: Trevol lo está pidiendo a la DIAN",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/DianDocumentPdf"
+        },
+        "example": {
+         "object": "dian_document_pdf",
+         "document_id": "ddoc_9b2e4c6a9b2e4c6a9b2e4c6a9b2e4c6a",
+         "status": "pending",
+         "size_bytes": null,
+         "requested_at": "2026-11-25T15:04:05Z",
+         "ready_at": null,
+         "expires_at": null,
+         "error": null
+        }
+       }
+      },
+      "headers": {
+       "Location": {
+        "schema": {
+         "type": "string"
+        }
+       },
+       "Retry-After": {
+        "schema": {
+         "type": "integer"
+        }
+       },
+       "Request-Id": {
+        "$ref": "#/components/headers/Request-Id"
+       },
+       "Trevol-Version": {
+        "$ref": "#/components/headers/Trevol-Version"
+       },
+       "RateLimit-Policy": {
+        "$ref": "#/components/headers/RateLimit-Policy"
+       },
+       "RateLimit": {
+        "$ref": "#/components/headers/RateLimit"
+       },
+       "Trevol-Simulated": {
+        "$ref": "#/components/headers/Trevol-Simulated"
+       }
+      }
+     },
+     "402": {
+      "description": "Error (application/problem+json)",
+      "content": {
+       "application/problem+json": {
+        "schema": {
+         "$ref": "#/components/schemas/Problem"
+        }
+       }
+      },
+      "headers": {
+       "Request-Id": {
+        "$ref": "#/components/headers/Request-Id"
+       },
+       "Trevol-Version": {
+        "$ref": "#/components/headers/Trevol-Version"
+       },
+       "RateLimit-Policy": {
+        "$ref": "#/components/headers/RateLimit-Policy"
+       },
+       "RateLimit": {
+        "$ref": "#/components/headers/RateLimit"
+       },
+       "Trevol-Simulated": {
+        "$ref": "#/components/headers/Trevol-Simulated"
+       }
+      }
+     },
+     "403": {
+      "description": "Error (application/problem+json)",
+      "content": {
+       "application/problem+json": {
+        "schema": {
+         "$ref": "#/components/schemas/Problem"
+        },
+        "examples": {
+         "solo_produccion": {
+          "summary": "Con una llave de prueba",
+          "value": {
+           "type": "https://platform.trevol.si/docs/errores#permission_denied",
+           "title": "Sin permiso para esto",
+           "status": 403,
+           "code": "permission_denied",
+           "detail": "Esto solo existe en producción: usa una llave tvl_live_",
+           "retryable": false,
+           "reason": "live_mode_required",
+           "request_id": "req_5b1c5b1c5b1c5b1c5b1c5b1c"
+          }
+         }
+        }
+       }
+      },
+      "headers": {
+       "Request-Id": {
+        "$ref": "#/components/headers/Request-Id"
+       },
+       "Trevol-Version": {
+        "$ref": "#/components/headers/Trevol-Version"
+       },
+       "RateLimit-Policy": {
+        "$ref": "#/components/headers/RateLimit-Policy"
+       },
+       "RateLimit": {
+        "$ref": "#/components/headers/RateLimit"
+       },
+       "Trevol-Simulated": {
+        "$ref": "#/components/headers/Trevol-Simulated"
+       }
+      }
+     },
+     "404": {
+      "description": "Error (application/problem+json)",
+      "content": {
+       "application/problem+json": {
+        "schema": {
+         "$ref": "#/components/schemas/Problem"
+        }
+       }
+      },
+      "headers": {
+       "Request-Id": {
+        "$ref": "#/components/headers/Request-Id"
+       },
+       "Trevol-Version": {
+        "$ref": "#/components/headers/Trevol-Version"
+       },
+       "RateLimit-Policy": {
+        "$ref": "#/components/headers/RateLimit-Policy"
+       },
+       "RateLimit": {
+        "$ref": "#/components/headers/RateLimit"
+       },
+       "Trevol-Simulated": {
+        "$ref": "#/components/headers/Trevol-Simulated"
+       }
+      }
+     },
+     "409": {
+      "description": "Error (application/problem+json)",
+      "content": {
+       "application/problem+json": {
+        "schema": {
+         "$ref": "#/components/schemas/Problem"
+        }
+       }
+      },
+      "headers": {
+       "Request-Id": {
+        "$ref": "#/components/headers/Request-Id"
+       },
+       "Trevol-Version": {
+        "$ref": "#/components/headers/Trevol-Version"
+       },
+       "RateLimit-Policy": {
+        "$ref": "#/components/headers/RateLimit-Policy"
+       },
+       "RateLimit": {
+        "$ref": "#/components/headers/RateLimit"
+       },
+       "Trevol-Simulated": {
+        "$ref": "#/components/headers/Trevol-Simulated"
+       }
+      }
+     },
+     "429": {
+      "description": "Error (application/problem+json)",
+      "content": {
+       "application/problem+json": {
+        "schema": {
+         "$ref": "#/components/schemas/Problem"
+        }
+       }
+      },
+      "headers": {
+       "Request-Id": {
+        "$ref": "#/components/headers/Request-Id"
+       },
+       "Trevol-Version": {
+        "$ref": "#/components/headers/Trevol-Version"
+       },
+       "Retry-After": {
+        "$ref": "#/components/headers/Retry-After"
+       },
+       "RateLimit-Policy": {
+        "$ref": "#/components/headers/RateLimit-Policy"
+       },
+       "RateLimit": {
+        "$ref": "#/components/headers/RateLimit"
+       },
+       "Trevol-Simulated": {
+        "$ref": "#/components/headers/Trevol-Simulated"
+       }
+      }
+     },
+     "default": {
+      "description": "Error (application/problem+json)",
+      "content": {
+       "application/problem+json": {
+        "schema": {
+         "$ref": "#/components/schemas/Problem"
+        }
+       }
+      },
+      "headers": {
+       "Request-Id": {
+        "$ref": "#/components/headers/Request-Id"
+       },
+       "Trevol-Version": {
+        "$ref": "#/components/headers/Trevol-Version"
+       },
+       "RateLimit-Policy": {
+        "$ref": "#/components/headers/RateLimit-Policy"
+       },
+       "RateLimit": {
+        "$ref": "#/components/headers/RateLimit"
+       },
+       "Trevol-Simulated": {
+        "$ref": "#/components/headers/Trevol-Simulated"
+       }
+      }
+     }
+    },
+    "tags": [
+     "Documentos en la DIAN"
+    ],
+    "operationId": "requestDianDocumentPdf"
+   },
+   "get": {
+    "summary": "Bajar el PDF de la DIAN de un documento",
+    "description": "El PDF oficial de la DIAN de un documento, cuando está listo (200 `application/pdf`). Bajarlo no se cobra. Si todavía viene en camino: 409 `file_unavailable` reintentable con `reason: pending` y `Retry-After` (o mira `pdf_status`). Si no se ha pedido (o venció a los 90 días): 409 `file_unavailable` con `reason: not_requested`; pídelo con POST /v1/dian_documents/{id}/pdf. Si la DIAN no lo entregó: 503 `dian_unavailable` (pídelo otra vez) o 409 `file_unavailable` con `reason: dian_failed` (la DIAN no tiene el PDF de ese documento); en los dos casos no se cobró. Solo producción; lo emitido exige `customers:read`.",
+    "responses": {
+     "200": {
+      "description": "El PDF oficial de la DIAN",
+      "content": {
+       "application/pdf": {
+        "schema": {
+         "type": "string",
+         "format": "binary"
+        }
+       }
+      },
+      "headers": {
+       "Request-Id": {
+        "$ref": "#/components/headers/Request-Id"
+       },
+       "Trevol-Version": {
+        "$ref": "#/components/headers/Trevol-Version"
+       },
+       "RateLimit-Policy": {
+        "$ref": "#/components/headers/RateLimit-Policy"
+       },
+       "RateLimit": {
+        "$ref": "#/components/headers/RateLimit"
+       },
+       "Trevol-Simulated": {
+        "$ref": "#/components/headers/Trevol-Simulated"
+       }
+      }
+     },
+     "403": {
+      "description": "Error (application/problem+json)",
+      "content": {
+       "application/problem+json": {
+        "schema": {
+         "$ref": "#/components/schemas/Problem"
+        }
+       }
+      },
+      "headers": {
+       "Request-Id": {
+        "$ref": "#/components/headers/Request-Id"
+       },
+       "Trevol-Version": {
+        "$ref": "#/components/headers/Trevol-Version"
+       },
+       "RateLimit-Policy": {
+        "$ref": "#/components/headers/RateLimit-Policy"
+       },
+       "RateLimit": {
+        "$ref": "#/components/headers/RateLimit"
+       },
+       "Trevol-Simulated": {
+        "$ref": "#/components/headers/Trevol-Simulated"
+       }
+      }
+     },
+     "404": {
+      "description": "Error (application/problem+json)",
+      "content": {
+       "application/problem+json": {
+        "schema": {
+         "$ref": "#/components/schemas/Problem"
+        }
+       }
+      },
+      "headers": {
+       "Request-Id": {
+        "$ref": "#/components/headers/Request-Id"
+       },
+       "Trevol-Version": {
+        "$ref": "#/components/headers/Trevol-Version"
+       },
+       "RateLimit-Policy": {
+        "$ref": "#/components/headers/RateLimit-Policy"
+       },
+       "RateLimit": {
+        "$ref": "#/components/headers/RateLimit"
+       },
+       "Trevol-Simulated": {
+        "$ref": "#/components/headers/Trevol-Simulated"
+       }
+      }
+     },
+     "409": {
+      "description": "Error (application/problem+json)",
+      "content": {
+       "application/problem+json": {
+        "schema": {
+         "$ref": "#/components/schemas/Problem"
+        }
+       }
+      },
+      "headers": {
+       "Request-Id": {
+        "$ref": "#/components/headers/Request-Id"
+       },
+       "Trevol-Version": {
+        "$ref": "#/components/headers/Trevol-Version"
+       },
+       "RateLimit-Policy": {
+        "$ref": "#/components/headers/RateLimit-Policy"
+       },
+       "RateLimit": {
+        "$ref": "#/components/headers/RateLimit"
+       },
+       "Trevol-Simulated": {
+        "$ref": "#/components/headers/Trevol-Simulated"
+       }
+      }
+     },
+     "429": {
+      "description": "Error (application/problem+json)",
+      "content": {
+       "application/problem+json": {
+        "schema": {
+         "$ref": "#/components/schemas/Problem"
+        }
+       }
+      },
+      "headers": {
+       "Request-Id": {
+        "$ref": "#/components/headers/Request-Id"
+       },
+       "Trevol-Version": {
+        "$ref": "#/components/headers/Trevol-Version"
+       },
+       "Retry-After": {
+        "$ref": "#/components/headers/Retry-After"
+       },
+       "RateLimit-Policy": {
+        "$ref": "#/components/headers/RateLimit-Policy"
+       },
+       "RateLimit": {
+        "$ref": "#/components/headers/RateLimit"
+       },
+       "Trevol-Simulated": {
+        "$ref": "#/components/headers/Trevol-Simulated"
+       }
+      }
+     },
+     "503": {
+      "description": "Error (application/problem+json)",
+      "content": {
+       "application/problem+json": {
+        "schema": {
+         "$ref": "#/components/schemas/Problem"
+        }
+       }
+      },
+      "headers": {
+       "Request-Id": {
+        "$ref": "#/components/headers/Request-Id"
+       },
+       "Trevol-Version": {
+        "$ref": "#/components/headers/Trevol-Version"
+       },
+       "RateLimit-Policy": {
+        "$ref": "#/components/headers/RateLimit-Policy"
+       },
+       "RateLimit": {
+        "$ref": "#/components/headers/RateLimit"
+       },
+       "Trevol-Simulated": {
+        "$ref": "#/components/headers/Trevol-Simulated"
+       }
+      }
+     },
+     "default": {
+      "description": "Error (application/problem+json)",
+      "content": {
+       "application/problem+json": {
+        "schema": {
+         "$ref": "#/components/schemas/Problem"
+        }
+       }
+      },
+      "headers": {
+       "Request-Id": {
+        "$ref": "#/components/headers/Request-Id"
+       },
+       "Trevol-Version": {
+        "$ref": "#/components/headers/Trevol-Version"
+       },
+       "RateLimit-Policy": {
+        "$ref": "#/components/headers/RateLimit-Policy"
+       },
+       "RateLimit": {
+        "$ref": "#/components/headers/RateLimit"
+       },
+       "Trevol-Simulated": {
+        "$ref": "#/components/headers/Trevol-Simulated"
+       }
+      }
+     }
+    },
+    "tags": [
+     "Documentos en la DIAN"
+    ],
+    "operationId": "downloadDianDocumentPdf"
    }
   },
   "/radian_status": {
@@ -43700,7 +44217,8 @@
           "name": "SUMINISTROS DEL VALLE SAS"
          },
          "source": "sync",
-         "xml_available": true
+         "xml_available": true,
+         "pdf_available": true
         }
        }
       }
@@ -56026,7 +56544,7 @@
    },
    "Balance": {
     "type": "object",
-    "description": "El saldo prepago de Trevol. Es de la **cuenta**, no de la empresa: todas las empresas de la cuenta lo comparten (`shared: true`) y toda llave que lo lee, de cualquiera de ellas, de lectura o de escritura, `test` o `live`, ve el mismo (en una cuenta compartida, la llave de un Facturador no lo lee: 403, abajo). Solo lo que se emite en producción (llaves `live`) lo consume; la habilitación (`test`) no cobra. `available` es lo que se puede gastar (en pesos); `held`, lo apartado por documentos que la DIAN todavía valida y por operaciones de la API en curso; `overdraft`, cuánto puede bajar `available` de cero al apartar un documento; `low_threshold`, el umbral del aviso de saldo bajo (el 20 % de la última recarga; `null` sin recargas). `level`: `empty` con `available` ≤ 0, `low` por debajo de `low_threshold`, si no `ok`. Con `available` por debajo del precio de un documento, emitir en producción responde 402 `insufficient_balance`. El evento `balance.low` avisa por webhook. `operation_prices`: el precio en pesos de cada operación que Trevol hace por la empresa en el portal de la DIAN y que se cobra del saldo (`dian_sync`: `POST /v1/dian_syncs`; `numbering_refresh`: `POST /v1/numbering_ranges/refresh`; `numbering_association`: `POST /v1/numbering_ranges/{id}/associate`; `numbering_request`: `POST /v1/numbering_requests`, una vez por solicitud). 0 es gratis. Solo en producción: se aparta al crearla, se cobra si termina bien y se devuelve si falla; sin saldo, 402 `insufficient_balance` y no se crea nada. Si la persona responsable de la llave no puede ver el saldo de la cuenta (en una cuenta compartida, un Facturador: en la app solo ve si alcanza), 403 `permission_denied` con `reason: key_owner_without_access`, y el 402 llega sin `balance_cop`. Por eso `key_owner` (el nivel del saldo propio de la persona responsable, si la llave paga con él) solo llega a las llaves de quien puede ver el saldo de la cuenta.",
+    "description": "El saldo prepago de Trevol. Es de la **cuenta**, no de la empresa: todas las empresas de la cuenta lo comparten (`shared: true`) y toda llave que lo lee, de cualquiera de ellas, de lectura o de escritura, `test` o `live`, ve el mismo (en una cuenta compartida, la llave de un Facturador no lo lee: 403, abajo). Solo lo que se emite en producción (llaves `live`) lo consume; la habilitación (`test`) no cobra. `available` es lo que se puede gastar (en pesos); `held`, lo apartado por documentos que la DIAN todavía valida y por operaciones de la API en curso; `overdraft`, cuánto puede bajar `available` de cero al apartar un documento; `low_threshold`, el umbral del aviso de saldo bajo (el 20 % de la última recarga; `null` sin recargas). `level`: `empty` con `available` ≤ 0, `low` por debajo de `low_threshold`, si no `ok`. Con `available` por debajo del precio de un documento, emitir en producción responde 402 `insufficient_balance`. El evento `balance.low` avisa por webhook. `operation_prices`: el precio en pesos de cada operación de la API que Trevol hace por la empresa ante la DIAN y que se cobra del saldo (`dian_sync`: `POST /v1/dian_syncs`; `numbering_refresh`: `POST /v1/numbering_ranges/refresh`; `numbering_association`: `POST /v1/numbering_ranges/{id}/associate`; `numbering_request`: `POST /v1/numbering_requests`, una vez por solicitud; `dian_document_pdf`: `POST /v1/dian_documents/{id}/pdf`, una vez por PDF que llega). 0 es gratis. Solo en producción: se aparta al crearla, se cobra si termina bien y se devuelve si falla; sin saldo, 402 `insufficient_balance` y no se crea nada. Si la persona responsable de la llave no puede ver el saldo de la cuenta (en una cuenta compartida, un Facturador: en la app solo ve si alcanza), 403 `permission_denied` con `reason: key_owner_without_access`, y el 402 llega sin `balance_cop`. Por eso `key_owner` (el nivel del saldo propio de la persona responsable, si la llave paga con él) solo llega a las llaves de quien puede ver el saldo de la cuenta.",
     "required": [
      "object",
      "currency",
@@ -56059,7 +56577,7 @@
      },
      "held": {
       "type": "integer",
-      "description": "Apartado por documentos que la DIAN todavía valida y por operaciones de la API en curso (sincronizaciones y numeración)."
+      "description": "Apartado por documentos que la DIAN todavía valida y por operaciones de la API en curso (sincronizaciones, numeración y PDF de la DIAN)."
      },
      "overdraft": {
       "type": "integer",
@@ -56123,10 +56641,11 @@
        "dian_sync",
        "numbering_refresh",
        "numbering_association",
-       "numbering_request"
+       "numbering_request",
+       "dian_document_pdf"
       ],
       "additionalProperties": false,
-      "description": "El precio en pesos de cada operación que Trevol hace por la empresa en el portal de la DIAN y que se cobra del saldo (0 es gratis). Solo en producción.",
+      "description": "El precio en pesos de cada operación de la API que Trevol hace por la empresa ante la DIAN y que se cobra del saldo (0 es gratis). Solo en producción.",
       "properties": {
        "dian_sync": {
         "type": "integer",
@@ -56141,6 +56660,10 @@
         "minimum": 0
        },
        "numbering_request": {
+        "type": "integer",
+        "minimum": 0
+       },
+       "dian_document_pdf": {
         "type": "integer",
         "minimum": 0
        }
@@ -56290,7 +56813,8 @@
          "dian_sync",
          "numbering_refresh",
          "numbering_association",
-         "numbering_request"
+         "numbering_request",
+         "dian_document_pdf"
         ]
        },
        "id": {
@@ -56298,7 +56822,7 @@
          "string",
          "null"
         ],
-        "description": "dsync_… (sincronización), nas_… (asociación) o nreq_… (solicitud); null en una lectura de numeraciones."
+        "description": "dsync_… (sincronización), nas_… (asociación), nreq_… (solicitud) o ddoc_… (el documento del PDF de la DIAN); null en una lectura de numeraciones."
        }
       }
      },
@@ -56463,7 +56987,7 @@
    },
    "DianDocument": {
     "type": "object",
-    "description": "Un documento de la empresa ante la DIAN (emitido con Trevol o con otro sistema, o recibido de un proveedor), tal como lo trajo la sincronización o el buzón. Es de solo lectura: no tiene PDF ni acciones aquí; su XML se le pide a la DIAN (`xml_available`).",
+    "description": "Un documento de la empresa ante la DIAN (emitido con Trevol o con otro sistema, o recibido de un proveedor), tal como lo trajo la sincronización o el buzón. Es de solo lectura: su XML se le pide a la DIAN (`xml_available`) y también el PDF oficial que genera la DIAN (`pdf_available`, `pdf_status`).",
     "required": [
      "id",
      "object",
@@ -56621,6 +57145,20 @@
      "xml_available": {
       "type": "boolean",
       "description": "Si se le puede pedir el XML a la DIAN con GET /v1/dian_documents/{id}/xml (tiene CUFE y la DIAN lo verificó; Trevol no lo guarda). En lo emitido, además, si la llave tiene el permiso customers:read (su XML trae los datos personales del cliente)."
+     },
+     "pdf_available": {
+      "type": "boolean",
+      "description": "Si se le puede pedir a la DIAN el PDF oficial del documento con POST /v1/dian_documents/{id}/pdf: solo en producción, con CUFE y verificado por la DIAN. En lo emitido, además, si la llave tiene el permiso customers:read."
+     },
+     "pdf_status": {
+      "type": "string",
+      "enum": [
+       "not_requested",
+       "pending",
+       "ready",
+       "failed"
+      ],
+      "description": "Cómo va el PDF de la DIAN: `not_requested` (nunca se pidió, o el que se pidió venció a los 90 días), `pending` (Trevol lo está pidiendo a la DIAN), `ready` (se baja con GET /v1/dian_documents/{id}/pdf) o `failed` (la DIAN no lo entregó; no se cobró: se puede pedir otra vez)."
      }
     }
    },
@@ -57063,6 +57601,96 @@
      "xml_available": {
       "type": "boolean",
       "description": "Si se le puede pedir el XML a la DIAN con GET /v1/dian_documents/{id}/xml (tiene CUFE y la DIAN lo verificó)."
+     },
+     "pdf_available": {
+      "type": "boolean",
+      "description": "Si se le puede pedir el PDF oficial de la DIAN con POST /v1/dian_documents/{id}/pdf (además, solo en producción)."
+     }
+    }
+   },
+   "DianDocumentPdf": {
+    "type": "object",
+    "description": "El PDF oficial que genera la DIAN de un documento: Trevol lo pide a la DIAN y lo guarda 90 días. Se baja con GET /v1/dian_documents/{id}/pdf.",
+    "required": [
+     "object",
+     "document_id",
+     "status",
+     "size_bytes",
+     "requested_at",
+     "ready_at",
+     "expires_at",
+     "error"
+    ],
+    "properties": {
+     "object": {
+      "type": "string",
+      "enum": [
+       "dian_document_pdf"
+      ]
+     },
+     "document_id": {
+      "type": "string",
+      "pattern": "^ddoc_[0-9a-f]{32}$"
+     },
+     "status": {
+      "type": "string",
+      "enum": [
+       "pending",
+       "ready",
+       "failed",
+       "expired"
+      ],
+      "description": "`pending`: Trevol lo está pidiendo a la DIAN (puede tardar unos segundos o minutos). `ready`: listo para bajar. `failed`: la DIAN no lo entregó (no se cobró). `expired`: venció; pídelo otra vez."
+     },
+     "size_bytes": {
+      "type": [
+       "integer",
+       "null"
+      ],
+      "minimum": 1,
+      "description": "El tamaño del PDF, si está listo."
+     },
+     "requested_at": {
+      "type": [
+       "string",
+       "null"
+      ],
+      "format": "date-time"
+     },
+     "ready_at": {
+      "type": [
+       "string",
+       "null"
+      ],
+      "format": "date-time"
+     },
+     "expires_at": {
+      "type": [
+       "string",
+       "null"
+      ],
+      "format": "date-time",
+      "description": "Hasta cuándo se puede bajar sin pedirlo otra vez (90 días)."
+     },
+     "error": {
+      "type": [
+       "object",
+       "null"
+      ],
+      "description": "Solo si falló: un código y un texto fijo.",
+      "properties": {
+       "code": {
+        "type": "string",
+        "enum": [
+         "dian_unavailable",
+         "file_unavailable",
+         "internal_error"
+        ]
+       },
+       "message": {
+        "type": "string"
+       }
+      }
      }
     }
    },
@@ -57340,6 +57968,7 @@
        "credentials_missing",
        "delivery_incomplete",
        "delivery_pending",
+       "dian_failed",
        "disabled",
        "email_suppressed",
        "empty",
@@ -57355,9 +57984,11 @@
        "no_recipient",
        "no_resolution",
        "not_accepted",
+       "not_requested",
        "number_paused",
        "payroll_not_enabled",
        "pdf_design_writes_disabled",
+       "pending",
        "prefix_in_use",
        "resolution_exhausted",
        "resolution_expired",
@@ -57371,7 +58002,7 @@
        "unreadable",
        "unsupported_format"
       ],
-      "description": "En `company_not_enabled` (`missing_legal_representative`, `missing_pin`, `missing_software`, `payroll_not_enabled`), en `numbering_unavailable` (`missing_technical_key`, `no_contingency_numbering`, `no_resolution`, `prefix_in_use`, `resolution_exhausted`, `resolution_expired`, `resolution_not_yet_valid`) y en `invalid_state` al reenviar el correo (`delivery_incomplete`, `delivery_pending`, `email_suppressed`, `no_recipient`, `not_accepted`): por qué. En `permission_denied`: `key_owner_without_access` (la persona responsable de la llave ya no tiene acceso a la empresa, no puede gestionar lo que pide la ruta: webhooks, numeración, talonarios, sincronización con la DIAN o diseños del PDF, o no puede ver el saldo de la cuenta) y `number_paused` (el número de WhatsApp está en pausa hasta que la empresa le asigne una persona responsable). En `automatic_mode_unavailable` (`credentials_missing`, `mandate_required`: falta el mandato para integraciones que se acepta en la app, `disabled`) y en `permission_denied` de una ruta que solo existe en producción (`live_mode_required`). En `permission_denied` de una llave de administración: `environment_mismatch` (`Trevol-Environment` no es el ambiente de la llave), `live_mode_required` (el alta de empresas pide una llave de producción) y `scope_list` (una llave con alcance de lista no da de alta empresas; como esa llave no puede tener `companies:write`, lo que llega en la práctica es el 403 con `required_permission: companies:write`). En `logo_invalid` (`animated`, `empty`, `svg_not_supported`, `too_large`, `too_many_pixels`, `too_small`, `unreadable`, `unsupported_format`) y en `permission_denied` del diseño del PDF (`pdf_design_writes_disabled`: el titular no permitió en la app que la API lo cambie). En `permission_denied` de una llave de la empresa simulada: `simulated_not_supported` (eso no existe en el entorno simulado: el adquiriente en la DIAN, RADIAN, el saldo y las recargas, el XML de un documento de la DIAN, el reenvío del correo, el documento equivalente y la nómina; o el entorno simulado está apagado)."
+      "description": "En `company_not_enabled` (`missing_legal_representative`, `missing_pin`, `missing_software`, `payroll_not_enabled`), en `numbering_unavailable` (`missing_technical_key`, `no_contingency_numbering`, `no_resolution`, `prefix_in_use`, `resolution_exhausted`, `resolution_expired`, `resolution_not_yet_valid`) y en `invalid_state` al reenviar el correo (`delivery_incomplete`, `delivery_pending`, `email_suppressed`, `no_recipient`, `not_accepted`): por qué. En `permission_denied`: `key_owner_without_access` (la persona responsable de la llave ya no tiene acceso a la empresa, no puede gestionar lo que pide la ruta: webhooks, numeración, talonarios, sincronización con la DIAN o diseños del PDF, o no puede ver el saldo de la cuenta) y `number_paused` (el número de WhatsApp está en pausa hasta que la empresa le asigne una persona responsable). En `file_unavailable` del PDF de la DIAN (`dian_failed`, `not_requested`, `pending`): todavía en camino (reintentable), no se ha pedido (o venció) o la DIAN no tiene ese PDF. En `automatic_mode_unavailable` (`credentials_missing`, `mandate_required`: falta el mandato para integraciones que se acepta en la app, `disabled`) y en `permission_denied` de una ruta que solo existe en producción (`live_mode_required`). En `permission_denied` de una llave de administración: `environment_mismatch` (`Trevol-Environment` no es el ambiente de la llave), `live_mode_required` (el alta de empresas pide una llave de producción) y `scope_list` (una llave con alcance de lista no da de alta empresas; como esa llave no puede tener `companies:write`, lo que llega en la práctica es el 403 con `required_permission: companies:write`). En `logo_invalid` (`animated`, `empty`, `svg_not_supported`, `too_large`, `too_many_pixels`, `too_small`, `unreadable`, `unsupported_format`) y en `permission_denied` del diseño del PDF (`pdf_design_writes_disabled`: el titular no permitió en la app que la API lo cambie). En `permission_denied` de una llave de la empresa simulada: `simulated_not_supported` (eso no existe en el entorno simulado: el adquiriente en la DIAN, RADIAN, el saldo y las recargas, el XML de un documento de la DIAN, el reenvío del correo, el documento equivalente y la nómina; o el entorno simulado está apagado)."
      },
      "previous": {
       "type": "string",
@@ -60277,7 +60908,7 @@
    },
    "AccountDianDocument": {
     "type": "object",
-    "description": "Un documento de una empresa de tu cuenta ante la DIAN, emitido o recibido, tal como lo trajo la sincronización (el mismo `dian_document` de `GET /v1/dian_documents`, sin `xml_available`), con la empresa y, en las facturas, el resumen RADIAN. Lo que llegó al buzón y la sincronización todavía no vio no aparece.",
+    "description": "Un documento de una empresa de tu cuenta ante la DIAN, emitido o recibido, tal como lo trajo la sincronización (el mismo `dian_document` de `GET /v1/dian_documents`, sin `xml_available` ni el PDF), con la empresa y, en las facturas, el resumen RADIAN. Lo que llegó al buzón y la sincronización todavía no vio no aparece.",
     "required": [
      "id",
      "object",
